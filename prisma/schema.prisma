@@ -8,13 +8,14 @@ generator client {
 }
 
 model User {
-  name          Int      @default(autoincrement()) @id
-  age           Int    
-  Email       String   
-  Social_type 
+  id          Int      @default(autoincrement()) @id
+  name        String   
+  age         Int    
+  email       String   
+  socialType  String   @map("social_type")
+  phone       String   
+  pushToken   String   @map(push_token)
   createdAt   DateTime @default(now()) @map("created_at")
   updatedAt   DateTime @map("updated_at") @updatedAt
-  title       String
-  description String?
-  @@map("todos")
+  @@map("users")
 }
