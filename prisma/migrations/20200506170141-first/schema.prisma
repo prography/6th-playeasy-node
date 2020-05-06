@@ -3,7 +3,7 @@ generator client {
 }
 
 datasource mysql {
-  url      = env("DB_URL")
+  url = "***"
   provider = "mysql"
 }
 
@@ -17,5 +17,5 @@ model User {
   pushToken   String   @map("push_token")
   createdAt   DateTime @default(now()) @map("created_at")
   updatedAt   DateTime @map("updated_at") @updatedAt
-  @@map("user")
+  @@map("users")
 }
