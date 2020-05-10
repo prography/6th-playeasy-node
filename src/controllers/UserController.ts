@@ -8,7 +8,7 @@ export class UserController extends BaseController {
 
     constructor() {
         super();
-        //this.prisma = new PrismaClient();
+        this.prisma = new PrismaClient();
     }
 
     @Get()

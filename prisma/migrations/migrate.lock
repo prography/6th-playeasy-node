@@ -3,5 +3,4 @@
 # Prisma Migrate lockfile v1
 # Read more about conflict resolution here: TODO
 
-20200506170141-first
-20200506170326-user
+20200510133923-user_v1

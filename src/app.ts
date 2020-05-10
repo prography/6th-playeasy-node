@@ -1,23 +1,23 @@
 import express from 'express';
-import session from 'express-session';
-import path from 'path';
-import { config } from 'dotenv';
-import logger from 'morgan';
-import passport from 'passport';
 import { useExpressServer } from 'routing-controllers';
+import bodyParser from 'body-parser';
+import cookieParser from 'cookie-parser';
+import morgan from 'morgan';
 
 const app = express();
 
-config();
-
-
-app.use(logger('dev'));
-app.use(passport.initialize());
+app.use(bodyParser.urlencoded({ extended: true }));
+app.use(bodyParser.json());
+app.use(cookieParser());
+app.use(morgan('dev'));
 
 useExpressServer(app, {
-    controllers: [`${__dirname}/controllers/**`],
+  routePrefix: "/api",
+  cors: true,
+  controllers: [`${__dirname}/controllers/**`],
   });
-  
+
+
 export {
     app,
 }

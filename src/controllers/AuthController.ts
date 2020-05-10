@@ -1,10 +1,12 @@
 import { BaseController } from './BaseController';
-import passport from 'passport';
-import { JsonController, Get, Param, Post } from 'routing-controllers';
-import { PrismaClient } from '@prisma/client';
+import { JsonController, Get, Param, Post, BodyParam, Body, Req, Res } from 'routing-controllers';
+import { PrismaClient, User } from '@prisma/client';
+import jwt from 'jsonwebtoken';
+import { resolve } from 'dns';
+import { response } from 'express';
 
 @JsonController('/auth')
-export class AuthController extends BaseController {
+export class MatchController extends BaseController {
     private prisma: PrismaClient;
 
     constructor() {
@@ -12,17 +14,29 @@ export class AuthController extends BaseController {
         this.prisma = new PrismaClient();
     }
 
-    @Post('/signup')
-    public join() {
-        return { "data" : 'users controllers'};
+    @Post('/register')
+    public register(@BodyParam('email') email: string, @Res() res: any) {
+        console.log(email);
+        return this.prisma.user.create({data: {email, name: '', age: -1, socialType: 'kakao', phone: '', pushToken: ''}});                
     }
-
+//.then(() => {
+//     res.status(200).json({ success: true });
+// })
+// .catch( (err: any) => {
+//     res.json({ success: false, err });
+// })
     @Post('/login')
-    public login() {
+    public login(@BodyParam("email") email: string) {
+        
+        
+    }
+
+    @Get('/auth')
+    public auth() {
 
     }
 
-    @Post('/logout')
+    @Get('/logout')
     public logout() {
 
     }
