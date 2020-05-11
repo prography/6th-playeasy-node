@@ -9,11 +9,11 @@ datasource mysql {
 
 model User {
   id          Int      @default(autoincrement()) @id
-  name        String   @default("")
-  age         Int      @default(-1)
+  name        String   
+  age         Int      
   email       String   @unique
   socialType  String   @default("kakao") @map("social_type")
-  phone       String   @default("")
+  phone       String   
   pushToken   String   @default("") @map("push_token")
   createdAt   DateTime @default(now()) @map("created_at")
   updatedAt   DateTime @map("updated_at") @updatedAt
