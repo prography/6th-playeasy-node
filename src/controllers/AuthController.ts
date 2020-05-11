@@ -13,12 +13,10 @@ import requestKakao from 'request'; // 테스트 후 삭제 예정
 const kakao = { 
     clientID: "794ed9a88648a25cbaec8bc25ad4f2a6",
     clientSecret: "BtSD12taxk3DqusTvOjGBQv2MbZoViI3",
-    // api/auth/kakao/callback
-    redirectUri: "http://localhost:3000/login/kakao/callback"
+    redirectUri: "http://localhost:3000/api/auth/kakao/callback"
   };
 
-// auth로 변경 예정
-@JsonController('/login')
+@JsonController('/auth')
 export class AuthController extends BaseController {
     private prisma: PrismaClient;
 
@@ -48,6 +46,7 @@ export class AuthController extends BaseController {
         })
     }
 
+    // 테스트 후 삭제 예정
     @Get('/kakao/callback')
     public async kakao(@Req() request: any, @Res() response: any) {
         try {
@@ -66,10 +65,16 @@ export class AuthController extends BaseController {
                     redirect_uri: kakao.redirectUri
                 })
             });
+            return { access_token: kakaoToken.data.access_token };
+        } catch (error) {
+            console.log(error);
+            return { success: false, error };
+        }
+    }
 
-            const access_token = kakaoToken.data.access_token;
-
-            // 2. kakao user info by 1's accessToken
+    @Post('/login')
+    public async login(@BodyParam('access_token') access_token: string, @Res() res: any) {
+        try {
             const kakaoUserInfo = await axios({      
                 method: "GET",
                 url: "https://kapi.kakao.com/v2/user/me",
@@ -77,40 +82,23 @@ export class AuthController extends BaseController {
             });
 
             const email: string = kakaoUserInfo.data.kakao_account.email;
-            let exUser = await this.prisma.user.findOne({ where: { email } });
+            const exUser = await this.prisma.user.findOne({ where: { email } });
             let isNewMember: boolean = false;
     
             if (!exUser) {
                 isNewMember = true;
-                exUser = await this.prisma.user.create({data: {email, name: '', age: -1, socialType: 'kakao', phone: '', pushToken: ''}});
+                await this.prisma.user.create({data: {email, name: '', age: -1, socialType: 'kakao', phone: '', pushToken: ''}});
             }
             const token = await jwt.sign(email, 'SeCrEtKeYfOrHaShInG');
 
-            response.cookie('auth_token', token).status(200);
-            return { success: true, isNewMember, exUser, token };    
+            res.cookie('auth_token', token).status(200);
+
+            return { success: true, isNewMember, token };    
         } catch (error) {
             console.log(error);
-            return { success: false, error };
+            return error;
         }
     }
-
-    // @Post('/register')
-    // public async register(@BodyParam('email') email: string) {
-    //     try {
-    //         const newUser = await this.prisma.user.create({data: {email, name: '', age: -1, socialType: 'kakao', phone: '', pushToken: ''}});
-    //         return { sueecss: true, newUser };
-    //     } catch (error) {
-    //         return { success: false, error };
-    //     }
-    // }
-
-    // @Post('/login')
-    // public async login(@BodyParam('email') email: string, @Res() res: any) {
-    //     const exUser = await this.prisma.user.findOne({ where: { email } }); 
-    //     const token = await jwt.sign(email, 'SeCrEtKeYfOrHaShInG');
-    //     res.cookie('auth_token', token).status(200);
-    //     return { success: true, token, exUser };    
-    // }
 
     @Get('/user')
     @UseBefore(authMiddleware)

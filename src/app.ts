@@ -20,7 +20,7 @@ app.use(cookieParser());
 app.use(morgan('dev'));
 
 useExpressServer(app, {
-  //routePrefix: "/api",
+  routePrefix: "/api",
   cors: true,
   controllers: [`${__dirname}/controllers/**`],
   middlewares: [`${__dirname}/middlewares/**`],
@@ -30,3 +30,4 @@ useExpressServer(app, {
 export {
     app,
 }
+
