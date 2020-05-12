@@ -7,7 +7,7 @@ export async function authMiddleware(req: any, res: any, next: any) {
         const prisma = new PrismaClient();
 
         const decoded = await jwt.verify(token, 'SeCrEtKeYfOrHaShInG');
-        const exUser = await prisma.user.findOne({ where: { email: String(decoded) } });
+        const exUser = await prisma.user.findOne({ where: { email: String(JSON.parse(JSON.stringify(decoded)).email) } });
         
         if (!exUser)
             return res.json({ isAuth: false, error: true });

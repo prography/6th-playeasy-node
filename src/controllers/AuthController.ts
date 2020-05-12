@@ -89,7 +89,7 @@ export class AuthController extends BaseController {
                 isNewMember = true;
                 await this.prisma.user.create({data: {email, name: '', age: -1, socialType: 'kakao', phone: '', pushToken: ''}});
             }
-            const token = await jwt.sign(email, 'SeCrEtKeYfOrHaShInG');
+            const token = await jwt.sign({email: email}, 'SeCrEtKeYfOrHaShInG', {expiresIn : "7d"});
 
             res.cookie('auth_token', token).status(200);
 
