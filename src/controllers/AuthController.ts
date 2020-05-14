@@ -1,6 +1,6 @@
 import { BaseController } from './BaseController';
 import { JsonController, Get, Post, BodyParam, CookieParam , 
-        UseBefore, Req, Res, Render, Redirect } from 'routing-controllers';
+        UseBefore, Req, Res, Render, Redirect, HttpError, NotFoundError } from 'routing-controllers';
 import jwt from 'jsonwebtoken';
 import axios from 'axios';
 import querystring from 'querystring';
@@ -24,6 +24,7 @@ export class AuthController extends BaseController {
         super();
         this.prisma = new PrismaClient();
     }
+    
 
     // 테스트 후 삭제 예정
     @Get()  
@@ -87,22 +88,20 @@ export class AuthController extends BaseController {
     
             if (!exUser) {
                 isNewMember = true;
-                await this.prisma.user.create({data: {email, name: '', age: -1, socialType: 'kakao', phone: '', pushToken: ''}});
+                await this.prisma.user.create({data: { email }});
             }
-            const token = await jwt.sign(email, 'SeCrEtKeYfOrHaShInG');
-
-            res.cookie('auth_token', token).status(200);
+            const token = await jwt.sign({email: email}, 'SeCrEtKeYfOrHaShInG', {expiresIn : "7d"});
 
             return { success: true, isNewMember, token };    
         } catch (error) {
             console.log(error);
-            return error;
+            throw new NotFoundError('login 실패');
         }
     }
 
     @Get('/user')
     @UseBefore(authMiddleware)
-    public async auth(@CookieParam("auth_token") token: string, @Req() req: any) {
+    public async auth(@BodyParam("token") token: string, @Req() req: any) {
         return req.user;
     }
 }

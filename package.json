@@ -5,8 +5,10 @@
   "main": "index.js",
   "scripts": {
     "build": "tsc",
-    "serve": "npm run build && node dist",
-    "dev": "nodemon"
+    "start": "npm run prisma:generate && node ./dist",
+    "dev": "npm run prisma:migrate && npm run prisma:generate && nodemon",
+    "prisma:generate": "prisma2 generate",
+    "prisma:migrate": "prisma2 migrate up --experimental"
   },
   "repository": {
     "type": "git",
@@ -40,7 +42,6 @@
     "@types/morgan": "^1.9.0",
     "@types/node": "^13.13.2",
     "@types/passport": "^1.0.3",
-    "@types/passport-jwt": "^3.0.3",
     "@types/passport-kakao": "^0.2.0",
     "@types/request": "^2.48.4",
     "@types/supertest": "^2.0.8",
@@ -59,6 +60,7 @@
   },
   "dependencies": {
     "@prisma/client": "^2.0.0-beta.3",
+    "aws-sdk": "^2.675.0",
     "axios": "^0.19.2",
     "bcrypt": "^4.0.1",
     "body-parser": "^1.19.0",
@@ -72,7 +74,6 @@
     "jsonwebtoken": "^8.5.1",
     "multer": "^1.4.2",
     "passport": "^0.4.1",
-    "passport-jwt": "^4.0.0",
     "passport-kakao": "^1.0.0",
     "querystring": "^0.2.0",
     "reflect-metadata": "^0.1.13",

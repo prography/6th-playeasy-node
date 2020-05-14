@@ -18,29 +18,3 @@ export async function authMiddleware(req: any, res: any, next: any) {
         next(error);
     }
 }
-
-
-// import {ExpressMiddlewareInterface} from "routing-controllers";
- 
-// export class AuthMiddleware implements ExpressMiddlewareInterface { 
-//     use(req: any, res: any, next: any): any {
-//         try {
-//             const token = req.cookies.token;
-//             const prisma = new PrismaClient();
-            
-//             let exUser;
-//             jwt.verify(token, 'SeCrEtKeYfOrHaShInG', (err: any, decoded: any) => {
-//                 exUser = prisma.user.findOne({ where: {email: String(decoded) } }); 
-//             });
-        
-//             if (!exUser) return res.json({ isAuth: false, error: true });
-//             req.token = token;
-//             req.user = exUser;
-//         } catch (error) {
-//             console.log(error);
-//             next(error);
-//         }
-//         next();
-//     }
- 
-// }

@@ -8,15 +8,49 @@ datasource mysql {
 }
 
 model User {
-  id          Int      @default(autoincrement()) @id
-  name        String   
-  age         Int      
-  email       String   @unique
-  socialType  String   @default("kakao") @map("social_type")
-  phone       String   
-  pushToken   String   @default("") @map("push_token")
-  createdAt   DateTime @default(now()) @map("created_at")
-  updatedAt   DateTime @map("updated_at") @updatedAt
+  id          Int       @default(autoincrement()) @id
+  name        String?   
+  age         Int?      
+  email       String    @unique
+  socialType  String    @default("kakao") @map("social_type")
+  phone       String?   
+  pushToken   String?   @default("") @map("push_token")
+  createdAt   DateTime  @default(now()) @map("created_at")
+  updatedAt   DateTime  @updatedAt() @map("updated_at") 
+  team        Team?     @relation(fields: [teamId], references: [id])
+  teamId      Int?      @map("team_id")
 
-  @@map("users")
+  @@map("user")
+}
+
+model Team {
+  id          Int     @default(autoincrement()) @id
+  name        String   
+  description String?
+  home        Match   @relation("home")
+  away        Match   @relation("away")
+  @@map("team")   
+}
+
+model Match {
+  id            Int         @default(autoincrement()) @id
+  type          MatchType 
+  description   String?
+  homeTeam      Team        @relation("home", fields: [homeTeamId], references: [id]) 
+  homeTeamId    Int         @map("home_team_id")
+  awayTeam      Team?       @relation("away", fields: [awayTeamId], references: [id])
+  awayTeamId    Int?        @map("away_team_id")
+  location      String          
+  startedAt     DateTime    @map("started_at")
+  homeQuota     Int
+  awayQuota     Int?
+  fee           Int?
+  writer        User        @relation(fields: [writerId], references: [id])
+  writerId      Int         @map("writer_id")
+
+  @@map("match")
+}
+
+enum MatchType {
+  SOCCKER FUTSAL5 FUTSAL6
 }

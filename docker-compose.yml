@@ -1,0 +1,38 @@
+version: "3.7"
+services:
+  db:
+    image: mysql:latest
+    ports:
+      - 3306:3306
+    environment:
+      MYSQL_ROOT_PASSWORD: playeasy
+      MYSQL_DATABASE: plaeyeasy
+    restart: on-failure
+    volumes:
+      - ./db/conf.d:/etc/mysql/conf.d
+      - ./db/data:/var/lib/mysql
+    networks:
+      default:
+        ipv4_address: 192.168.0.3
+
+  server:
+    build: .
+    depends_on: 
+      - db
+    ports:
+      - 3000:3000
+    environment:
+      HOST: 0.0.0.0
+      PORT: 3000
+      DB_URL: mysql://admin:playeasy@playeasy.c2nvfbhvyzxd.ap-northeast-2.rds.amazonaws.com:3306/playeasy
+    entrypoint: "npm run dev"
+    networks:
+      default:
+        ipv4_address: 192.168.0.2
+
+networks:
+  default:
+    driver: bridge
+    ipam:
+      config:
+        - subnet: 192.168.0.0/24
