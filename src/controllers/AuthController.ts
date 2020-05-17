@@ -83,25 +83,19 @@ export class AuthController extends BaseController {
             });
 
             const email: string = kakaoUserInfo.data.kakao_account.email;
-            const exUser = await this.prisma.user.findOne({ where: { email } });
+            const exUser: any = await this.prisma.user.findOne({ where: { email } });
             let isNewMember: boolean = false;
     
             if (!exUser) {
                 isNewMember = true;
                 await this.prisma.user.create({data: { email }});
             }
-            const token = await jwt.sign({email: email}, 'SeCrEtKeYfOrHaShInG', {expiresIn : "7d"});
+            const token: string = await jwt.sign({email: email}, 'SeCrEtKeYfOrHaShInG', {expiresIn : "7d"});
 
             return { success: true, isNewMember, token };    
         } catch (error) {
             console.log(error);
             throw new NotFoundError('login 실패');
         }
-    }
-
-    @Get('/user')
-    @UseBefore(authMiddleware)
-    public async auth(@BodyParam("token") token: string, @Req() req: any) {
-        return req.user;
     }
 }
