@@ -3,7 +3,7 @@ generator client {
 }
 
 datasource mysql {
-  url      = env("DB_URL")
+  url = "***"
   provider = "mysql"
 }
 
@@ -34,14 +34,14 @@ model Team {
 }
 
 model Match {
-  id              Int         @default(autoincrement()) @id 
+  id              Int         @default(autoincrement()) @id
   title           String      
   type            MatchType 
   description     String?
-  location        String   
-  fee             Int?       
+  location        String          
   startAt         DateTime    @map("start_at")
   endAt           DateTime    @map("end_at")
+  fee             Int?
 
   writer          User        @relation(fields: [writerId], references: [id])
   writerId        Int         @map("writer_id")

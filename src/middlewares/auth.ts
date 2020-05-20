@@ -16,7 +16,7 @@ export async function authMiddleware(req: any, res: any, next: any) {
         next();
         
     } catch (error) {
-        console.log(error);
+        console.error(error);
         next(error);
     }
 }

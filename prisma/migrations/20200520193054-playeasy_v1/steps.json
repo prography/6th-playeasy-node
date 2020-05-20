@@ -190,31 +190,6 @@
           "model": "User",
           "field": "pushToken"
         },
-        "directive": "default"
-      }
-    },
-    {
-      "tag": "CreateArgument",
-      "location": {
-        "tag": "Directive",
-        "path": {
-          "tag": "Field",
-          "model": "User",
-          "field": "pushToken"
-        },
-        "directive": "default"
-      },
-      "argument": "",
-      "value": "\"\""
-    },
-    {
-      "tag": "CreateDirective",
-      "location": {
-        "path": {
-          "tag": "Field",
-          "model": "User",
-          "field": "pushToken"
-        },
         "directive": "map"
       }
     },
@@ -294,7 +269,7 @@
       "model": "User",
       "field": "updatedAt",
       "type": "DateTime",
-      "arity": "Required"
+      "arity": "Optional"
     },
     {
       "tag": "CreateDirective",
@@ -497,66 +472,9 @@
     {
       "tag": "CreateField",
       "model": "Team",
-      "field": "home",
-      "type": "Match",
-      "arity": "Required"
-    },
-    {
-      "tag": "CreateDirective",
-      "location": {
-        "path": {
-          "tag": "Field",
-          "model": "Team",
-          "field": "home"
-        },
-        "directive": "relation"
-      }
-    },
-    {
-      "tag": "CreateArgument",
-      "location": {
-        "tag": "Directive",
-        "path": {
-          "tag": "Field",
-          "model": "Team",
-          "field": "home"
-        },
-        "directive": "relation"
-      },
-      "argument": "",
-      "value": "\"home\""
-    },
-    {
-      "tag": "CreateField",
-      "model": "Team",
-      "field": "away",
-      "type": "Match",
-      "arity": "Required"
-    },
-    {
-      "tag": "CreateDirective",
-      "location": {
-        "path": {
-          "tag": "Field",
-          "model": "Team",
-          "field": "away"
-        },
-        "directive": "relation"
-      }
-    },
-    {
-      "tag": "CreateArgument",
-      "location": {
-        "tag": "Directive",
-        "path": {
-          "tag": "Field",
-          "model": "Team",
-          "field": "away"
-        },
-        "directive": "relation"
-      },
-      "argument": "",
-      "value": "\"away\""
+      "field": "users",
+      "type": "User",
+      "arity": "List"
     },
     {
       "tag": "CreateDirective",
@@ -631,6 +549,13 @@
     {
       "tag": "CreateField",
       "model": "Match",
+      "field": "title",
+      "type": "String",
+      "arity": "Required"
+    },
+    {
+      "tag": "CreateField",
+      "model": "Match",
       "field": "type",
       "type": "MatchType",
       "arity": "Required"
@@ -645,190 +570,6 @@
     {
       "tag": "CreateField",
       "model": "Match",
-      "field": "homeTeam",
-      "type": "Team",
-      "arity": "Required"
-    },
-    {
-      "tag": "CreateDirective",
-      "location": {
-        "path": {
-          "tag": "Field",
-          "model": "Match",
-          "field": "homeTeam"
-        },
-        "directive": "relation"
-      }
-    },
-    {
-      "tag": "CreateArgument",
-      "location": {
-        "tag": "Directive",
-        "path": {
-          "tag": "Field",
-          "model": "Match",
-          "field": "homeTeam"
-        },
-        "directive": "relation"
-      },
-      "argument": "",
-      "value": "\"home\""
-    },
-    {
-      "tag": "CreateArgument",
-      "location": {
-        "tag": "Directive",
-        "path": {
-          "tag": "Field",
-          "model": "Match",
-          "field": "homeTeam"
-        },
-        "directive": "relation"
-      },
-      "argument": "fields",
-      "value": "[homeTeamId]"
-    },
-    {
-      "tag": "CreateArgument",
-      "location": {
-        "tag": "Directive",
-        "path": {
-          "tag": "Field",
-          "model": "Match",
-          "field": "homeTeam"
-        },
-        "directive": "relation"
-      },
-      "argument": "references",
-      "value": "[id]"
-    },
-    {
-      "tag": "CreateField",
-      "model": "Match",
-      "field": "homeTeamId",
-      "type": "Int",
-      "arity": "Required"
-    },
-    {
-      "tag": "CreateDirective",
-      "location": {
-        "path": {
-          "tag": "Field",
-          "model": "Match",
-          "field": "homeTeamId"
-        },
-        "directive": "map"
-      }
-    },
-    {
-      "tag": "CreateArgument",
-      "location": {
-        "tag": "Directive",
-        "path": {
-          "tag": "Field",
-          "model": "Match",
-          "field": "homeTeamId"
-        },
-        "directive": "map"
-      },
-      "argument": "",
-      "value": "\"home_team_id\""
-    },
-    {
-      "tag": "CreateField",
-      "model": "Match",
-      "field": "awayTeam",
-      "type": "Team",
-      "arity": "Optional"
-    },
-    {
-      "tag": "CreateDirective",
-      "location": {
-        "path": {
-          "tag": "Field",
-          "model": "Match",
-          "field": "awayTeam"
-        },
-        "directive": "relation"
-      }
-    },
-    {
-      "tag": "CreateArgument",
-      "location": {
-        "tag": "Directive",
-        "path": {
-          "tag": "Field",
-          "model": "Match",
-          "field": "awayTeam"
-        },
-        "directive": "relation"
-      },
-      "argument": "",
-      "value": "\"away\""
-    },
-    {
-      "tag": "CreateArgument",
-      "location": {
-        "tag": "Directive",
-        "path": {
-          "tag": "Field",
-          "model": "Match",
-          "field": "awayTeam"
-        },
-        "directive": "relation"
-      },
-      "argument": "fields",
-      "value": "[awayTeamId]"
-    },
-    {
-      "tag": "CreateArgument",
-      "location": {
-        "tag": "Directive",
-        "path": {
-          "tag": "Field",
-          "model": "Match",
-          "field": "awayTeam"
-        },
-        "directive": "relation"
-      },
-      "argument": "references",
-      "value": "[id]"
-    },
-    {
-      "tag": "CreateField",
-      "model": "Match",
-      "field": "awayTeamId",
-      "type": "Int",
-      "arity": "Optional"
-    },
-    {
-      "tag": "CreateDirective",
-      "location": {
-        "path": {
-          "tag": "Field",
-          "model": "Match",
-          "field": "awayTeamId"
-        },
-        "directive": "map"
-      }
-    },
-    {
-      "tag": "CreateArgument",
-      "location": {
-        "tag": "Directive",
-        "path": {
-          "tag": "Field",
-          "model": "Match",
-          "field": "awayTeamId"
-        },
-        "directive": "map"
-      },
-      "argument": "",
-      "value": "\"away_team_id\""
-    },
-    {
-      "tag": "CreateField",
-      "model": "Match",
       "field": "location",
       "type": "String",
       "arity": "Required"
@@ -836,7 +577,7 @@
     {
       "tag": "CreateField",
       "model": "Match",
-      "field": "startedAt",
+      "field": "startAt",
       "type": "DateTime",
       "arity": "Required"
     },
@@ -846,7 +587,7 @@
         "path": {
           "tag": "Field",
           "model": "Match",
-          "field": "startedAt"
+          "field": "startAt"
         },
         "directive": "map"
       }
@@ -858,26 +599,44 @@
         "path": {
           "tag": "Field",
           "model": "Match",
-          "field": "startedAt"
+          "field": "startAt"
         },
         "directive": "map"
       },
       "argument": "",
-      "value": "\"started_at\""
+      "value": "\"start_at\""
     },
     {
       "tag": "CreateField",
       "model": "Match",
-      "field": "homeQuota",
-      "type": "Int",
+      "field": "endAt",
+      "type": "DateTime",
       "arity": "Required"
     },
     {
-      "tag": "CreateField",
-      "model": "Match",
-      "field": "awayQuota",
-      "type": "Int",
-      "arity": "Optional"
+      "tag": "CreateDirective",
+      "location": {
+        "path": {
+          "tag": "Field",
+          "model": "Match",
+          "field": "endAt"
+        },
+        "directive": "map"
+      }
+    },
+    {
+      "tag": "CreateArgument",
+      "location": {
+        "tag": "Directive",
+        "path": {
+          "tag": "Field",
+          "model": "Match",
+          "field": "endAt"
+        },
+        "directive": "map"
+      },
+      "argument": "",
+      "value": "\"end_at\""
     },
     {
       "tag": "CreateField",

@@ -3,15 +3,10 @@ import { JsonController, Get, Put, UseBefore, HeaderParam, Req, BodyParam, Body 
 import { PrismaClient, User } from '@prisma/client';
 import { authMiddleware } from '../middlewares/auth';
 
-enum MatchType {
-    SOCCKER = "SOCCKER",
-    FUTSAL5 = "FUTSAL5",
-    FUTSAL6 = "FUTSAL6", 
-}
-
 @JsonController('/users')
 export class UserController extends BaseController {
     private prisma: PrismaClient;
+    
     constructor() {
         super();
         this.prisma = new PrismaClient();
@@ -21,26 +16,31 @@ export class UserController extends BaseController {
     @UseBefore(authMiddleware)
     public getUser(@HeaderParam('authorization') token: string, @Req() req: any) {
         return {
-            isAuth: true,
+            success: true,
             user: req.user,
         }
     }
 
     @Put()
     @UseBefore(authMiddleware)
-    public async updateUser(@HeaderParam('authorization') token: string, @Req() req: any,
+    public async updateUser(@HeaderParam('authorization') token: string, 
+                            @Req() req: any, 
                       @BodyParam('name') name: string, 
                       @BodyParam('age') age: number, 
-                      @BodyParam('phone') phone: string,
-                      @BodyParam('teamName') teamName: string) {
+                      @BodyParam('phone') phone: string) {
         
-        const user: User = req.user;
-        const updatedUser: User = this.prisma.user.update({
-             where: { id: user.id },
-            data: { name, age, phone, teamName },
-        });
+       try {
+            const user: User = req.user;
+            const updatedUser: User = await this.prisma.user.update({
+                where: { id: user.id },
+                data: { name, age, phone },
+            });
 
-        return { isUpdated: true, user }
+            return { success: true, user }
+       } catch (error) {
+           console.error(error);
+           throw new Error(error);
+       }
     }
 }
 
