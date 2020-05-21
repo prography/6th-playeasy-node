@@ -36,7 +36,7 @@ export class UserController extends BaseController {
                 data: { name, age, phone },
             });
 
-            return { success: true, user }
+            return { success: true, updatedUser }
        } catch (error) {
            console.error(error);
            throw new Error(error);

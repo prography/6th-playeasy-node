@@ -88,7 +88,7 @@ export class AuthController extends BaseController {
                 isNewMember = true;
                 await this.prisma.user.create({data: { email }});
             }
-            const token: string = await jwt.sign({email: email}, 'SeCrEtKeYfOrHaShInG', {expiresIn : "7d"});
+            const token = await jwt.sign({email: email}, 'SeCrEtKeYfOrHaShInG', {expiresIn : "7d"});
 
             return { success: true, isNewMember, token };    
         } catch (error) {

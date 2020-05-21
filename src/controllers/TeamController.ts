@@ -32,14 +32,12 @@ export class TeamController extends BaseController {
                 where: { id: team.id },
                 data: {
                     users: {
-                        connect: { id: user.id }
+                        connect: { id: user.teamId }
                     }
                 }
             });
 
-            return {
-                success: true, team, user, 
-            }
+            return { success: true, updatedTeam, user, }
 
         } catch (error) {
             console.error(error);

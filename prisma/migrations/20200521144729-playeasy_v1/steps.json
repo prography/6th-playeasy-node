@@ -577,6 +577,13 @@
     {
       "tag": "CreateField",
       "model": "Match",
+      "field": "fee",
+      "type": "Int",
+      "arity": "Optional"
+    },
+    {
+      "tag": "CreateField",
+      "model": "Match",
       "field": "startAt",
       "type": "DateTime",
       "arity": "Required"
@@ -641,9 +648,34 @@
     {
       "tag": "CreateField",
       "model": "Match",
-      "field": "fee",
+      "field": "homeQuota",
       "type": "Int",
-      "arity": "Optional"
+      "arity": "Required"
+    },
+    {
+      "tag": "CreateDirective",
+      "location": {
+        "path": {
+          "tag": "Field",
+          "model": "Match",
+          "field": "homeQuota"
+        },
+        "directive": "map"
+      }
+    },
+    {
+      "tag": "CreateArgument",
+      "location": {
+        "tag": "Directive",
+        "path": {
+          "tag": "Field",
+          "model": "Match",
+          "field": "homeQuota"
+        },
+        "directive": "map"
+      },
+      "argument": "",
+      "value": "\"home_quota\""
     },
     {
       "tag": "CreateField",

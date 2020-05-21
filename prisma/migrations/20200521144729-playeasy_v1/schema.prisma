@@ -34,21 +34,21 @@ model Team {
 }
 
 model Match {
-  id              Int         @default(autoincrement()) @id
+  id              Int         @default(autoincrement()) @id 
   title           String      
   type            MatchType 
   description     String?
-  location        String          
+  location        String   
+  fee             Int?       
   startAt         DateTime    @map("start_at")
   endAt           DateTime    @map("end_at")
-  fee             Int?
-
+  homeQuota       Int         @map("home_quota")
   writer          User        @relation(fields: [writerId], references: [id])
   writerId        Int         @map("writer_id")
   
   // homeTeam        Team?       @relation( fields: [homeTeamId], references: [id]) 
   // homeTeamId      Int?        @map("home_team_id")
-  // homeQuota       Int         @map("home_quota")
+  
 
   // awayQuota       Int?        @map("away_quota") 
   // awayTeam        Team        @relation("away" fields: [awayTeamId], references: [id])
