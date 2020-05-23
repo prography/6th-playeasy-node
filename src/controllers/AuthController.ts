@@ -1,11 +1,9 @@
 import { BaseController } from './BaseController';
-import { JsonController, Get, Post, BodyParam, CookieParam , 
-        UseBefore, Req, Res, Render, Redirect, HttpError, NotFoundError } from 'routing-controllers';
+import { JsonController, Get, Post, BodyParam, Req, Res, Render, NotFoundError } from 'routing-controllers';
 import jwt from 'jsonwebtoken';
 import axios from 'axios';
 import querystring from 'querystring';
 import { PrismaClient } from '@prisma/client';
-import { authMiddleware } from '../middlewares/auth';
 
 import requestKakao from 'request'; // 테스트 후 삭제 예정
 
@@ -83,7 +81,7 @@ export class AuthController extends BaseController {
             });
 
             const email: string = kakaoUserInfo.data.kakao_account.email;
-            const exUser = await this.prisma.user.findOne({ where: { email } });
+            const exUser: any = await this.prisma.user.findOne({ where: { email } });
             let isNewMember: boolean = false;
     
             if (!exUser) {
@@ -95,13 +93,7 @@ export class AuthController extends BaseController {
             return { success: true, isNewMember, token };    
         } catch (error) {
             console.log(error);
-            throw new NotFoundError('login 실패');
+            throw new Error('login 실패');
         }
-    }
-
-    @Get('/user')
-    @UseBefore(authMiddleware)
-    public async auth(@BodyParam("token") token: string, @Req() req: any) {
-        return req.user;
     }
 }
