@@ -57,6 +57,16 @@ model Match {
   @@map("match")
 }
 
+model Location {
+  id              Int         @default(autoincrement()) @id
+  latitude        Float       
+  longitude       Float       
+  name            String    
+  address         String    
+}
+
+
+
 enum MatchType {
   SOCCKER FUTSAL5 FUTSAL6
 }

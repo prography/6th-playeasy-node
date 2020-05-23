@@ -58,9 +58,7 @@ export class MatchController extends BaseController {
     @Get()
     public async getMatch(@QueryParam('id') matchId: number) {
         try {
-            const match = await this.prisma.match.findOne({
-                where: { id: matchId }
-            });
+            const match = await this.prisma.match.findOne({ where: { id: matchId }});
 
             if (!match) 
                 throw new NotFoundError('해당 매치를 찾을 수 없습니다.');

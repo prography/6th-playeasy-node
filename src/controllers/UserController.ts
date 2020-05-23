@@ -1,5 +1,5 @@
 import { BaseController } from './BaseController';
-import { JsonController, Get, Put, UseBefore, HeaderParam, Req, BodyParam, Body } from 'routing-controllers';
+import { JsonController, Get, Put, UseBefore, HeaderParam, Req, BodyParam } from 'routing-controllers';
 import { PrismaClient, User } from '@prisma/client';
 import { authMiddleware } from '../middlewares/auth';
 

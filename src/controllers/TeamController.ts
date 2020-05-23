@@ -12,7 +12,6 @@ export class TeamController extends BaseController {
         this.prisma = new PrismaClient();
     }
 
-    // 팀 생성 or 수정
     @Post()
     @UseBefore(authMiddleware)
     public async createOrUpdateTeam(@HeaderParam('authorization') token: string, 

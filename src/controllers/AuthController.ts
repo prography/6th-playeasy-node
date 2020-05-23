@@ -1,5 +1,5 @@
 import { BaseController } from './BaseController';
-import { JsonController, Get, Post, BodyParam, Req, Res, Render, NotFoundError } from 'routing-controllers';
+import { JsonController, Get, Post, BodyParam, Req, Res, Render } from 'routing-controllers';
 import jwt from 'jsonwebtoken';
 import axios from 'axios';
 import querystring from 'querystring';
