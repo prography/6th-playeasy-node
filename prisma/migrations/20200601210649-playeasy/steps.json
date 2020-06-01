@@ -1,0 +1,233 @@
+{
+  "version": "0.3.14-fixed",
+  "steps": [
+    {
+      "tag": "CreateEnum",
+      "enum": "StatusType",
+      "values": [
+        "WAITING",
+        "CONFIRMED",
+        "DENIED",
+        "CANCEL"
+      ]
+    },
+    {
+      "tag": "CreateModel",
+      "model": "MatchTeamApplication"
+    },
+    {
+      "tag": "CreateField",
+      "model": "MatchTeamApplication",
+      "field": "id",
+      "type": "Int",
+      "arity": "Required"
+    },
+    {
+      "tag": "CreateDirective",
+      "location": {
+        "path": {
+          "tag": "Field",
+          "model": "MatchTeamApplication",
+          "field": "id"
+        },
+        "directive": "default"
+      }
+    },
+    {
+      "tag": "CreateArgument",
+      "location": {
+        "tag": "Directive",
+        "path": {
+          "tag": "Field",
+          "model": "MatchTeamApplication",
+          "field": "id"
+        },
+        "directive": "default"
+      },
+      "argument": "",
+      "value": "autoincrement()"
+    },
+    {
+      "tag": "CreateDirective",
+      "location": {
+        "path": {
+          "tag": "Field",
+          "model": "MatchTeamApplication",
+          "field": "id"
+        },
+        "directive": "id"
+      }
+    },
+    {
+      "tag": "CreateField",
+      "model": "MatchTeamApplication",
+      "field": "matchId",
+      "type": "Int",
+      "arity": "Required"
+    },
+    {
+      "tag": "CreateDirective",
+      "location": {
+        "path": {
+          "tag": "Field",
+          "model": "MatchTeamApplication",
+          "field": "matchId"
+        },
+        "directive": "map"
+      }
+    },
+    {
+      "tag": "CreateArgument",
+      "location": {
+        "tag": "Directive",
+        "path": {
+          "tag": "Field",
+          "model": "MatchTeamApplication",
+          "field": "matchId"
+        },
+        "directive": "map"
+      },
+      "argument": "",
+      "value": "\"match_id\""
+    },
+    {
+      "tag": "CreateField",
+      "model": "MatchTeamApplication",
+      "field": "homeQuota",
+      "type": "Int",
+      "arity": "Required"
+    },
+    {
+      "tag": "CreateDirective",
+      "location": {
+        "path": {
+          "tag": "Field",
+          "model": "MatchTeamApplication",
+          "field": "homeQuota"
+        },
+        "directive": "map"
+      }
+    },
+    {
+      "tag": "CreateArgument",
+      "location": {
+        "tag": "Directive",
+        "path": {
+          "tag": "Field",
+          "model": "MatchTeamApplication",
+          "field": "homeQuota"
+        },
+        "directive": "map"
+      },
+      "argument": "",
+      "value": "\"home_quota\""
+    },
+    {
+      "tag": "CreateField",
+      "model": "MatchTeamApplication",
+      "field": "teamId",
+      "type": "Int",
+      "arity": "Optional"
+    },
+    {
+      "tag": "CreateDirective",
+      "location": {
+        "path": {
+          "tag": "Field",
+          "model": "MatchTeamApplication",
+          "field": "teamId"
+        },
+        "directive": "map"
+      }
+    },
+    {
+      "tag": "CreateArgument",
+      "location": {
+        "tag": "Directive",
+        "path": {
+          "tag": "Field",
+          "model": "MatchTeamApplication",
+          "field": "teamId"
+        },
+        "directive": "map"
+      },
+      "argument": "",
+      "value": "\"team_id\""
+    },
+    {
+      "tag": "CreateField",
+      "model": "MatchTeamApplication",
+      "field": "status",
+      "type": "StatusType",
+      "arity": "Required"
+    },
+    {
+      "tag": "CreateDirective",
+      "location": {
+        "path": {
+          "tag": "Field",
+          "model": "MatchTeamApplication",
+          "field": "status"
+        },
+        "directive": "default"
+      }
+    },
+    {
+      "tag": "CreateArgument",
+      "location": {
+        "tag": "Directive",
+        "path": {
+          "tag": "Field",
+          "model": "MatchTeamApplication",
+          "field": "status"
+        },
+        "directive": "default"
+      },
+      "argument": "value",
+      "value": "WAITING"
+    },
+    {
+      "tag": "CreateDirective",
+      "location": {
+        "path": {
+          "tag": "Model",
+          "model": "MatchTeamApplication"
+        },
+        "directive": "map"
+      }
+    },
+    {
+      "tag": "CreateArgument",
+      "location": {
+        "tag": "Directive",
+        "path": {
+          "tag": "Model",
+          "model": "MatchTeamApplication"
+        },
+        "directive": "map"
+      },
+      "argument": "",
+      "value": "\"matchTeamApplication\""
+    },
+    {
+      "tag": "CreateDirective",
+      "location": {
+        "path": {
+          "tag": "Model",
+          "model": "MatchTeamApplication",
+          "arguments": [
+            {
+              "name": "",
+              "value": "[matchId, teamId]"
+            },
+            {
+              "name": "name",
+              "value": "\"matchId_teamId\""
+            }
+          ]
+        },
+        "directive": "unique"
+      }
+    }
+  ]
+}
