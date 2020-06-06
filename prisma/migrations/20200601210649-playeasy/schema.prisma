@@ -3,7 +3,7 @@ generator client {
 }
 
 datasource mysql {
-  url      = env("DB_URL")
+  url = "***"
   provider = "mysql"
 }
 
@@ -59,13 +59,11 @@ model Match {
   homeQuota       Int         @map("home_quota")
   writer          User        @relation(fields: [writerId], references: [id])
   writerId        Int         @map("writer_id")
-
-  homeTeamId      Int?        @map("home_team_id")
-  awayQuota       Int?        @map("away_quota") 
-  awayTeamId      Int?        @map("away_team_id")
   
   // homeTeam        Team?       @relation( fields: [homeTeamId], references: [id]) 
   // homeTeamId      Int?        @map("home_team_id")
+  
+
   // awayQuota       Int?        @map("away_quota") 
   // awayTeam        Team        @relation("away" fields: [awayTeamId], references: [id])
   // awayTeamId      Int?        @map("away_team_id")

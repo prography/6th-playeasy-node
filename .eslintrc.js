@@ -4,7 +4,7 @@ module.exports = {
     'node': true,
   },
   'extends': [
-    'google',
+    'standard',
   ],
   'globals': {
     'Atomics': 'readonly',
