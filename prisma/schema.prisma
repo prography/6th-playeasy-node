@@ -83,5 +83,13 @@ model MatchTeamApplication {
   status        StatusType         @default(value: WAITING)
   
   @@unique([matchId, teamId], name:"matchId_teamId")
-  @@map("matchTeamApplication")
+  @@map("match_team_application")
+}
+
+model MatchUserApplication {
+  id              Int         @default(autoincrement()) @id
+  match           Match       @relation(fields: [matchId], references: [id])
+  matchId         Int         
+  status          StatusType  
+  message         String?     
 }
