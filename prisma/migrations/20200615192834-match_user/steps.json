@@ -11,6 +11,16 @@
       ]
     },
     {
+      "tag": "CreateEnum",
+      "enum": "StatusType",
+      "values": [
+        "WAITING",
+        "CONFIRMED",
+        "DENIED",
+        "CANCEL"
+      ]
+    },
+    {
       "tag": "CreateSource",
       "source": "mysql"
     },
@@ -386,6 +396,13 @@
       "value": "\"team_id\""
     },
     {
+      "tag": "CreateField",
+      "model": "User",
+      "field": "MatchUser",
+      "type": "MatchUserApplication",
+      "arity": "List"
+    },
+    {
       "tag": "CreateDirective",
       "location": {
         "path": {
@@ -756,6 +773,109 @@
       "value": "\"writer_id\""
     },
     {
+      "tag": "CreateField",
+      "model": "Match",
+      "field": "homeTeamId",
+      "type": "Int",
+      "arity": "Optional"
+    },
+    {
+      "tag": "CreateDirective",
+      "location": {
+        "path": {
+          "tag": "Field",
+          "model": "Match",
+          "field": "homeTeamId"
+        },
+        "directive": "map"
+      }
+    },
+    {
+      "tag": "CreateArgument",
+      "location": {
+        "tag": "Directive",
+        "path": {
+          "tag": "Field",
+          "model": "Match",
+          "field": "homeTeamId"
+        },
+        "directive": "map"
+      },
+      "argument": "",
+      "value": "\"home_team_id\""
+    },
+    {
+      "tag": "CreateField",
+      "model": "Match",
+      "field": "awayQuota",
+      "type": "Int",
+      "arity": "Optional"
+    },
+    {
+      "tag": "CreateDirective",
+      "location": {
+        "path": {
+          "tag": "Field",
+          "model": "Match",
+          "field": "awayQuota"
+        },
+        "directive": "map"
+      }
+    },
+    {
+      "tag": "CreateArgument",
+      "location": {
+        "tag": "Directive",
+        "path": {
+          "tag": "Field",
+          "model": "Match",
+          "field": "awayQuota"
+        },
+        "directive": "map"
+      },
+      "argument": "",
+      "value": "\"away_quota\""
+    },
+    {
+      "tag": "CreateField",
+      "model": "Match",
+      "field": "awayTeamId",
+      "type": "Int",
+      "arity": "Optional"
+    },
+    {
+      "tag": "CreateDirective",
+      "location": {
+        "path": {
+          "tag": "Field",
+          "model": "Match",
+          "field": "awayTeamId"
+        },
+        "directive": "map"
+      }
+    },
+    {
+      "tag": "CreateArgument",
+      "location": {
+        "tag": "Directive",
+        "path": {
+          "tag": "Field",
+          "model": "Match",
+          "field": "awayTeamId"
+        },
+        "directive": "map"
+      },
+      "argument": "",
+      "value": "\"away_team_id\""
+    },
+    {
+      "tag": "CreateField",
+      "model": "Match",
+      "field": "usersApplication",
+      "type": "MatchUserApplication",
+      "arity": "List"
+    },
+    {
       "tag": "CreateDirective",
       "location": {
         "path": {
@@ -777,6 +897,464 @@
       },
       "argument": "",
       "value": "\"match\""
+    },
+    {
+      "tag": "CreateModel",
+      "model": "MatchTeamApplication"
+    },
+    {
+      "tag": "CreateField",
+      "model": "MatchTeamApplication",
+      "field": "id",
+      "type": "Int",
+      "arity": "Required"
+    },
+    {
+      "tag": "CreateDirective",
+      "location": {
+        "path": {
+          "tag": "Field",
+          "model": "MatchTeamApplication",
+          "field": "id"
+        },
+        "directive": "default"
+      }
+    },
+    {
+      "tag": "CreateArgument",
+      "location": {
+        "tag": "Directive",
+        "path": {
+          "tag": "Field",
+          "model": "MatchTeamApplication",
+          "field": "id"
+        },
+        "directive": "default"
+      },
+      "argument": "",
+      "value": "autoincrement()"
+    },
+    {
+      "tag": "CreateDirective",
+      "location": {
+        "path": {
+          "tag": "Field",
+          "model": "MatchTeamApplication",
+          "field": "id"
+        },
+        "directive": "id"
+      }
+    },
+    {
+      "tag": "CreateField",
+      "model": "MatchTeamApplication",
+      "field": "matchId",
+      "type": "Int",
+      "arity": "Required"
+    },
+    {
+      "tag": "CreateDirective",
+      "location": {
+        "path": {
+          "tag": "Field",
+          "model": "MatchTeamApplication",
+          "field": "matchId"
+        },
+        "directive": "map"
+      }
+    },
+    {
+      "tag": "CreateArgument",
+      "location": {
+        "tag": "Directive",
+        "path": {
+          "tag": "Field",
+          "model": "MatchTeamApplication",
+          "field": "matchId"
+        },
+        "directive": "map"
+      },
+      "argument": "",
+      "value": "\"match_id\""
+    },
+    {
+      "tag": "CreateField",
+      "model": "MatchTeamApplication",
+      "field": "homeQuota",
+      "type": "Int",
+      "arity": "Required"
+    },
+    {
+      "tag": "CreateDirective",
+      "location": {
+        "path": {
+          "tag": "Field",
+          "model": "MatchTeamApplication",
+          "field": "homeQuota"
+        },
+        "directive": "map"
+      }
+    },
+    {
+      "tag": "CreateArgument",
+      "location": {
+        "tag": "Directive",
+        "path": {
+          "tag": "Field",
+          "model": "MatchTeamApplication",
+          "field": "homeQuota"
+        },
+        "directive": "map"
+      },
+      "argument": "",
+      "value": "\"home_quota\""
+    },
+    {
+      "tag": "CreateField",
+      "model": "MatchTeamApplication",
+      "field": "teamId",
+      "type": "Int",
+      "arity": "Optional"
+    },
+    {
+      "tag": "CreateDirective",
+      "location": {
+        "path": {
+          "tag": "Field",
+          "model": "MatchTeamApplication",
+          "field": "teamId"
+        },
+        "directive": "map"
+      }
+    },
+    {
+      "tag": "CreateArgument",
+      "location": {
+        "tag": "Directive",
+        "path": {
+          "tag": "Field",
+          "model": "MatchTeamApplication",
+          "field": "teamId"
+        },
+        "directive": "map"
+      },
+      "argument": "",
+      "value": "\"team_id\""
+    },
+    {
+      "tag": "CreateField",
+      "model": "MatchTeamApplication",
+      "field": "status",
+      "type": "StatusType",
+      "arity": "Required"
+    },
+    {
+      "tag": "CreateDirective",
+      "location": {
+        "path": {
+          "tag": "Field",
+          "model": "MatchTeamApplication",
+          "field": "status"
+        },
+        "directive": "default"
+      }
+    },
+    {
+      "tag": "CreateArgument",
+      "location": {
+        "tag": "Directive",
+        "path": {
+          "tag": "Field",
+          "model": "MatchTeamApplication",
+          "field": "status"
+        },
+        "directive": "default"
+      },
+      "argument": "value",
+      "value": "WAITING"
+    },
+    {
+      "tag": "CreateDirective",
+      "location": {
+        "path": {
+          "tag": "Model",
+          "model": "MatchTeamApplication"
+        },
+        "directive": "map"
+      }
+    },
+    {
+      "tag": "CreateArgument",
+      "location": {
+        "tag": "Directive",
+        "path": {
+          "tag": "Model",
+          "model": "MatchTeamApplication"
+        },
+        "directive": "map"
+      },
+      "argument": "",
+      "value": "\"match_team_application\""
+    },
+    {
+      "tag": "CreateDirective",
+      "location": {
+        "path": {
+          "tag": "Model",
+          "model": "MatchTeamApplication",
+          "arguments": [
+            {
+              "name": "",
+              "value": "[matchId, teamId]"
+            },
+            {
+              "name": "name",
+              "value": "\"matchId_teamId\""
+            }
+          ]
+        },
+        "directive": "unique"
+      }
+    },
+    {
+      "tag": "CreateModel",
+      "model": "MatchUserApplication"
+    },
+    {
+      "tag": "CreateField",
+      "model": "MatchUserApplication",
+      "field": "id",
+      "type": "Int",
+      "arity": "Required"
+    },
+    {
+      "tag": "CreateDirective",
+      "location": {
+        "path": {
+          "tag": "Field",
+          "model": "MatchUserApplication",
+          "field": "id"
+        },
+        "directive": "default"
+      }
+    },
+    {
+      "tag": "CreateArgument",
+      "location": {
+        "tag": "Directive",
+        "path": {
+          "tag": "Field",
+          "model": "MatchUserApplication",
+          "field": "id"
+        },
+        "directive": "default"
+      },
+      "argument": "",
+      "value": "autoincrement()"
+    },
+    {
+      "tag": "CreateDirective",
+      "location": {
+        "path": {
+          "tag": "Field",
+          "model": "MatchUserApplication",
+          "field": "id"
+        },
+        "directive": "id"
+      }
+    },
+    {
+      "tag": "CreateField",
+      "model": "MatchUserApplication",
+      "field": "status",
+      "type": "StatusType",
+      "arity": "Required"
+    },
+    {
+      "tag": "CreateField",
+      "model": "MatchUserApplication",
+      "field": "message",
+      "type": "String",
+      "arity": "Optional"
+    },
+    {
+      "tag": "CreateField",
+      "model": "MatchUserApplication",
+      "field": "match",
+      "type": "Match",
+      "arity": "Required"
+    },
+    {
+      "tag": "CreateDirective",
+      "location": {
+        "path": {
+          "tag": "Field",
+          "model": "MatchUserApplication",
+          "field": "match"
+        },
+        "directive": "relation"
+      }
+    },
+    {
+      "tag": "CreateArgument",
+      "location": {
+        "tag": "Directive",
+        "path": {
+          "tag": "Field",
+          "model": "MatchUserApplication",
+          "field": "match"
+        },
+        "directive": "relation"
+      },
+      "argument": "fields",
+      "value": "[matchId]"
+    },
+    {
+      "tag": "CreateArgument",
+      "location": {
+        "tag": "Directive",
+        "path": {
+          "tag": "Field",
+          "model": "MatchUserApplication",
+          "field": "match"
+        },
+        "directive": "relation"
+      },
+      "argument": "references",
+      "value": "[id]"
+    },
+    {
+      "tag": "CreateField",
+      "model": "MatchUserApplication",
+      "field": "matchId",
+      "type": "Int",
+      "arity": "Required"
+    },
+    {
+      "tag": "CreateDirective",
+      "location": {
+        "path": {
+          "tag": "Field",
+          "model": "MatchUserApplication",
+          "field": "matchId"
+        },
+        "directive": "map"
+      }
+    },
+    {
+      "tag": "CreateArgument",
+      "location": {
+        "tag": "Directive",
+        "path": {
+          "tag": "Field",
+          "model": "MatchUserApplication",
+          "field": "matchId"
+        },
+        "directive": "map"
+      },
+      "argument": "",
+      "value": "\"match_id\""
+    },
+    {
+      "tag": "CreateField",
+      "model": "MatchUserApplication",
+      "field": "user",
+      "type": "User",
+      "arity": "Required"
+    },
+    {
+      "tag": "CreateDirective",
+      "location": {
+        "path": {
+          "tag": "Field",
+          "model": "MatchUserApplication",
+          "field": "user"
+        },
+        "directive": "relation"
+      }
+    },
+    {
+      "tag": "CreateArgument",
+      "location": {
+        "tag": "Directive",
+        "path": {
+          "tag": "Field",
+          "model": "MatchUserApplication",
+          "field": "user"
+        },
+        "directive": "relation"
+      },
+      "argument": "fields",
+      "value": "[userId]"
+    },
+    {
+      "tag": "CreateArgument",
+      "location": {
+        "tag": "Directive",
+        "path": {
+          "tag": "Field",
+          "model": "MatchUserApplication",
+          "field": "user"
+        },
+        "directive": "relation"
+      },
+      "argument": "references",
+      "value": "[id]"
+    },
+    {
+      "tag": "CreateField",
+      "model": "MatchUserApplication",
+      "field": "userId",
+      "type": "Int",
+      "arity": "Required"
+    },
+    {
+      "tag": "CreateDirective",
+      "location": {
+        "path": {
+          "tag": "Field",
+          "model": "MatchUserApplication",
+          "field": "userId"
+        },
+        "directive": "map"
+      }
+    },
+    {
+      "tag": "CreateArgument",
+      "location": {
+        "tag": "Directive",
+        "path": {
+          "tag": "Field",
+          "model": "MatchUserApplication",
+          "field": "userId"
+        },
+        "directive": "map"
+      },
+      "argument": "",
+      "value": "\"user_id\""
+    },
+    {
+      "tag": "CreateDirective",
+      "location": {
+        "path": {
+          "tag": "Model",
+          "model": "MatchUserApplication"
+        },
+        "directive": "map"
+      }
+    },
+    {
+      "tag": "CreateArgument",
+      "location": {
+        "tag": "Directive",
+        "path": {
+          "tag": "Model",
+          "model": "MatchUserApplication"
+        },
+        "directive": "map"
+      },
+      "argument": "",
+      "value": "\"match_user_application\""
     }
   ]
 }
