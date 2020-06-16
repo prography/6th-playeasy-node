@@ -3,7 +3,7 @@ generator client {
 }
 
 datasource mysql {
-  url      = env("DB_URL")
+  url = "***"
   provider = "mysql"
 }
 
@@ -35,6 +35,7 @@ model User {
   // User n : 1 Team
   team            Team?       @relation(fields: [teamId], references: [id])
   teamId          Int?        @map("team_id")
+
 
   // User 1 : N MatchUser
   MatchUser       MatchUserApplication[]

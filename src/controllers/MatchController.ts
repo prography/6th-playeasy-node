@@ -94,7 +94,7 @@ export class MatchController extends BaseController {
                              @BodyParam('data') data: object) {
         try {
             const user: User = req.user;        
-            const match = await this.prisma.match.findOne({ where: {id: matchId }});
+            const match = await this.prisma.match.findOne({ where: { id: matchId }});
 
             if(!match) 
                 throw new NotFoundError('해당하는 match 정보가 없습니다.');
