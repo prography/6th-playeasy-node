@@ -11,7 +11,7 @@ import requestKakao from 'request'; // 테스트 후 삭제 예정
 const kakao = { 
     clientID: "794ed9a88648a25cbaec8bc25ad4f2a6",
     clientSecret: "BtSD12taxk3DqusTvOjGBQv2MbZoViI3",
-    redirectUri: "http://localhost:3000/api/auth/kakao/callback"
+    redirectUri: "http://api.theplayeasy.com/api/auth/kakao/callback"
   };
 
 @JsonController('/auth')
