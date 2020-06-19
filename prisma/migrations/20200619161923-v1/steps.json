@@ -398,7 +398,14 @@
     {
       "tag": "CreateField",
       "model": "User",
-      "field": "MatchUser",
+      "field": "matches",
+      "type": "Match",
+      "arity": "List"
+    },
+    {
+      "tag": "CreateField",
+      "model": "User",
+      "field": "matchUsers",
       "type": "MatchUserApplication",
       "arity": "List"
     },
@@ -491,6 +498,20 @@
       "model": "Team",
       "field": "users",
       "type": "User",
+      "arity": "List"
+    },
+    {
+      "tag": "CreateField",
+      "model": "Team",
+      "field": "matches",
+      "type": "Match",
+      "arity": "List"
+    },
+    {
+      "tag": "CreateField",
+      "model": "Team",
+      "field": "matchTeams",
+      "type": "MatchTeamApplication",
       "arity": "List"
     },
     {
@@ -594,13 +615,6 @@
     {
       "tag": "CreateField",
       "model": "Match",
-      "field": "fee",
-      "type": "Int",
-      "arity": "Optional"
-    },
-    {
-      "tag": "CreateField",
-      "model": "Match",
       "field": "startAt",
       "type": "DateTime",
       "arity": "Required"
@@ -633,39 +647,14 @@
     {
       "tag": "CreateField",
       "model": "Match",
-      "field": "endAt",
-      "type": "DateTime",
+      "field": "duration",
+      "type": "Int",
       "arity": "Required"
-    },
-    {
-      "tag": "CreateDirective",
-      "location": {
-        "path": {
-          "tag": "Field",
-          "model": "Match",
-          "field": "endAt"
-        },
-        "directive": "map"
-      }
-    },
-    {
-      "tag": "CreateArgument",
-      "location": {
-        "tag": "Directive",
-        "path": {
-          "tag": "Field",
-          "model": "Match",
-          "field": "endAt"
-        },
-        "directive": "map"
-      },
-      "argument": "",
-      "value": "\"end_at\""
     },
     {
       "tag": "CreateField",
       "model": "Match",
-      "field": "homeQuota",
+      "field": "totalQuota",
       "type": "Int",
       "arity": "Required"
     },
@@ -675,7 +664,7 @@
         "path": {
           "tag": "Field",
           "model": "Match",
-          "field": "homeQuota"
+          "field": "totalQuota"
         },
         "directive": "map"
       }
@@ -687,12 +676,151 @@
         "path": {
           "tag": "Field",
           "model": "Match",
-          "field": "homeQuota"
+          "field": "totalQuota"
         },
         "directive": "map"
       },
       "argument": "",
-      "value": "\"home_quota\""
+      "value": "\"total_quota\""
+    },
+    {
+      "tag": "CreateField",
+      "model": "Match",
+      "field": "fee",
+      "type": "Int",
+      "arity": "Optional"
+    },
+    {
+      "tag": "CreateField",
+      "model": "Match",
+      "field": "status",
+      "type": "StatusType",
+      "arity": "Required"
+    },
+    {
+      "tag": "CreateDirective",
+      "location": {
+        "path": {
+          "tag": "Field",
+          "model": "Match",
+          "field": "status"
+        },
+        "directive": "default"
+      }
+    },
+    {
+      "tag": "CreateArgument",
+      "location": {
+        "tag": "Directive",
+        "path": {
+          "tag": "Field",
+          "model": "Match",
+          "field": "status"
+        },
+        "directive": "default"
+      },
+      "argument": "value",
+      "value": "WAITING"
+    },
+    {
+      "tag": "CreateField",
+      "model": "Match",
+      "field": "createdAt",
+      "type": "DateTime",
+      "arity": "Required"
+    },
+    {
+      "tag": "CreateDirective",
+      "location": {
+        "path": {
+          "tag": "Field",
+          "model": "Match",
+          "field": "createdAt"
+        },
+        "directive": "default"
+      }
+    },
+    {
+      "tag": "CreateArgument",
+      "location": {
+        "tag": "Directive",
+        "path": {
+          "tag": "Field",
+          "model": "Match",
+          "field": "createdAt"
+        },
+        "directive": "default"
+      },
+      "argument": "",
+      "value": "now()"
+    },
+    {
+      "tag": "CreateDirective",
+      "location": {
+        "path": {
+          "tag": "Field",
+          "model": "Match",
+          "field": "createdAt"
+        },
+        "directive": "map"
+      }
+    },
+    {
+      "tag": "CreateArgument",
+      "location": {
+        "tag": "Directive",
+        "path": {
+          "tag": "Field",
+          "model": "Match",
+          "field": "createdAt"
+        },
+        "directive": "map"
+      },
+      "argument": "",
+      "value": "\"created_at\""
+    },
+    {
+      "tag": "CreateField",
+      "model": "Match",
+      "field": "updatedAt",
+      "type": "DateTime",
+      "arity": "Optional"
+    },
+    {
+      "tag": "CreateDirective",
+      "location": {
+        "path": {
+          "tag": "Field",
+          "model": "Match",
+          "field": "updatedAt"
+        },
+        "directive": "updatedAt"
+      }
+    },
+    {
+      "tag": "CreateDirective",
+      "location": {
+        "path": {
+          "tag": "Field",
+          "model": "Match",
+          "field": "updatedAt"
+        },
+        "directive": "map"
+      }
+    },
+    {
+      "tag": "CreateArgument",
+      "location": {
+        "tag": "Directive",
+        "path": {
+          "tag": "Field",
+          "model": "Match",
+          "field": "updatedAt"
+        },
+        "directive": "map"
+      },
+      "argument": "",
+      "value": "\"updated_at\""
     },
     {
       "tag": "CreateField",
@@ -775,6 +903,52 @@
     {
       "tag": "CreateField",
       "model": "Match",
+      "field": "homeTeam",
+      "type": "Team",
+      "arity": "Optional"
+    },
+    {
+      "tag": "CreateDirective",
+      "location": {
+        "path": {
+          "tag": "Field",
+          "model": "Match",
+          "field": "homeTeam"
+        },
+        "directive": "relation"
+      }
+    },
+    {
+      "tag": "CreateArgument",
+      "location": {
+        "tag": "Directive",
+        "path": {
+          "tag": "Field",
+          "model": "Match",
+          "field": "homeTeam"
+        },
+        "directive": "relation"
+      },
+      "argument": "fields",
+      "value": "[homeTeamId]"
+    },
+    {
+      "tag": "CreateArgument",
+      "location": {
+        "tag": "Directive",
+        "path": {
+          "tag": "Field",
+          "model": "Match",
+          "field": "homeTeam"
+        },
+        "directive": "relation"
+      },
+      "argument": "references",
+      "value": "[id]"
+    },
+    {
+      "tag": "CreateField",
+      "model": "Match",
       "field": "homeTeamId",
       "type": "Int",
       "arity": "Optional"
@@ -807,72 +981,15 @@
     {
       "tag": "CreateField",
       "model": "Match",
-      "field": "awayQuota",
-      "type": "Int",
-      "arity": "Optional"
-    },
-    {
-      "tag": "CreateDirective",
-      "location": {
-        "path": {
-          "tag": "Field",
-          "model": "Match",
-          "field": "awayQuota"
-        },
-        "directive": "map"
-      }
-    },
-    {
-      "tag": "CreateArgument",
-      "location": {
-        "tag": "Directive",
-        "path": {
-          "tag": "Field",
-          "model": "Match",
-          "field": "awayQuota"
-        },
-        "directive": "map"
-      },
-      "argument": "",
-      "value": "\"away_quota\""
-    },
-    {
-      "tag": "CreateField",
-      "model": "Match",
-      "field": "awayTeamId",
-      "type": "Int",
-      "arity": "Optional"
-    },
-    {
-      "tag": "CreateDirective",
-      "location": {
-        "path": {
-          "tag": "Field",
-          "model": "Match",
-          "field": "awayTeamId"
-        },
-        "directive": "map"
-      }
-    },
-    {
-      "tag": "CreateArgument",
-      "location": {
-        "tag": "Directive",
-        "path": {
-          "tag": "Field",
-          "model": "Match",
-          "field": "awayTeamId"
-        },
-        "directive": "map"
-      },
-      "argument": "",
-      "value": "\"away_team_id\""
-    },
-    {
-      "tag": "CreateField",
-      "model": "Match",
       "field": "usersApplication",
       "type": "MatchUserApplication",
+      "arity": "List"
+    },
+    {
+      "tag": "CreateField",
+      "model": "Match",
+      "field": "teamsApplication",
+      "type": "MatchTeamApplication",
       "arity": "List"
     },
     {
@@ -948,98 +1065,9 @@
     {
       "tag": "CreateField",
       "model": "MatchTeamApplication",
-      "field": "matchId",
+      "field": "quota",
       "type": "Int",
       "arity": "Required"
-    },
-    {
-      "tag": "CreateDirective",
-      "location": {
-        "path": {
-          "tag": "Field",
-          "model": "MatchTeamApplication",
-          "field": "matchId"
-        },
-        "directive": "map"
-      }
-    },
-    {
-      "tag": "CreateArgument",
-      "location": {
-        "tag": "Directive",
-        "path": {
-          "tag": "Field",
-          "model": "MatchTeamApplication",
-          "field": "matchId"
-        },
-        "directive": "map"
-      },
-      "argument": "",
-      "value": "\"match_id\""
-    },
-    {
-      "tag": "CreateField",
-      "model": "MatchTeamApplication",
-      "field": "homeQuota",
-      "type": "Int",
-      "arity": "Required"
-    },
-    {
-      "tag": "CreateDirective",
-      "location": {
-        "path": {
-          "tag": "Field",
-          "model": "MatchTeamApplication",
-          "field": "homeQuota"
-        },
-        "directive": "map"
-      }
-    },
-    {
-      "tag": "CreateArgument",
-      "location": {
-        "tag": "Directive",
-        "path": {
-          "tag": "Field",
-          "model": "MatchTeamApplication",
-          "field": "homeQuota"
-        },
-        "directive": "map"
-      },
-      "argument": "",
-      "value": "\"home_quota\""
-    },
-    {
-      "tag": "CreateField",
-      "model": "MatchTeamApplication",
-      "field": "teamId",
-      "type": "Int",
-      "arity": "Optional"
-    },
-    {
-      "tag": "CreateDirective",
-      "location": {
-        "path": {
-          "tag": "Field",
-          "model": "MatchTeamApplication",
-          "field": "teamId"
-        },
-        "directive": "map"
-      }
-    },
-    {
-      "tag": "CreateArgument",
-      "location": {
-        "tag": "Directive",
-        "path": {
-          "tag": "Field",
-          "model": "MatchTeamApplication",
-          "field": "teamId"
-        },
-        "directive": "map"
-      },
-      "argument": "",
-      "value": "\"team_id\""
     },
     {
       "tag": "CreateField",
@@ -1074,6 +1102,262 @@
       "value": "WAITING"
     },
     {
+      "tag": "CreateField",
+      "model": "MatchTeamApplication",
+      "field": "createdAt",
+      "type": "DateTime",
+      "arity": "Required"
+    },
+    {
+      "tag": "CreateDirective",
+      "location": {
+        "path": {
+          "tag": "Field",
+          "model": "MatchTeamApplication",
+          "field": "createdAt"
+        },
+        "directive": "default"
+      }
+    },
+    {
+      "tag": "CreateArgument",
+      "location": {
+        "tag": "Directive",
+        "path": {
+          "tag": "Field",
+          "model": "MatchTeamApplication",
+          "field": "createdAt"
+        },
+        "directive": "default"
+      },
+      "argument": "",
+      "value": "now()"
+    },
+    {
+      "tag": "CreateDirective",
+      "location": {
+        "path": {
+          "tag": "Field",
+          "model": "MatchTeamApplication",
+          "field": "createdAt"
+        },
+        "directive": "map"
+      }
+    },
+    {
+      "tag": "CreateArgument",
+      "location": {
+        "tag": "Directive",
+        "path": {
+          "tag": "Field",
+          "model": "MatchTeamApplication",
+          "field": "createdAt"
+        },
+        "directive": "map"
+      },
+      "argument": "",
+      "value": "\"created_at\""
+    },
+    {
+      "tag": "CreateField",
+      "model": "MatchTeamApplication",
+      "field": "updatedAt",
+      "type": "DateTime",
+      "arity": "Optional"
+    },
+    {
+      "tag": "CreateDirective",
+      "location": {
+        "path": {
+          "tag": "Field",
+          "model": "MatchTeamApplication",
+          "field": "updatedAt"
+        },
+        "directive": "updatedAt"
+      }
+    },
+    {
+      "tag": "CreateDirective",
+      "location": {
+        "path": {
+          "tag": "Field",
+          "model": "MatchTeamApplication",
+          "field": "updatedAt"
+        },
+        "directive": "map"
+      }
+    },
+    {
+      "tag": "CreateArgument",
+      "location": {
+        "tag": "Directive",
+        "path": {
+          "tag": "Field",
+          "model": "MatchTeamApplication",
+          "field": "updatedAt"
+        },
+        "directive": "map"
+      },
+      "argument": "",
+      "value": "\"updated_at\""
+    },
+    {
+      "tag": "CreateField",
+      "model": "MatchTeamApplication",
+      "field": "match",
+      "type": "Match",
+      "arity": "Required"
+    },
+    {
+      "tag": "CreateDirective",
+      "location": {
+        "path": {
+          "tag": "Field",
+          "model": "MatchTeamApplication",
+          "field": "match"
+        },
+        "directive": "relation"
+      }
+    },
+    {
+      "tag": "CreateArgument",
+      "location": {
+        "tag": "Directive",
+        "path": {
+          "tag": "Field",
+          "model": "MatchTeamApplication",
+          "field": "match"
+        },
+        "directive": "relation"
+      },
+      "argument": "fields",
+      "value": "[matchId]"
+    },
+    {
+      "tag": "CreateArgument",
+      "location": {
+        "tag": "Directive",
+        "path": {
+          "tag": "Field",
+          "model": "MatchTeamApplication",
+          "field": "match"
+        },
+        "directive": "relation"
+      },
+      "argument": "references",
+      "value": "[id]"
+    },
+    {
+      "tag": "CreateField",
+      "model": "MatchTeamApplication",
+      "field": "matchId",
+      "type": "Int",
+      "arity": "Required"
+    },
+    {
+      "tag": "CreateDirective",
+      "location": {
+        "path": {
+          "tag": "Field",
+          "model": "MatchTeamApplication",
+          "field": "matchId"
+        },
+        "directive": "map"
+      }
+    },
+    {
+      "tag": "CreateArgument",
+      "location": {
+        "tag": "Directive",
+        "path": {
+          "tag": "Field",
+          "model": "MatchTeamApplication",
+          "field": "matchId"
+        },
+        "directive": "map"
+      },
+      "argument": "",
+      "value": "\"match_id\""
+    },
+    {
+      "tag": "CreateField",
+      "model": "MatchTeamApplication",
+      "field": "team",
+      "type": "Team",
+      "arity": "Required"
+    },
+    {
+      "tag": "CreateDirective",
+      "location": {
+        "path": {
+          "tag": "Field",
+          "model": "MatchTeamApplication",
+          "field": "team"
+        },
+        "directive": "relation"
+      }
+    },
+    {
+      "tag": "CreateArgument",
+      "location": {
+        "tag": "Directive",
+        "path": {
+          "tag": "Field",
+          "model": "MatchTeamApplication",
+          "field": "team"
+        },
+        "directive": "relation"
+      },
+      "argument": "fields",
+      "value": "[teamId]"
+    },
+    {
+      "tag": "CreateArgument",
+      "location": {
+        "tag": "Directive",
+        "path": {
+          "tag": "Field",
+          "model": "MatchTeamApplication",
+          "field": "team"
+        },
+        "directive": "relation"
+      },
+      "argument": "references",
+      "value": "[id]"
+    },
+    {
+      "tag": "CreateField",
+      "model": "MatchTeamApplication",
+      "field": "teamId",
+      "type": "Int",
+      "arity": "Required"
+    },
+    {
+      "tag": "CreateDirective",
+      "location": {
+        "path": {
+          "tag": "Field",
+          "model": "MatchTeamApplication",
+          "field": "teamId"
+        },
+        "directive": "map"
+      }
+    },
+    {
+      "tag": "CreateArgument",
+      "location": {
+        "tag": "Directive",
+        "path": {
+          "tag": "Field",
+          "model": "MatchTeamApplication",
+          "field": "teamId"
+        },
+        "directive": "map"
+      },
+      "argument": "",
+      "value": "\"team_id\""
+    },
+    {
       "tag": "CreateDirective",
       "location": {
         "path": {
@@ -1095,26 +1379,6 @@
       },
       "argument": "",
       "value": "\"match_team_application\""
-    },
-    {
-      "tag": "CreateDirective",
-      "location": {
-        "path": {
-          "tag": "Model",
-          "model": "MatchTeamApplication",
-          "arguments": [
-            {
-              "name": "",
-              "value": "[matchId, teamId]"
-            },
-            {
-              "name": "name",
-              "value": "\"matchId_teamId\""
-            }
-          ]
-        },
-        "directive": "unique"
-      }
     },
     {
       "tag": "CreateModel",
@@ -1176,6 +1440,106 @@
       "field": "message",
       "type": "String",
       "arity": "Optional"
+    },
+    {
+      "tag": "CreateField",
+      "model": "MatchUserApplication",
+      "field": "createdAt",
+      "type": "DateTime",
+      "arity": "Required"
+    },
+    {
+      "tag": "CreateDirective",
+      "location": {
+        "path": {
+          "tag": "Field",
+          "model": "MatchUserApplication",
+          "field": "createdAt"
+        },
+        "directive": "default"
+      }
+    },
+    {
+      "tag": "CreateArgument",
+      "location": {
+        "tag": "Directive",
+        "path": {
+          "tag": "Field",
+          "model": "MatchUserApplication",
+          "field": "createdAt"
+        },
+        "directive": "default"
+      },
+      "argument": "",
+      "value": "now()"
+    },
+    {
+      "tag": "CreateDirective",
+      "location": {
+        "path": {
+          "tag": "Field",
+          "model": "MatchUserApplication",
+          "field": "createdAt"
+        },
+        "directive": "map"
+      }
+    },
+    {
+      "tag": "CreateArgument",
+      "location": {
+        "tag": "Directive",
+        "path": {
+          "tag": "Field",
+          "model": "MatchUserApplication",
+          "field": "createdAt"
+        },
+        "directive": "map"
+      },
+      "argument": "",
+      "value": "\"created_at\""
+    },
+    {
+      "tag": "CreateField",
+      "model": "MatchUserApplication",
+      "field": "updatedAt",
+      "type": "DateTime",
+      "arity": "Optional"
+    },
+    {
+      "tag": "CreateDirective",
+      "location": {
+        "path": {
+          "tag": "Field",
+          "model": "MatchUserApplication",
+          "field": "updatedAt"
+        },
+        "directive": "updatedAt"
+      }
+    },
+    {
+      "tag": "CreateDirective",
+      "location": {
+        "path": {
+          "tag": "Field",
+          "model": "MatchUserApplication",
+          "field": "updatedAt"
+        },
+        "directive": "map"
+      }
+    },
+    {
+      "tag": "CreateArgument",
+      "location": {
+        "tag": "Directive",
+        "path": {
+          "tag": "Field",
+          "model": "MatchUserApplication",
+          "field": "updatedAt"
+        },
+        "directive": "map"
+      },
+      "argument": "",
+      "value": "\"updated_at\""
     },
     {
       "tag": "CreateField",

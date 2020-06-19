@@ -32,12 +32,15 @@ model User {
   createdAt       DateTime    @default(now()) @map("created_at")
   updatedAt       DateTime?   @updatedAt() @map("updated_at") 
   
-  // User n : 1 Team
+  // User N : 1 Team
   team            Team?       @relation(fields: [teamId], references: [id])
   teamId          Int?        @map("team_id")
 
+  // user 1 : N Match
+  matches         Match[]
+
   // User 1 : N MatchUser
-  MatchUser       MatchUserApplication[]
+  matchUsers       MatchUserApplication[]
 
   @@map("user")
 }
@@ -47,52 +50,68 @@ model Team {
   name            String   
   description     String?
   
-  // User n : 1 Team
+  // Team 1 : N User
   users           User[]
 
+  // Team 1 : N Match
+  matches          Match[]
+
+  // Team 1 : N MatchTeamApplication
+  matchTeams      MatchTeamApplication[]
+
+  
   @@map("team")   
 }
 
 model Match {
-  id              Int         @default(autoincrement()) @id 
-  title           String      
+  id                  Int         @default(autoincrement()) @id 
+  title               String      
   type                MatchType 
   description         String?
   location            String   
-  fee                 Int?       
   startAt             DateTime    @map("start_at")
-  endAt               DateTime    @map("end_at")
-  homeQuota           Int         @map("home_quota")
+  duration            Int    
+  totalQuota          Int         @map("total_quota")
+  fee                 Int?       
+  status              StatusType  @default(value: WAITING)
+  createdAt           DateTime    @default(now()) @map("created_at")
+  updatedAt           DateTime?   @updatedAt() @map("updated_at")
+
+  // Match N : 1 User
   writer              User        @relation(fields: [writerId], references: [id])
   writerId            Int         @map("writer_id")
 
-  homeTeamId          Int?        @map("home_team_id")
-  awayQuota           Int?        @map("away_quota") 
-  awayTeamId          Int?        @map("away_team_id")
+
+  // Match N : 1 Team
+  homeTeam        Team?       @relation( fields: [homeTeamId], references: [id]) 
+  homeTeamId      Int?        @map("home_team_id")
+
   
   // Match 1 : N MatchUserApplication
   usersApplication    MatchUserApplication[]
 
-
-  // homeTeam        Team?       @relation( fields: [homeTeamId], references: [id]) 
-  // homeTeamId      Int?        @map("home_team_id")
-  // awayQuota       Int?        @map("away_quota") 
-  // awayTeam        Team        @relation("away" fields: [awayTeamId], references: [id])
-  // awayTeamId      Int?        @map("away_team_id")
+  // Match 1 : N MatchTeamApplication
+  teamsApplication    MatchTeamApplication[]
   
   @@map("match")
 }
 
 model MatchTeamApplication {
   id              Int             @default(autoincrement()) @id
+  quota           Int             
+  status          StatusType      @default(value: WAITING)
+  createdAt       DateTime        @default(now()) @map("created_at")
+  updatedAt       DateTime?       @updatedAt() @map("updated_at")
+
+  // MatchTeamApplication N : 1 Match
+  match           Match           @relation(fields: [matchId], references: [id])
   matchId         Int             @map("match_id")
-  homeQuota       Int             @map("home_quota")
-  //team            Team?         @relation(fields: [teamId], references: [id])
-  //teamId          Int?          @map("team_id")
-  teamId          Int?            @map("team_id")
-  status        StatusType        @default(value: WAITING)
-  
-  @@unique([matchId, teamId], name:"matchId_teamId")
+
+  // MatchTeamApplication N : 1 Team
+  team            Team            @relation(fields: [teamId], references: [id])
+  teamId          Int             @map("team_id")
+
+
   @@map("match_team_application")
 }
 
@@ -100,10 +119,14 @@ model MatchUserApplication {
   id              Int             @default(autoincrement()) @id
   status          StatusType  
   message         String?
+  createdAt       DateTime        @default(now()) @map("created_at")
+  updatedAt       DateTime?       @updatedAt() @map("updated_at")
 
+  // MatchUserApplication N : 1 Match
   match           Match           @relation(fields: [matchId], references: [id])
   matchId         Int             @map("match_id")
   
+  // MatchUserApplication N : 1 User
   user            User            @relation(fields: [userId], references: [id])
   userId          Int             @map("user_id")
 
