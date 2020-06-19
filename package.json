@@ -4,7 +4,7 @@
   "description": "플레이지 백엔드",
   "main": "index.js",
   "scripts": {
-    "build": "tsc",
+    "build": "npm run prisma:generate && tsc",
     "start": "npm run prisma:generate && node ./dist",
     "dev": "npm run prisma:migrate && npm run prisma:generate && nodemon",
     "prisma:generate": "prisma2 generate",
