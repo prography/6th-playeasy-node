@@ -1,6 +1,6 @@
 import { BaseController } from './BaseController';
 import { JsonController, Get, Post, Put, Delete, BodyParam, 
-        UseBefore, Req, HeaderParam, Param, NotFoundError, UnauthorizedError, QueryParam } from 'routing-controllers';
+        UseBefore, Req, HeaderParam, NotFoundError, UnauthorizedError, QueryParam } from 'routing-controllers';
 import { PrismaClient, User, Match } from '@prisma/client';
 import { authMiddleware } from '../middlewares/auth';
 

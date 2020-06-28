@@ -12,7 +12,7 @@ export class UserController extends BaseController {
         this.prisma = new PrismaClient();
     }
 
-    @Get()
+    @Get()  // 내 정보 보기
     @UseBefore(authMiddleware)
     public getUser(@HeaderParam('authorization') token: string, @Req() req: any) {
         return {
@@ -21,7 +21,7 @@ export class UserController extends BaseController {
         }
     }
 
-    @Put()
+    @Put()  // 내 정보 수정
     @UseBefore(authMiddleware)
     public async updateUser(@HeaderParam('authorization') token: string, 
                             @Req() req: any, 
@@ -42,5 +42,9 @@ export class UserController extends BaseController {
            throw new Error(error);
        }
     }
+
+    // 내가 등록한 매치 보기
+    // 내가 신청한 매치 보기 (팀, 유저)
+    // 사진 (언젠가..)
 }
 

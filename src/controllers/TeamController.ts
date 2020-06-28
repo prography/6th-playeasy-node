@@ -23,7 +23,7 @@ export class TeamController extends BaseController {
 
             const team: Team = await this.prisma.team.upsert({
                 where: {id: req.user.id },
-                update: { name, description, },
+                update: { name, description },
                 create: { name, description },
             });
 
@@ -43,5 +43,8 @@ export class TeamController extends BaseController {
             throw new Error('팀 정보 update 실패');
         }
     }
+
+
+    
 }
 
