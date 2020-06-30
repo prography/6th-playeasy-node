@@ -1,14 +1,14 @@
 import { BaseController } from './BaseController';
 import { JsonController, Get, Post, Put, Delete, BodyParam, 
         UseBefore, Req, HeaderParam, NotFoundError, UnauthorizedError, QueryParam } from 'routing-controllers';
-import { PrismaClient, User, Match } from '@prisma/client';
+import { PrismaClient, User, Match, MatchType, Location } from '@prisma/client';
 import { authMiddleware } from '../middlewares/auth';
 
-enum MatchType {
-    SOCCKER = "SOCCKER",
-    FUTSAL5 = "FUTSAL5",
-    FUTSAL6 = "FUTSAL6", 
-}
+// enum MatchType {
+//     SOCCKER = "SOCCKER",
+//     FUTSAL5 = "FUTSAL5",
+//     FUTSAL6 = "FUTSAL6", 
+// }
 
 @JsonController('/match')
 export class MatchController extends BaseController {
@@ -19,30 +19,32 @@ export class MatchController extends BaseController {
         this.prisma = new PrismaClient();
     }
 
+    // 매치 생성
     @Post()
     @UseBefore(authMiddleware)
     public async register(@HeaderParam('authorization') token: string, @Req() req: any,
-                    @BodyParam('title') title:  string,
-                    @BodyParam('type') matchType:  number,
-                    @BodyParam('description') description:  string,
-                    @BodyParam('location') location:  string,
-                    @BodyParam('fee') fee:  number,
-                    @BodyParam('startAt') startAt: Date,
-                    @BodyParam('endAt') endAt: Date,
-                    @BodyParam('homeQuota') homeQuota:  number,
-                   ) {
+                    @BodyParam('type') type: MatchType, @BodyParam('description') description:  string,
+                    @BodyParam('startAt') startAt: Date, @BodyParam('duration') duration: number,
+                    @BodyParam('fee') fee:  number, @BodyParam('phone') phone: string,
+                    @BodyParam('totalQuota') totalQuota:  number, @BodyParam('location') location: Location) {
         try {
-            let type;
-            if (matchType === 0) type = MatchType.SOCCKER;
-            else if (matchType === 1) type = MatchType.FUTSAL5;
-            else type = MatchType.FUTSAL6;
+            // let type;
+            // if (matchType === 0) type = MatchType.SOCCKER;
+            // else if (matchType === 1) type = MatchType.FUTSAL5;
+            // else type = MatchType.FUTSAL6;
             
             const match: Match = await this.prisma.match.create({
                 data: {
-                    title, type, description, homeQuota,
-                    location, fee, startAt, endAt,
+                    type, description, startAt, duration,
+                    fee, phone, totalQuota,
                     writer: {
                         connect: { id: req.user.id },
+                    },
+                    homeTeam: {
+                        connect: { id: req.user.teamId }
+                    },
+                    location: {
+                        create: location 
                     }  
                 }
             });
@@ -55,6 +57,7 @@ export class MatchController extends BaseController {
         }
     }
 
+    // 매치 상세
     @Get()
     public async getMatch(@QueryParam('id') matchId: number) {
         try {
@@ -71,6 +74,7 @@ export class MatchController extends BaseController {
         }
     }
 
+    // 매치 리스트 (매치 메인화면) -> 필터 기능 추가해야 함
     @Get('/list')
     public async getMatchList() {
         try {
@@ -87,6 +91,7 @@ export class MatchController extends BaseController {
         }
     }
 
+    // 매치 수정 
     @Put()
     @UseBefore(authMiddleware)
     public async updateMatch(@HeaderParam('authorization') token: string, @Req() req: any,
@@ -117,29 +122,29 @@ export class MatchController extends BaseController {
             throw new Error(error);
         }
     }
-
-    @Delete()
-    @UseBefore(authMiddleware)
-    public async delelteMatch(@HeaderParam('authorization') token: string, 
-                              @Req() req: any, 
-                              @BodyParam('matchId') matchId: number) {
-        try {
-            const user: User = req.user;
-            const match = await this.prisma.match.findOne({ where: { id: matchId }});
+    // 매치 마감
+    // @Delete()
+    // @UseBefore(authMiddleware)
+    // public async delelteMatch(@HeaderParam('authorization') token: string, 
+    //                           @Req() req: any, 
+    //                           @BodyParam('matchId') matchId: number) {
+    //     try {
+    //         const user: User = req.user;
+    //         const match = await this.prisma.match.findOne({ where: { id: matchId }});
             
-            if(!match) 
-                throw new NotFoundError('해당하는 match 정보가 없습니다.');
+    //         if(!match) 
+    //             throw new NotFoundError('해당하는 match 정보가 없습니다.');
             
-            if(user.id !== match.writerId)
-                throw new UnauthorizedError('해당 권한이 없는 유저입니다.');
+    //         if(user.id !== match.writerId)
+    //             throw new UnauthorizedError('해당 권한이 없는 유저입니다.');
 
-            await this.prisma.match.delete({ where: { id: matchId }});
+    //         await this.prisma.match.delete({ where: { id: matchId }});
 
-            return { success: true };
+    //         return { success: true };
             
-        } catch (error) {
-            console.error(error);
-            throw new Error(error);
-        }
-    }
+    //     } catch (error) {
+    //         console.error(error);
+    //         throw new Error(error);
+    //     }
+    // }
 }
