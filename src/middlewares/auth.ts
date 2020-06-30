@@ -13,7 +13,10 @@ export async function authMiddleware(req: any, res: any, next: any) {
             if (key === 'email') 
                 email = decoded.email;
         
-        const exUser: User = await prisma.user.findOne({ where: { email } });
+        const exUser: User = await prisma.user.findOne({ 
+            where: { email },
+            include: { team: true } 
+        });
         
         if (!exUser)
             return res.json({ isAuth: false, message: '해당하는 유저 정보가 없습니다.' });
