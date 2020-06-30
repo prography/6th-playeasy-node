@@ -1,5 +1,5 @@
 import { BaseController } from './BaseController';
-import { JsonController, Get, Put, UseBefore, HeaderParam, Req, BodyParam } from 'routing-controllers';
+import { JsonController, Get, Put, UseBefore, HeaderParam, Req, BodyParam, QueryParam } from 'routing-controllers';
 import { PrismaClient, User, Level } from '@prisma/client';
 import { authMiddleware } from '../middlewares/auth';
 
@@ -33,19 +33,23 @@ export class UserController extends BaseController {
         return { success: true, matchList }
     }
 
-    // 내가 신청한 매치 보기 (팀, 유저)
+    // 내가 신청한 매치 보기
     @Get("/applications")
     @UseBefore(authMiddleware)
-    public getApplicationList(@HeaderParam('authorization') token: string, @Req() req: any) {
-        const teamApplicationList = this.prisma.matchTeamApplication.findMany({
-            where: { teamId: req.user.teamId }
-        });
-
-        const userApplicationList = this.prisma.matchUserApplication.findMany({
-            where: { userId: req.user.id }
-        });
-
-        return { success: true, teamApplicationList, userApplicationList }
+    public getApplicationList(@HeaderParam('authorization') token: string, 
+                            @Req() req: any,
+                            @QueryParam("type") type: string) {
+        if (type === "team") {
+            const teamApplicationList = this.prisma.matchTeamApplication.findMany({
+                where: { teamId: req.user.teamId }
+            });
+            return { success: true, teamApplicationList }
+        } else if (type === "person") {
+            const userApplicationList = this.prisma.matchUserApplication.findMany({
+                where: { userId: req.user.id }
+            });
+            return { success: true, userApplicationList }
+        }
     }
 
     // 내 정보 수정
