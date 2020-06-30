@@ -48,13 +48,13 @@ export class UserController extends BaseController {
         return { success: true, teamApplicationList, userApplicationList }
     }
 
-    @Put()  // 내 정보 수정
+    // 내 정보 수정
+    @Put()  
     @UseBefore(authMiddleware)
     public async updateUser(@HeaderParam('authorization') token: string, @Req() req: any, 
                       @BodyParam('name') name: string, @BodyParam('age') age: number, 
                       @BodyParam('phone') phone: string, @BodyParam('level') level: Level,
-                      @BodyParam('description') description: string) {
-        
+                      @BodyParam('description') description: string) {   
        try {
             const user: User = req.user;
             const updatedUser: User = await this.prisma.user.update({
