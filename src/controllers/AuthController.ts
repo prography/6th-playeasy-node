@@ -92,7 +92,7 @@ export class AuthController extends BaseController {
 
             return { success: true, isNewMember, token };    
         } catch (error) {
-            console.log(error);
+            console.error(error);
             throw new Error('login 실패');
         }
     }

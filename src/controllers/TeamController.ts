@@ -1,7 +1,7 @@
 import { BaseController } from './BaseController';
 import { JsonController, UseBefore, HeaderParam, Req, BodyParam, Post } from 'routing-controllers';
 import { PrismaClient, User, Team } from '@prisma/client';
-import { authMiddleware } from '../middlewares/auth';
+import { isLoggedIn } from '../middlewares/auth';
 
 @JsonController('/team')
 export class TeamController extends BaseController {
@@ -13,7 +13,7 @@ export class TeamController extends BaseController {
     }
 
     @Post()
-    @UseBefore(authMiddleware)
+    @UseBefore(isLoggedIn)
     public async createOrUpdateTeam(@HeaderParam('authorization') token: string, 
                       @Req() req: any,
                       @BodyParam("name") name: string,

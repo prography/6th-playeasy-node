@@ -1,8 +1,8 @@
 import { BaseController } from './BaseController';
 import { JsonController, Get, Post, Put, BodyParam, 
         UseBefore, Req, HeaderParam, NotFoundError, UnauthorizedError, QueryParam, Delete, Body, Patch } from 'routing-controllers';
-import { PrismaClient, User, Match, Location, StatusType, MatchType } from '@prisma/client';
-import { authMiddleware } from '../middlewares/auth';
+import { PrismaClient, Match, Location, StatusType, MatchType } from '@prisma/client';
+import { isLoggedIn, isWriter } from '../middlewares/auth';
 
 @JsonController('/match')
 export class MatchController extends BaseController {
@@ -15,7 +15,7 @@ export class MatchController extends BaseController {
 
     // 매치 작성
     @Post()
-    @UseBefore(authMiddleware)
+    @UseBefore(isLoggedIn)
     public async register(@HeaderParam('authorization') token: string, @Req() req: any,
                     @BodyParam('resource') resource: Match, @BodyParam('location') location: Location) {
         try {       
@@ -46,7 +46,7 @@ export class MatchController extends BaseController {
 
     // 매치 상세
     @Get()
-    @UseBefore(authMiddleware)
+    @UseBefore(isLoggedIn)
     public async getMatch(@QueryParam('id') matchId: number) {
         try {
             const match = await this.prisma.match.findOne({
@@ -100,20 +100,19 @@ export class MatchController extends BaseController {
 
     // 매치 수정 
     @Put()
-    @UseBefore(authMiddleware)
+    @UseBefore(isLoggedIn, isWriter)
     public async updateMatch(@HeaderParam('authorization') token: string, @Req() req: any,
                              @BodyParam('matchId') matchId: number, 
                              @BodyParam('resource') resource: object, @BodyParam('location') location: Location) {
         try {
-            const user: User = req.user;        
-            const match = await this.prisma.match.findOne({ where: { id: matchId }});
+            //const user: User = req.user;        
+            // const match = await this.prisma.match.findOne({ where: { id: matchId }});
 
-            if(!match) 
-                throw new NotFoundError('해당하는 match 정보가 없습니다.');
+            // if(!match) 
+            //     throw new NotFoundError('해당하는 match 정보가 없습니다.');
             
-            if(user.id !== match.writerId)
-                throw new UnauthorizedError('해당 권한이 없는 유저입니다.');
-            
+            // if(user.id !== match.writerId)
+            //     throw new UnauthorizedError('해당 권한이 없는 유저입니다.');
             let updatedLocation: Location;
             if (location) {
                 updatedLocation = await this.prisma.location.update({
@@ -144,28 +143,26 @@ export class MatchController extends BaseController {
     
     // 매치 마감
     @Patch('/status')
-    @UseBefore(authMiddleware)
+    @UseBefore(isLoggedIn, isWriter)
     public async closeMatch(@HeaderParam('authorization') token: string, 
                               @Req() req: any, 
                               @BodyParam('matchId') matchId: number,
                               @BodyParam('status') status: StatusType) {
         try {
-            const user: User = req.user;
-            const match = await this.prisma.match.findOne({ where: { id: matchId }});
+            // const user: User = req.user;
+            // const match = await this.prisma.match.findOne({ where: { id: matchId }});
             
-            if(!match) 
-                throw new NotFoundError('해당하는 match 정보가 없습니다.');
+            // if(!match) 
+            //     throw new NotFoundError('해당하는 match 정보가 없습니다.');
             
-            if(user.id !== match.writerId)
-                throw new UnauthorizedError('해당 권한이 없는 유저입니다.');
-
+            // if(user.id !== match.writerId)
+            //     throw new UnauthorizedError('해당 권한이 없는 유저입니다.');
             const updatedMatch: Match = await this.prisma.match.update({
                 where: { id: matchId },
                 data: { status }
             });
 
             return { success: true, updatedMatch };
-            
         } catch (error) {
             console.error(error);
             throw new Error(error);
