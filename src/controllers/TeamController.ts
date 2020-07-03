@@ -160,7 +160,7 @@ export class TeamController extends BaseController {
                 where: { id: userId },
                 data: { 
                     team: {
-                        connect: { id : null }
+                        disconnect: true
                     },
                 updatedAt: new Date()} 
             });
