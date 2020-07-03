@@ -19,7 +19,7 @@ export async function authMiddleware(req: any, res: any, next: any) {
         });
         
         if (!exUser)
-            return res.json({ isAuth: false, message: '해당하는 유저 정보가 없습니다.' });
+            return res.status(404).json({ isAuth: false, message: '해당하는 유저 정보가 없습니다.' });
         
         req.user = exUser;
         next();

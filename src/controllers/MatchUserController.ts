@@ -37,7 +37,6 @@ export class MatchUserController extends BaseController {
                     }
                 }
             });
-
             return { success: true, application }
         } catch (error) {
             console.error(error);
@@ -74,7 +73,7 @@ export class MatchUserController extends BaseController {
         }
     }
 
-    // 용병 신청 취소
+    // 용병 신청 취소 (신청자)
     @Delete()
     @UseBefore(authMiddleware)
     public async cancel(@HeaderParam('authorization') token: string,
