@@ -1,7 +1,7 @@
 import { BaseController } from './BaseController';
 import { JsonController, Get, Post, Put, BodyParam, 
-        UseBefore, Req, HeaderParam, NotFoundError, UnauthorizedError, QueryParam, Delete, Body, Patch } from 'routing-controllers';
-import { PrismaClient, Match, Location, StatusType, MatchType } from '@prisma/client';
+        UseBefore, Req, HeaderParam, NotFoundError, QueryParam, Patch } from 'routing-controllers';
+import { PrismaClient, Match, Location, StatusType } from '@prisma/client';
 import { isLoggedIn, isWriter } from '../middlewares/auth';
 
 @JsonController('/match')
@@ -102,17 +102,9 @@ export class MatchController extends BaseController {
     @Put()
     @UseBefore(isLoggedIn, isWriter)
     public async updateMatch(@HeaderParam('authorization') token: string, @Req() req: any,
-                             @BodyParam('matchId') matchId: number, 
-                             @BodyParam('resource') resource: object, @BodyParam('location') location: Location) {
+                            @QueryParam('matchId') matchId: number, 
+                            @BodyParam('resource') resource: object, @BodyParam('location') location: Location) {
         try {
-            //const user: User = req.user;        
-            // const match = await this.prisma.match.findOne({ where: { id: matchId }});
-
-            // if(!match) 
-            //     throw new NotFoundError('해당하는 match 정보가 없습니다.');
-            
-            // if(user.id !== match.writerId)
-            //     throw new UnauthorizedError('해당 권한이 없는 유저입니다.');
             let updatedLocation: Location;
             if (location) {
                 updatedLocation = await this.prisma.location.update({
@@ -146,17 +138,9 @@ export class MatchController extends BaseController {
     @UseBefore(isLoggedIn, isWriter)
     public async closeMatch(@HeaderParam('authorization') token: string, 
                               @Req() req: any, 
-                              @BodyParam('matchId') matchId: number,
+                              @QueryParam('matchId') matchId: number,
                               @BodyParam('status') status: StatusType) {
         try {
-            // const user: User = req.user;
-            // const match = await this.prisma.match.findOne({ where: { id: matchId }});
-            
-            // if(!match) 
-            //     throw new NotFoundError('해당하는 match 정보가 없습니다.');
-            
-            // if(user.id !== match.writerId)
-            //     throw new UnauthorizedError('해당 권한이 없는 유저입니다.');
             const updatedMatch: Match = await this.prisma.match.update({
                 where: { id: matchId },
                 data: { status }

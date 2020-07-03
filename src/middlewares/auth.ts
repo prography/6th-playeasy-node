@@ -33,8 +33,8 @@ export async function isLoggedIn(req: any, res: any, next: any) {
 export async function isWriter(req: any, res: any, next: any) {
     try {
         const prisma: any = new PrismaClient();
-
-        const match: Match = await prisma.match.findOne({ where: { id: req.body.matchId }});
+        const matchId: number = Number(req.query.matchId);
+        const match: Match = await prisma.match.findOne({ where: { id: matchId }});
             
         if(!match) 
             return res.status(404).json({ isAuth: false, message: '해당하는 매치 정보가 없습니다.' });
