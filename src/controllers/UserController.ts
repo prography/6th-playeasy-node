@@ -90,4 +90,3 @@ export class UserController extends BaseController {
 
     // 사진 
 }
-
