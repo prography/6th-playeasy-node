@@ -16,27 +16,27 @@ export class MatchController extends BaseController {
     // 매치 작성
     @Post()
     @UseBefore(isLoggedIn)
-    public register(@Req() req: any,
+    public async register(@Req() req: any,
                         @BodyParam('matchDto') matchDto: Match, 
                         @BodyParam('locationDto') locationDto: Location) {
-        this.prisma.match.create({
-            data: {
-                ...matchDto, 
-                writer: { connect: { id: req.user.id } },
-                homeTeam: { connect: { id: req.user.teamId } },
-                location: { create: locationDto }  
-            },
-            include: { 
-                homeTeam: true,
-                location: true,
-            }
-        })
-        .then(match => {
+        try {
+            const match: Match = await this.prisma.match.create({
+                data: {
+                    ...matchDto, 
+                    writer: { connect: { id: req.user.id } },
+                    homeTeam: { connect: { id: req.user.teamId } },
+                    location: { create: locationDto }  
+                },
+                include: { 
+                    homeTeam: true,
+                    location: true,
+                }
+            })
+
             return { success: true, match }
-        })
-        .catch(error => {
+        } catch (error) {
             throw error;
-        })
+        }
     }
 
     // 매치 상세

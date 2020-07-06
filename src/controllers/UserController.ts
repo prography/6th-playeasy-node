@@ -1,6 +1,6 @@
 import { BaseController } from './BaseController';
 import { JsonController, Get, Put, UseBefore, Req, BodyParam, QueryParam } from 'routing-controllers';
-import { PrismaClient, User, Level } from '@prisma/client';
+import { PrismaClient, User, Level, Match } from '@prisma/client';
 import { isLoggedIn } from '../middlewares/auth';
 
 @JsonController('/users')
@@ -25,16 +25,16 @@ export class UserController extends BaseController {
     // 나의 매치 정보 - 내가 등록한 매치
     @Get("/matches")
     @UseBefore(isLoggedIn)
-    public getMatchList(@Req() req: any)  {
-        this.prisma.match.findMany({
-            where: { writerId: req.user.id }
-        })
-        .then(matchList => {
-            return { success: true, matchList }
-        })
-        .catch(error => {
+    public async getMatchList(@Req() req: any)  {
+        try {
+            const matchList = await this.prisma.match.findMany({
+                where: { writerId: req.user.id }
+            });
+
+            return { success: true, matchList } 
+        } catch (error) {
             throw error;
-        });
+        }
     }
 
     // 나의 매치 정보 - 나의 신청 현황
