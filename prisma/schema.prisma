@@ -145,7 +145,7 @@ model MatchTeamApplication {
 
 model MatchUserApplication {
   id              Int             @default(autoincrement()) @id
-  status          StatusType  
+  status          StatusType      
   quota           Int             @default(value: 1)
   createdAt       DateTime        @default(now()) @map("created_at")
   updatedAt       DateTime?       @updatedAt() @map("updated_at")

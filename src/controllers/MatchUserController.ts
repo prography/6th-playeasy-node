@@ -1,15 +1,8 @@
 import { BaseController } from './BaseController';
-import { JsonController, Get, Post, Put, Delete, BodyParam, 
-    UseBefore, Req, HeaderParam, NotFoundError, UnauthorizedError, QueryParam } from 'routing-controllers';
-import { PrismaClient, User, Match, MatchUserApplication } from '@prisma/client';
-import { authMiddleware } from '../middlewares/auth';
-
-enum StatusType {
-    WAITING = "WAITING",
-    CONFIRMED = "CONFIRMED",
-    DENIED = "DENIED",
-    CANCEL = "CANCEL"
-  }
+import { JsonController, Get, Post, Put, BodyParam, 
+    UseBefore, Req, QueryParam } from 'routing-controllers';
+import { PrismaClient, MatchUserApplication, StatusType } from '@prisma/client';
+import { isLoggedIn } from '../middlewares/auth';
 
 @JsonController('/match/user')
 export class MatchUserController extends BaseController {
@@ -22,15 +15,15 @@ export class MatchUserController extends BaseController {
 
     // 용병 신청
     @Post()
-    @UseBefore(authMiddleware)
-    public async register(@HeaderParam('authorization') token: string,
-                    @Req() req: any,
-                    @BodyParam('matchId') matchId: number,
-                    @BodyParam('message') message: string) {
+    @UseBefore(isLoggedIn)
+    public async register(@Req() req: any,
+                        @BodyParam('matchId') matchId: number, 
+                        @BodyParam('quota') quota: number) {
         try {
             const status = StatusType.WAITING;
-            const matchUserApplication:MatchUserApplication = await this.prisma.matchUserApplication.create({
-                data: { status, message, 
+            const application:MatchUserApplication = await this.prisma.matchUserApplication.create({
+                data: { 
+                    status, quota, 
                     match: {
                         connect: { id : matchId }
                     },
@@ -40,89 +33,42 @@ export class MatchUserController extends BaseController {
                 }
             });
 
-            return { success: true, matchUserApplication }
+            return { success: true, application }
         } catch (error) {
-            console.error(error);
-            throw new Error(error);
+            throw error;
         }
     }
 
-    // 용병 신청 취소 (용병)
-    @Delete()
-    @UseBefore(authMiddleware)
-    public async cancel(@HeaderParam('authorization') token: string,
-                    @Req() req: any,
-                    @BodyParam('matchUserApplicationId') matchUserApplicationId : number) {
-        try {
-            const status = StatusType.CANCEL;
-            const matchUserApplication = await this.prisma.matchUserApplication.update({
-                where: { id: matchUserApplicationId },
-                data: { status }
-            });
-
-            return { success: true, matchUserApplication }
-        } catch (error) {
-            console.error(error);
-            throw new Error(error);
-        }
-    }
-
-
-    // 용병 신청자 보기 (매니저)
+    // 용병 지원 현황 (매니저)
     @Get('/list')
-    @UseBefore(authMiddleware)
-    public async getList(@HeaderParam('authorization') token: string,
-                    @Req() req: any,
-                    @QueryParam("matchId") matchId: number,
-                    ) {
+    @UseBefore(isLoggedIn)
+    public async getList(@QueryParam("matchId") matchId: number) {
         try {
-            const user: User = req.user;
-            const match = await this.prisma.match.findOne({ where: { id: matchId }});
-
-            if(!match) 
-                throw new NotFoundError('해당하는 match 정보가 없습니다.');
-        
-            if(user.id !== match.writerId)
-                throw new UnauthorizedError('권한이 없는 유저입니다.');
-            
-            const matchUserApplication = await this.prisma.matchUserApplication.findMany({ where: { matchId } });
-
+            const matchUserApplication = await this.prisma.matchUserApplication.findMany({
+                where: { matchId },
+                include: { user: true }, 
+            });
+    
             return { success: true, matchUserApplication };
-            
         } catch (error) {
-            console.error(error);
-            throw new Error(error);
+            throw error;
         }
     }
 
-    // 용병 신청 승인 (매니저)
-    @Put('/approval')
-    @UseBefore(authMiddleware)
-    public async approve(@HeaderParam('authorization') token: string,
-                    @Req() req: any,
-                    @BodyParam('matchId') matchId: number,
-                    @BodyParam('matchUserApplicationId') matchUserApplicationId : number) {
+    // 신청 상태 변경
+    @Put()
+    @UseBefore(isLoggedIn)
+    public async cancel(@BodyParam('matchUserApplicationId') matchUserApplicationId : number,
+                        @BodyParam('status') status: StatusType) {
         try {
-            const user = req.user;
-            const match = await this.prisma.match.findOne({ where: { id: matchId }});
-
-            if(!match) 
-            throw new NotFoundError('해당하는 match 정보가 없습니다.');
-    
-            if(user.id !== match.writerId)
-                throw new UnauthorizedError('권한이 없는 유저입니다.');
-
-            const status = StatusType.CONFIRMED;
             const matchUserApplication = await this.prisma.matchUserApplication.update({
                 where: { id: matchUserApplicationId },
                 data: { status }
             });
 
             return { success: true, matchUserApplication }
-
         } catch (error) {
-            console.error(error);
-            throw new Error(error);
+            throw error;
         }
     }
 }
