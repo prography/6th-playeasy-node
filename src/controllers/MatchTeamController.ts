@@ -24,17 +24,42 @@ export class MatchTeamController extends BaseController {
     //Away Team apply for the team match
     @Post()
     @UseBefore(authMiddleware)
-    public async matchTeamRegister(@Body() registInfo: any) {
+    public async matchTeamRegister(@Req() req: any, @Body() registInfo: any) {
         try {
             
             console.log('ryz test');
+            console.log(req.user.teamId);
+
+            
             //1. init data defination
             // MatchTeamApplication N : 1 Match, Team
             let matchId:number =  parseInt(registInfo.matchId);
-            let teamId:number = parseInt(registInfo.teamId);
+            let teamId:number = parseInt(req.user.teamId);
             let quota:number = parseInt(registInfo.quota);
 
-            //2. insert into table
+            if (!teamId)
+            throw new NotFoundError('소속된 팀 정보가 없습니다.');
+
+
+            //2. check whether the match info is already existed in database
+            const matchTeamSearchInfo = await this.prisma.matchTeamApplication.count({
+                where: { AND: [
+                    {
+                        teamId: teamId,
+                    },
+                    {
+                      matchId: matchId,
+                    },
+                  ]
+                },
+            });
+
+            console.log(matchTeamSearchInfo);
+
+            if (matchTeamSearchInfo != 0)
+             throw new NotFoundError('이미 해당 매치를 신청하셨습니다.');
+
+            //3. insert into table
             const matchTeamApplication: MatchTeamApplication = await this.prisma.matchTeamApplication.create({
                 data: { quota, 
                         team: {
@@ -83,14 +108,10 @@ export class MatchTeamController extends BaseController {
 
    //Manager will see the team match status
    @Get('/list')
-   public async getMatchTeamList(@Body() searchInfo: any) {
+   public async getMatchTeamList(@QueryParam("matchId") matchId: number) {
        try {
-           //1. init the insert info
-           let matchId:number =  parseInt(searchInfo.matchId);
 
-           console.log(matchId);
-
-           //2. select team list from match table
+           //1. select team list from match table
            const matchTeamApplicationList = await this.prisma.matchTeamApplication.findMany({ 
                where: { NOT: [{status:StatusType.CANCEL}], AND: {matchId: matchId}},
                include: { team: true }
@@ -108,7 +129,7 @@ export class MatchTeamController extends BaseController {
     }
 
     //Manager approve the team application
-    @Put('/approve')
+    @Put('/approval')
     @UseBefore(authMiddleware)
     public async approveMatchTeamApplication(@Body() approveInfo: any) {
         try {

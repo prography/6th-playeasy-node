@@ -1,5 +1,5 @@
 import { BaseController } from './BaseController';
-import { JsonController, UseBefore, HeaderParam, Req, BodyParam, Post, Body, Put, Get, Delete } from 'routing-controllers';
+import { JsonController, UseBefore, HeaderParam, Req, BodyParam, Post, Body, Put, Get, Delete, QueryParam } from 'routing-controllers';
 import { PrismaClient, User, Team, MatchTeamApplication, Level } from '@prisma/client';
 import { authMiddleware } from '../middlewares/auth';
 
@@ -15,19 +15,11 @@ export class TeamController extends BaseController {
     // create team
     @Post()
     @UseBefore(authMiddleware)
-    public async teamRegister(@Body() registInfo: any) {
+    public async teamRegister(@BodyParam('team') team: Team) {
         try {
-            //1. init data defination
-            let name:string =  registInfo.name;
-            let description:string = registInfo.description;
-            let age:number = parseInt(registInfo.age);
-            let level:Level = registInfo.level;
-            let leader:string = registInfo.leader;
-            let phone:string = registInfo.phone;
 
-            //2. insert into team table
             const createTeam: Team = await this.prisma.team.create({
-                data: {  name, description, age, level, leader, phone }
+                data: { ...team }
             });
 
             return { success: true, createTeam }
@@ -41,22 +33,14 @@ export class TeamController extends BaseController {
     //update team info
     @Put()
     @UseBefore(authMiddleware)
-    public async teamUpdate(@Body() updateInfo: any) {
+    public async teamUpdate(@BodyParam('teamId') teamId: number, @BodyParam('team') team: object) {
         try {
-            //1. init data defination
-            let teamId:number = parseInt(updateInfo.teamId);
-            let name:string =  updateInfo.name;
-            let description:string = updateInfo.description;
-            let age:number = parseInt(updateInfo.age);
-            let level:Level = updateInfo.level;
-            let leader:string = updateInfo.leader;
-            let phone:string = updateInfo.phone;
-            
 
-            //2. insert into team table
+            console.log(teamId);
+
             const updateTeam: Team = await this.prisma.team.update({
                 where: { id: teamId },
-                data: {  name, description, age, level, leader, phone }
+                data: {  ...team }
             });
 
             return { success: true, updateTeam }
@@ -67,17 +51,15 @@ export class TeamController extends BaseController {
         }
     }
 
-    //get team info
+    //get team info from table
     @Get('/info')
     @UseBefore(authMiddleware)
-    public async getTeamInfo(@Body() updateInfo: any) {
+    public async getTeamInfo(@QueryParam("teamId") teamId: number) {
         try {
-            //1. init data defination
-            let teamId:number = parseInt(updateInfo.teamId);          
 
-            //2. select team info
-            const teamInfo= this.prisma.team.findMany({
-                where: { id : teamId }
+            //select team member from team table
+            const teamInfo = await this.prisma.team.findOne({
+                where: { id: teamId },
             });
 
             return { success: true, teamInfo }
@@ -91,12 +73,10 @@ export class TeamController extends BaseController {
     //get user info from table
     @Get('/userList')
     @UseBefore(authMiddleware)
-    public async getTeamMember(@Body() memberListInfo: any) {
+    public async getTeamMember(@QueryParam("teamId") teamId: number) {
         try {
-            //1. init data defination
-            let teamId:number = parseInt(memberListInfo.teamId);
-            
-            //2. select team member from team table
+
+            //select team member from team table
             const userList: User[] = await this.prisma.user.findMany({
                 where: { teamId: teamId },
             });
@@ -112,24 +92,21 @@ export class TeamController extends BaseController {
     //search team Info
     @Get('/searchList')
     @UseBefore(authMiddleware)
-    public async getTeamList(@Body() teamListInfo: any) {
+    public async getTeamList(@QueryParam("searchInfo") searchInfo: string) {
         try {
-            //1. init data defination
-            let serachInfo:string = teamListInfo.serachInfo;
 
-            console.log(serachInfo);
-            
-            //2. select team member from team table
+            console.log(searchInfo);
+            //select team member from team table
             const teamList: Team[] = await this.prisma.team.findMany({
                 where: { OR: [
                     {
                         name: {
-                        contains: serachInfo,
+                        contains: searchInfo,
                       },
                     },
                     {
                       leader: {
-                        contains: serachInfo,
+                        contains: searchInfo,
                       },
                     },
                   ]
