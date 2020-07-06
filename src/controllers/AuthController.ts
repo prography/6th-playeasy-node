@@ -7,13 +7,6 @@ import { PrismaClient } from '@prisma/client';
 
 import requestKakao from 'request'; // 테스트 후 삭제 예정
 
-
-const kakao = { 
-    clientID: "794ed9a88648a25cbaec8bc25ad4f2a6",
-    clientSecret: "BtSD12taxk3DqusTvOjGBQv2MbZoViI3",
-    redirectUri: "http://api.theplayeasy.com/api/auth/kakao/callback"
-  };
-
 @JsonController('/auth')
 export class AuthController extends BaseController {
     private prisma: PrismaClient;
@@ -22,7 +15,6 @@ export class AuthController extends BaseController {
         super();
         this.prisma = new PrismaClient();
     }
-    
 
     // 테스트 후 삭제 예정
     @Get()  
@@ -34,41 +26,33 @@ export class AuthController extends BaseController {
     // 테스트 후 삭제 예정
     @Get('/kakao')
     public kakaoCheck(@Res() response: any) {
-
-        const kakaoAuthUrl = `https://kauth.kakao.com/oauth/authorize?client_id=${
-        kakao.clientID
-        }&redirect_uri=${
-        kakao.redirectUri
-        }&response_type=code`;
+        const kakaoAuthUrl = `https://kauth.kakao.com/oauth/authorize?
+                                client_id=${process.env.KAKAO_CLIENT_ID}
+                                &redirect_uri=${process.env.KAKAO_REDIRECT_URI}
+                                &response_type=code`;
     
-        return requestKakao.post (kakaoAuthUrl, function(err: any,httpResponse: any,body: any){
-        })
+        return requestKakao.post(kakaoAuthUrl, function(err: any,httpResponse: any,body: any){});
     }
 
     // 테스트 후 삭제 예정
     @Get('/kakao/callback')
     public async kakao(@Req() request: any, @Res() response: any) {
-        try {
-            // 1. kakao access token  
-            const kakaoToken = await axios({      
-                method: "POST",
-                url: "https://kauth.kakao.com/oauth/token",
-                headers: {
+        // 1. kakao access token  
+        const kakaoToken = await axios({      
+            method: "POST",
+            url: "https://kauth.kakao.com/oauth/token",
+            headers: {
                 "content-type": "application/x-www-form-urlencoded"
-                },
-                data: querystring.stringify({
-                    code: request.query.code,
-                    grant_type: "authorization_code",
-                    client_id: kakao.clientID,
-                    client_secret: kakao.clientSecret,
-                    redirect_uri: kakao.redirectUri
-                })
-            });
-            return { access_token: kakaoToken.data.access_token };
-        } catch (error) {
-            console.log(error);
-            return { success: false, error };
-        }
+            },
+            data: querystring.stringify({
+                code: request.query.code,
+                grant_type: "authorization_code",
+                client_id: process.env.KAKAO_CLIENT_ID,
+                client_secret: process.env.KAKAO_CLIENT_SECRET,
+                redirect_uri: process.env.KAKAO_REDIRECT_URI
+            })
+        });
+        return { access_token: kakaoToken.data.access_token };
     }
 
     @Post('/login')
@@ -79,7 +63,7 @@ export class AuthController extends BaseController {
                 url: "https://kapi.kakao.com/v2/user/me",
                 headers: { Authorization: `Bearer ${access_token}` }
             });
-
+    
             const email: string = kakaoUserInfo.data.kakao_account.email;
             const exUser: any = await this.prisma.user.findOne({ where: { email } });
             let isNewMember: boolean = false;
@@ -88,12 +72,11 @@ export class AuthController extends BaseController {
                 isNewMember = true;
                 await this.prisma.user.create({data: { email }});
             }
-            const token = await jwt.sign({email: email}, 'SeCrEtKeYfOrHaShInG', {expiresIn : "7d"});
-
-            return { success: true, isNewMember, token };    
+            const token = await jwt.sign({email: email}, String(process.env.JWT_SECRET_KEY), {expiresIn : "7d"});
+    
+            return { success: true, isNewMember, token };
         } catch (error) {
-            console.error(error);
-            throw new Error('login 실패');
-        }
+            throw error;
+        } 
     }
 }
