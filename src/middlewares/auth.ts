@@ -14,9 +14,20 @@ export async function isLoggedIn(req: any, res: any, next: any) {
             if (key === 'email') 
                 email = decoded.email;
         
-        const exUser: User = await prisma.user.findOne({ 
+        const exUser = await prisma.user.findOne({ 
             where: { email },
-            include: { team: true } 
+            select: {
+                id: true, name: true, age: true, email: true,
+                socialType: true, phone: true, pushToken: true,
+                level: true, description: true, picture: true,
+                teamId: true,
+                team: {
+                    select: {
+                        id: true, name: true, description: true,
+                        age: true, level: true, leader: true, phone: true,
+                    }
+                }
+            } 
         });
         
         if (!exUser)

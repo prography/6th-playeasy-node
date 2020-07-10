@@ -17,23 +17,19 @@ export class MatchController extends BaseController {
     @Post()
     @UseBefore(isLoggedIn)
     public async register(@Req() req: any,
-                        @BodyParam('matchDto') matchDto: Match, 
-                        @BodyParam('locationDto') locationDto: Location) {
+                        @BodyParam('matchData') matchData: Match, 
+                        @BodyParam('locationData') locationData: Location) {
         try {
-            const match: Match = await this.prisma.match.create({
+            await this.prisma.match.create({
                 data: {
-                    ...matchDto, 
+                    ...matchData, 
                     writer: { connect: { id: req.user.id } },
                     homeTeam: { connect: { id: req.user.teamId } },
-                    location: { create: locationDto }  
-                },
-                include: { 
-                    homeTeam: true,
-                    location: true,
+                    location: { create: locationData }  
                 }
-            })
+            });
 
-            return { match }
+            return { success: true }
         } catch (error) {
             throw error;
         }
@@ -46,9 +42,23 @@ export class MatchController extends BaseController {
         try {
             const match = await this.prisma.match.findOne({
                 where: { id: matchId },
-                include: { 
-                    homeTeam: true,
-                    location: true,
+                select: {
+                    id: true, type: true, description: true,
+                    startAt: true, duration: true, fee: true,
+                    phone: true, totalQuota: true, status: true, 
+                    writerId: true,
+                    homeTeam: {
+                        select: {
+                            id: true, name: true, description: true,
+                            age: true, level: true, leader: true, phone: true
+                        }
+                    },
+                    location: {
+                        select: {
+                            id: true, latitude: true, longitude: true,
+                            name: true, address: true, detail: true,
+                        }
+                    },
                 }
             });
     
@@ -56,7 +66,6 @@ export class MatchController extends BaseController {
                 throw new NotFoundError('해당 매치를 찾을 수 없습니다.');
 
             return { match }
-
         } catch (error) {
             throw error;            
         }
@@ -68,7 +77,7 @@ export class MatchController extends BaseController {
     public async getMatchList(@QueryParam('date') date: string, 
                             @QueryParam('status') status: string) {
         try {
-            let matchList: Array<Match>;
+            let matchList;
             matchList = await this.prisma.match.findMany({
                 where: {
                     startAt: {
@@ -76,9 +85,23 @@ export class MatchController extends BaseController {
                         lte: new Date(`${date}T23:59:59`),
                     }
                 },
-                include: {
-                    homeTeam: true,
-                    location: true,
+                select: {
+                    id: true, type: true, description: true,
+                    startAt: true, duration: true, fee: true,
+                    phone: true, totalQuota: true, status: true, 
+                    writerId: true,
+                    homeTeam: {
+                        select: {
+                            id: true, name: true, description: true,
+                            age: true, level: true, leader: true, phone: true
+                        }
+                    },
+                    location: {
+                        select: {
+                            id: true, latitude: true, longitude: true,
+                            name: true, address: true, detail: true,
+                        }
+                    },
                 }
             });
     
@@ -97,26 +120,40 @@ export class MatchController extends BaseController {
     // 매치 수정 
     @Put()
     @UseBefore(isLoggedIn)
-    public async updateMatch(@BodyParam('matchUpdateDto') matchUpdateDto: Match, 
-                            @BodyParam('locationUpdateDto') locationUpdateDto: Location) {
+    public async updateMatch(@BodyParam('matchData') matchData: Match, 
+                            @BodyParam('locationData') locationData: Location) {
         try {
-            if (matchUpdateDto) {
+            if (locationData) {
                 await this.prisma.location.update({
-                    where: { id: locationUpdateDto.id },
-                    data: { ...locationUpdateDto },
+                    where: { id: locationData.id },
+                    data: { ...locationData },
                 });
             }
 
-            const updatedMatch = await this.prisma.match.update({
-                where: { id: matchUpdateDto.id },
-                data: { ...matchUpdateDto },
-                include: { 
-                    homeTeam: true,
-                    location: true,
+            const match: object = await this.prisma.match.update({
+                where: { id: matchData.id },
+                data: { ...matchData },
+                select: {
+                    id: true, type: true, description: true,
+                    startAt: true, duration: true, fee: true,
+                    phone: true, totalQuota: true, status: true, 
+                    writerId: true,
+                    homeTeam: {
+                        select: {
+                            id: true, name: true, description: true,
+                            age: true, level: true, leader: true, phone: true
+                        }
+                    },
+                    location: {
+                        select: {
+                            id: true, latitude: true, longitude: true,
+                            name: true, address: true, detail: true,
+                        }
+                    },
                 }
             });
             
-            return { updatedMatch }
+            return { match }
         } catch (error) {
             throw error;
         }
@@ -128,12 +165,30 @@ export class MatchController extends BaseController {
     public async closeMatch(@BodyParam('matchId') matchId: number,
                             @BodyParam('status') status: StatusType) {
         try {
-            const updatedMatch: Match = await this.prisma.match.update({
+            const match: object = await this.prisma.match.update({
                 where: { id: matchId },
-                data: { status }
+                data: { status },
+                select: {
+                    id: true, type: true, description: true,
+                    startAt: true, duration: true, fee: true,
+                    phone: true, totalQuota: true, status: true, 
+                    writerId: true,
+                    homeTeam: {
+                        select: {
+                            id: true, name: true, description: true,
+                            age: true, level: true, leader: true, phone: true
+                        }
+                    },
+                    location: {
+                        select: {
+                            id: true, latitude: true, longitude: true,
+                            name: true, address: true, detail: true,
+                        }
+                    },
+                }
             });
 
-            return { updatedMatch}
+            return { match }
         } catch (error) {
             throw error;
         }
