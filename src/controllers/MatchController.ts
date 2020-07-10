@@ -75,7 +75,8 @@ export class MatchController extends BaseController {
                         gte: new Date(`${date}T00:00:00`),
                         lte: new Date(`${date}T23:59:59`),
                     }
-                },include: {
+                },
+                include: {
                     homeTeam: true,
                     location: true,
                 }
