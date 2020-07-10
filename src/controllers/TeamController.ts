@@ -1,6 +1,6 @@
 import { BaseController } from './BaseController';
-import { JsonController, UseBefore, HeaderParam, Req, BodyParam, Post, Body, Put, Get, Delete, QueryParam } from 'routing-controllers';
-import { PrismaClient, User, Team, MatchTeamApplication, Level } from '@prisma/client';
+import { JsonController, UseBefore, BodyParam, Post, Body, Put, Get, Delete, QueryParam } from 'routing-controllers';
+import { PrismaClient, User, Team } from '@prisma/client';
 import { isLoggedIn } from '../middlewares/auth';
 
 @JsonController('/team')
@@ -22,11 +22,10 @@ export class TeamController extends BaseController {
                 data: { ...team }
             });
 
-            return { success: true, createTeam }
+            return { createTeam }
 
         } catch (error) {
-            console.error(error);
-            throw new Error(error);
+            throw error;
         }
     }
 
@@ -43,11 +42,10 @@ export class TeamController extends BaseController {
                 data: {  ...team }
             });
 
-            return { success: true, updateTeam }
+            return { updateTeam }
 
         } catch (error) {
-            console.error(error);
-            throw new Error(error);
+            throw error;
         }
     }
 
@@ -62,11 +60,10 @@ export class TeamController extends BaseController {
                 where: { id: teamId },
             });
 
-            return { success: true, teamInfo }
+            return { teamInfo }
 
         } catch (error) {
-            console.error(error);
-            throw new Error(error);
+            throw error;
         }
     }
 
@@ -81,11 +78,10 @@ export class TeamController extends BaseController {
                 where: { teamId: teamId },
             });
 
-            return { success: true, userList }
+            return { userList }
 
         } catch (error) {
-            console.error(error);
-            throw new Error(error);
+            throw error;
         }
     }
 
@@ -113,11 +109,10 @@ export class TeamController extends BaseController {
                 },
             });
 
-            return { success: true, teamList }
+            return { teamList }
 
         } catch (error) {
-            console.error(error);
-            throw new Error(error);
+            throw error;
         }
     }
 
@@ -132,7 +127,6 @@ export class TeamController extends BaseController {
             let teamId:number = parseInt( deleteMemberInfo.teamId );
             
             //2. delete member from team table
-
             const userInfo: User = await this.prisma.user.update({
                 where: { id: userId },
                 data: { 
@@ -146,46 +140,10 @@ export class TeamController extends BaseController {
             const userList: User[] = await this.prisma.user.findMany({
                 where: { teamId: teamId },
             });
-            return { success: true, userList }
+            return { userList }
 
         } catch (error) {
-            console.error(error);
-            throw new Error(error);
+            throw error;
         }
     }
-    /*
-    @Post()
-    @UseBefore(authMiddleware)
-    public async createOrUpdateTeam(@HeaderParam('authorization') token: string, 
-                      @Req() req: any,
-                      @BodyParam("name") name: string,
-                      @BodyParam("description") description: string) {
-        try {
-            const user: User = req.user;
-
-            const team: Team = await this.prisma.team.upsert({
-                where: {id: req.user.id },
-                update: { name, description },
-                create: { name, description },
-            });
-
-            const updatedTeam: Team = await this.prisma.team.update({
-                where: { id: team.id },
-                data: {
-                    users: {
-                        connect: { id: user.teamId }
-                    }
-                }
-            });
-
-            return { success: true, updatedTeam, user, }
-
-        } catch (error) {
-            console.error(error);
-            throw new Error('팀 정보 update 실패');
-        }
-    } */
-
-
-    
 }

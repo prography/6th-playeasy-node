@@ -26,10 +26,7 @@ export class AuthController extends BaseController {
     // 테스트 후 삭제 예정
     @Get('/kakao')
     public kakaoCheck(@Res() response: any) {
-        const kakaoAuthUrl = `https://kauth.kakao.com/oauth/authorize?
-                                client_id=${process.env.KAKAO_CLIENT_ID}
-                                &redirect_uri=${process.env.KAKAO_REDIRECT_URI}
-                                &response_type=code`;
+        const kakaoAuthUrl = `https://kauth.kakao.com/oauth/authorize?client_id=${process.env.KAKAO_CLIENT_ID}&redirect_uri=${process.env.KAKAO_REDIRECT_URI}&response_type=code`;
     
         return requestKakao.post(kakaoAuthUrl, function(err: any,httpResponse: any,body: any){});
     }
@@ -74,7 +71,7 @@ export class AuthController extends BaseController {
             }
             const token = await jwt.sign({email: email}, String(process.env.JWT_SECRET_KEY), {expiresIn : "7d"});
     
-            return { success: true, isNewMember, token };
+            return { isNewMember, token };
         } catch (error) {
             throw error;
         } 

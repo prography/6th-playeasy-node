@@ -1,6 +1,5 @@
 import { BaseController } from './BaseController';
-import { JsonController, Get, Post, Put, BodyParam, 
-    UseBefore, Req, QueryParam } from 'routing-controllers';
+import { JsonController, Get, Post, Put, BodyParam, UseBefore, Req, QueryParam } from 'routing-controllers';
 import { PrismaClient, MatchUserApplication, StatusType } from '@prisma/client';
 import { isLoggedIn } from '../middlewares/auth';
 
@@ -33,7 +32,7 @@ export class MatchUserController extends BaseController {
                 }
             });
 
-            return { success: true, application }
+            return { application }
         } catch (error) {
             throw error;
         }
@@ -49,7 +48,7 @@ export class MatchUserController extends BaseController {
                 include: { user: true }, 
             });
     
-            return { success: true, matchUserApplication };
+            return { matchUserApplication };
         } catch (error) {
             throw error;
         }
@@ -66,7 +65,7 @@ export class MatchUserController extends BaseController {
                 data: { status }
             });
 
-            return { success: true, matchUserApplication }
+            return { matchUserApplication }
         } catch (error) {
             throw error;
         }

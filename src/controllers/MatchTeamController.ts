@@ -1,6 +1,6 @@
 import { BaseController } from './BaseController';
-import { JsonController, Get, Post, Put, Delete, BodyParam, 
-    UseBefore, Req, HeaderParam, Param, NotFoundError, UnauthorizedError, QueryParam, Body } from 'routing-controllers';
+import { JsonController, Get, Post, Put, Delete, UseBefore, 
+        Req, NotFoundError, QueryParam, Body } from 'routing-controllers';
 import { PrismaClient, MatchTeamApplication } from '@prisma/client';
 import { isLoggedIn } from '../middlewares/auth';
 
@@ -71,11 +71,10 @@ export class MatchTeamController extends BaseController {
                 }
             });
 
-            return { success: true, matchTeamApplication }
+            return { matchTeamApplication }
 
         } catch (error) {
-            console.error(error);
-            throw new Error(error);
+            throw error;
         }
     }
 
@@ -97,11 +96,10 @@ export class MatchTeamController extends BaseController {
             if (!canceledMatchTeamApplication)
                 throw new Error('매치 신청 정보를 수정하는데 실패했습니다.');
             
-            return { success: true, canceledMatchTeamApplication}
+            return { canceledMatchTeamApplication }
 
         } catch (error) {
-            console.error(error);
-            throw new Error(error);
+            throw error;
         }
     }
 
@@ -109,23 +107,22 @@ export class MatchTeamController extends BaseController {
    //Manager will see the team match status
    @Get('/list')
    public async getMatchTeamList(@QueryParam("matchId") matchId: number) {
-       try {
+        try {
 
-           //1. select team list from match table
-           const matchTeamApplicationList = await this.prisma.matchTeamApplication.findMany({ 
+            //1. select team list from match table
+            const matchTeamApplicationList = await this.prisma.matchTeamApplication.findMany({ 
                where: { NOT: [{status:StatusType.CANCEL}], AND: {matchId: matchId}},
                include: { team: true }
             });
 
-           if (!matchTeamApplicationList) 
+            if (!matchTeamApplicationList) 
                throw new NotFoundError('해당 매치를 찾을 수 없습니다.');
            
-           return { success: true, matchTeamApplicationList }
+            return { matchTeamApplicationList }
 
-       } catch (error) {
-           console.error(error);
-           throw new Error(error);
-       }
+        } catch (error) {
+            throw error;
+        }
     }
 
     //Manager approve the team application
@@ -157,11 +154,10 @@ export class MatchTeamController extends BaseController {
             if (!(approvedMatchTeamApplication))
                 throw new Error('해당 팀을 최종선택 하시는데 실패했습니다.');
             
-            return { success: true, approvedMatchTeamApplication }
+            return { approvedMatchTeamApplication }
 
         } catch (error) {
-            console.error(error);
-            throw new Error(error);
+            throw error;
         }
     }
 
@@ -195,11 +191,10 @@ export class MatchTeamController extends BaseController {
             if (!(deniedMatchTeamApplication))
                 throw new Error('해당 팀을 하시는데 거절하시는데 실패했습니다.');
             
-            return { success: true, deniedMatchTeamApplication }
+            return { deniedMatchTeamApplication }
 
         } catch (error) {
-            console.error(error);
-            throw new Error(error);
+            throw error;
         }
     }
 }

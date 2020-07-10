@@ -33,7 +33,7 @@ export class MatchController extends BaseController {
                 }
             })
 
-            return { success: true, match }
+            return { match }
         } catch (error) {
             throw error;
         }
@@ -55,7 +55,7 @@ export class MatchController extends BaseController {
             if (!match) 
                 throw new NotFoundError('해당 매치를 찾을 수 없습니다.');
 
-            return { success: true, match }
+            return { match }
 
         } catch (error) {
             throw error;            
@@ -88,7 +88,7 @@ export class MatchController extends BaseController {
                 });
             } 
             
-            return { success: true, matchList }
+            return { matchList }
         } catch (error) {
             throw error;
         }
@@ -116,7 +116,7 @@ export class MatchController extends BaseController {
                 }
             });
             
-            return { success: true, updatedMatch }
+            return { updatedMatch }
         } catch (error) {
             throw error;
         }
@@ -133,7 +133,7 @@ export class MatchController extends BaseController {
                 data: { status }
             });
 
-            return { success: true, updatedMatch}
+            return { updatedMatch}
         } catch (error) {
             throw error;
         }
