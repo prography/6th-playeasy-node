@@ -1,6 +1,6 @@
 import { BaseController } from './BaseController';
 import { JsonController, Get, Post, Put, Delete, UseBefore, 
-        Req, NotFoundError, QueryParam, Body } from 'routing-controllers';
+        Req, NotFoundError, QueryParam, Body, BodyParam } from 'routing-controllers';
 import { PrismaClient, MatchTeamApplication } from '@prisma/client';
 import { isLoggedIn } from '../middlewares/auth';
 
@@ -126,72 +126,35 @@ export class MatchTeamController extends BaseController {
     }
 
     //Manager approve the team application
-    @Put('/approval')
+    @Put()
     @UseBefore(isLoggedIn)
-    public async approveMatchTeamApplication(@Body() approveInfo: any) {
+    public async approveMatchTeamApplication(@BodyParam('applicationId') applicationId : number, @BodyParam('status') status: StatusType) {
         try {
             //1. init the insert info
-            const matchTeamApplicationId:number = parseInt(approveInfo.matchTeamApplicationId);
-            const matchId:number =  parseInt(approveInfo.matchId);
-            const statusConfirmed = StatusType.CONFIRMED;
+            // const matchTeamApplicationId:number = parseInt(approveInfo.matchTeamApplicationId);
+            // const matchId:number =  parseInt(approveInfo.matchId);
+            // const statusConfirmed = StatusType.CONFIRMED;
 
-            //2. check whether there's the match info
-            const matchTeamApplication = await this.prisma.match.findOne(
-                { where: { id: matchId }}
-            );
+            // //2. check whether there's the match info
+            // const matchTeamApplication = await this.prisma.match.findOne(
+            //     { where: { id: matchId }}
+            // );
 
-            console.log(matchTeamApplication);
+            // console.log(matchTeamApplication);
 
-            if(!matchTeamApplication) 
-                throw new NotFoundError('신청한 match가 없습니다.');
+            // if(!matchTeamApplication) 
+            //     throw new NotFoundError('신청한 match가 없습니다.');
         
             // 3. update status -> matchTeamApplication
             const approvedMatchTeamApplication = await this.prisma.matchTeamApplication.update({
-                where: { id: matchTeamApplicationId },
-                data: { status:statusConfirmed, updatedAt: new Date()}
+                where: { id: applicationId },
+                data: { status:status, updatedAt: new Date()}
             });
 
             if (!(approvedMatchTeamApplication))
                 throw new Error('해당 팀을 최종선택 하시는데 실패했습니다.');
             
             return { approvedMatchTeamApplication }
-
-        } catch (error) {
-            throw error;
-        }
-    }
-
-    //Manager cancel the team application
-    @Put('/cancel')
-    @UseBefore(isLoggedIn)
-    public async cancelMatchTeamApplication(@Body() approveInfo: any) {
-        try {
-            //1. init the insert info
-            const matchTeamApplicationId:number = parseInt(approveInfo.matchTeamApplicationId);
-            const matchId:number =  parseInt(approveInfo.matchId);
-            const statusDenied = StatusType.DENIED;
-
-            //2. check whether there's the match info
-            const matchTeamApplication = await this.prisma.match.findOne(
-                { where: { id: matchId }}
-            );
-
-            console.log(matchTeamApplication);
-
-            if(!matchTeamApplication) 
-                throw new NotFoundError('신청한 match가 없습니다.');
-        
-            // 3. update status -> matchTeamApplication
-            const deniedMatchTeamApplication = await this.prisma.matchTeamApplication.update({
-                where: { id: matchTeamApplicationId },
-                data: { status:statusDenied, updatedAt: new Date()},
-                
-            });
-
-            if (!(deniedMatchTeamApplication))
-                throw new Error('해당 팀을 하시는데 거절하시는데 실패했습니다.');
-            
-            return { deniedMatchTeamApplication }
 
         } catch (error) {
             throw error;

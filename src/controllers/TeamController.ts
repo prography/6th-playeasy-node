@@ -32,13 +32,11 @@ export class TeamController extends BaseController {
     //update team info
     @Put()
     @UseBefore(isLoggedIn)
-    public async teamUpdate(@BodyParam('teamId') teamId: number, @BodyParam('team') team: object) {
+    public async teamUpdate(@BodyParam('team') team: Team) {
         try {
 
-            console.log(teamId);
-
             const updateTeam: Team = await this.prisma.team.update({
-                where: { id: teamId },
+                where: { id: team.id },
                 data: {  ...team }
             });
 
