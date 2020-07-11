@@ -20,6 +20,12 @@ export class MatchController extends BaseController {
                         @BodyParam('matchData') matchData: Match, 
                         @BodyParam('locationData') locationData: Location) {
         try {
+
+            const teamid:number = req.user.teamId;
+            if (teamid == null){
+                throw new NotFoundError('팀 가입 해주세요.');
+            }
+
             await this.prisma.match.create({
                 data: {
                     ...matchData, 
