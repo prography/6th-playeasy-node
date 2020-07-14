@@ -144,7 +144,7 @@ export class MatchController extends BaseController {
     // 매치 수정 
     @Put()
     @UseBefore(isLoggedIn, isWriter)
-    public async updateMatch(@QueryParam('matchId') matchId: number,
+    public async updateMatch(@BodyParam('matchId') matchId: number,
                             @BodyParam('matchData') matchData: Match, 
                             @BodyParam('locationData') locationData: Location) {
         try {

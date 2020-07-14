@@ -1,6 +1,6 @@
 import { BaseController } from './BaseController';
 import { JsonController, Get, Post, Put, BodyParam, UseBefore, Req, QueryParam, HttpCode } from 'routing-controllers';
-import { PrismaClient, StatusType, User } from '@prisma/client';
+import { PrismaClient, StatusType, User, MatchUserApplication } from '@prisma/client';
 import { isLoggedIn, isWriter } from '../middlewares/auth';
 
 @JsonController('/match/user')
@@ -97,12 +97,12 @@ export class MatchUserController extends BaseController {
     public async cancel(@BodyParam('applicationId') applicationId : number,
                         @BodyParam('status') status: StatusType) {
         try {
-            await this.prisma.matchUserApplication.update({
+            const application: MatchUserApplication = await this.prisma.matchUserApplication.update({
                 where: { id: applicationId },
                 data: { status }
             });
 
-            return { success: true }
+            return { application }
         } catch (error) {
             throw error;
         }
