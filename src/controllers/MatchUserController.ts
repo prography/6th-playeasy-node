@@ -1,5 +1,5 @@
 import { BaseController } from './BaseController';
-import { JsonController, Get, Post, Put, BodyParam, UseBefore, Req, QueryParam } from 'routing-controllers';
+import { JsonController, Get, Post, Put, BodyParam, UseBefore, Req, QueryParam, HttpCode } from 'routing-controllers';
 import { PrismaClient, StatusType, User } from '@prisma/client';
 import { isLoggedIn } from '../middlewares/auth';
 
@@ -12,15 +12,25 @@ export class MatchUserController extends BaseController {
         this.prisma = new PrismaClient();
     }
 
-    // 용병 신청 (이미 해당 매치에 신청해서 대기 중인 사람은 또 신청 못하게 하는 로직 추가해야 함)
     @Post()
+    @HttpCode(201)
     @UseBefore(isLoggedIn)
     public async register(@Req() req: any,
                         @BodyParam('matchId') matchId: number, 
                         @BodyParam('quota') quota: number) {
         try {
+            const applicationCount = await this.prisma.matchUserApplication.count({
+                where: { 
+                    AND: [ { userId: req.user.id }, { matchId: matchId } ]
+                }
+            });
+
+            if (applicationCount !== 0) {
+                throw new Error('이미 신청했던 매치입니다.');
+            }
+
             const status = StatusType.WAITING;
-            await this.prisma.matchUserApplication.create({
+            const application = await this.prisma.matchUserApplication.create({
                 data: { 
                     status, quota, 
                     match: {
@@ -32,7 +42,7 @@ export class MatchUserController extends BaseController {
                 }
             });
 
-            return { success: true }
+            return { application }
         } catch (error) {
             throw error;
         }

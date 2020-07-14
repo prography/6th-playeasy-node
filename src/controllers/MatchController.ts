@@ -1,6 +1,6 @@
 import { BaseController } from './BaseController';
 import { JsonController, Get, Post, Put, BodyParam, 
-        UseBefore, Req, NotFoundError, QueryParam } from 'routing-controllers';
+        UseBefore, Req, NotFoundError, QueryParam, HttpCode } from 'routing-controllers';
 import { PrismaClient, Match, Location, StatusType } from '@prisma/client';
 import { isLoggedIn } from '../middlewares/auth';
 
@@ -15,15 +15,15 @@ export class MatchController extends BaseController {
 
     // 매치 작성
     @Post()
+    @HttpCode(201)
     @UseBefore(isLoggedIn)
     public async register(@Req() req: any,
                         @BodyParam('matchData') matchData: Match, 
                         @BodyParam('locationData') locationData: Location) {
         try {
-
-            const teamid:number = req.user.teamId;
-            if (teamid == null){
-                throw new NotFoundError('팀 가입 해주세요.');
+            const teamId:number = req.user.teamId;
+            if (teamId){
+                throw new NotFoundError('팀에 가입되어 있지 않습니다.');
             }
 
             const match: object = await this.prisma.match.create({
