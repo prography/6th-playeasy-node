@@ -1,7 +1,7 @@
 import { BaseController } from './BaseController';
 import { JsonController, Get, Post, Put, BodyParam, UseBefore, Req, QueryParam, HttpCode } from 'routing-controllers';
 import { PrismaClient, StatusType, User } from '@prisma/client';
-import { isLoggedIn } from '../middlewares/auth';
+import { isLoggedIn, isWriter } from '../middlewares/auth';
 
 @JsonController('/match/user')
 export class MatchUserController extends BaseController {
@@ -12,6 +12,7 @@ export class MatchUserController extends BaseController {
         this.prisma = new PrismaClient();
     }
 
+    // 용병 신청
     @Post()
     @HttpCode(201)
     @UseBefore(isLoggedIn)
@@ -50,7 +51,7 @@ export class MatchUserController extends BaseController {
 
     // 용병 지원 현황 (매니저)
     @Get('/list')
-    @UseBefore(isLoggedIn)
+    @UseBefore(isLoggedIn, isWriter)
     public async getList(@QueryParam("matchId") matchId: number) {
         try {
             const applicationList = await this.prisma.matchUserApplication.findMany({

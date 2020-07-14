@@ -1,6 +1,5 @@
-import { PrismaClient, User, Match, StatusType, MatchUserApplication, MatchTeamApplication } from '@prisma/client';
+import { PrismaClient, Match } from '@prisma/client';
 import jwt from 'jsonwebtoken';
-import { Response } from '@sentry/node';
 
 
 export async function isLoggedIn(req: any, res: any, next: any) {
@@ -44,11 +43,18 @@ export async function isLoggedIn(req: any, res: any, next: any) {
 export async function isWriter(req: any, res: any, next: any) {
     try {
         const prisma: any = new PrismaClient();
-        const matchId: number = Number(req.query.matchId);
+        let matchId: number;
+        if (req.query.matchId) {
+            matchId = Number(req.query.matchId);
+        } else {
+            matchId = Number(req.body.matchId);
+        }
+
+
         const match: Match = await prisma.match.findOne({ where: { id: matchId }});
         
         if(req.user.id !== match.writerId)
-            throw new Error('해당 권한이 없는 유저입니다.');
+            throw new Error('Match 등록자만 접근 가능한 요청입니다.');
 
         next();
     } catch (error) {

@@ -2,7 +2,7 @@ import { BaseController } from './BaseController';
 import { JsonController, Get, Post, Put, BodyParam, 
         UseBefore, Req, NotFoundError, QueryParam, HttpCode } from 'routing-controllers';
 import { PrismaClient, Match, Location, StatusType } from '@prisma/client';
-import { isLoggedIn } from '../middlewares/auth';
+import { isLoggedIn, isWriter } from '../middlewares/auth';
 
 @JsonController('/match')
 export class MatchController extends BaseController {
@@ -143,8 +143,9 @@ export class MatchController extends BaseController {
 
     // 매치 수정 
     @Put()
-    @UseBefore(isLoggedIn)
-    public async updateMatch(@BodyParam('matchData') matchData: Match, 
+    @UseBefore(isLoggedIn, isWriter)
+    public async updateMatch(@QueryParam('matchId') matchId: number,
+                            @BodyParam('matchData') matchData: Match, 
                             @BodyParam('locationData') locationData: Location) {
         try {
             if (locationData) {
@@ -155,7 +156,7 @@ export class MatchController extends BaseController {
             }
 
             const match: object = await this.prisma.match.update({
-                where: { id: matchData.id },
+                where: { id: matchId },
                 data: { ...matchData },
                 select: {
                     id: true, type: true, description: true,
@@ -185,7 +186,7 @@ export class MatchController extends BaseController {
     
     // 매치 마감 
     @Put('/status')
-    @UseBefore(isLoggedIn)
+    @UseBefore(isLoggedIn, isWriter)
     public async closeMatch(@BodyParam('matchId') matchId: number,
                             @BodyParam('status') status: StatusType) {
         try {
