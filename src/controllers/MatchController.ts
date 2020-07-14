@@ -26,16 +26,34 @@ export class MatchController extends BaseController {
                 throw new NotFoundError('팀 가입 해주세요.');
             }
 
-            await this.prisma.match.create({
+            const match: object = await this.prisma.match.create({
                 data: {
                     ...matchData, 
                     writer: { connect: { id: req.user.id } },
                     homeTeam: { connect: { id: req.user.teamId } },
                     location: { create: locationData }  
+                },
+                select: {
+                    id: true, type: true, description: true,
+                    startAt: true, duration: true, fee: true,
+                    phone: true, totalQuota: true, status: true, 
+                    writerId: true,
+                    homeTeam: {
+                        select: {
+                            id: true, name: true, description: true,
+                            age: true, level: true, leader: true, phone: true
+                        }
+                    },
+                    location: {
+                        select: {
+                            id: true, latitude: true, longitude: true,
+                            name: true, address: true, detail: true,
+                        }
+                    },
                 }
             });
 
-            return { success: true }
+            return { match }
         } catch (error) {
             throw error;
         }
