@@ -82,8 +82,8 @@ export class UserController extends BaseController {
                     }
                 });                
             } else if (type === "personal") {
-                applicationList = await this.prisma.matchTeamApplication.findMany({
-                    where: { teamId: req.user.teamId },
+                applicationList = await this.prisma.matchUserApplication.findMany({
+                    where: { userId: req.user.id },
                     select: {
                         id: true, quota: true, status: true,
                         match: {

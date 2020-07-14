@@ -1,11 +1,11 @@
-import { PrismaClient, User, Match } from '@prisma/client';
+import { PrismaClient, Match } from '@prisma/client';
 import jwt from 'jsonwebtoken';
 
 
 export async function isLoggedIn(req: any, res: any, next: any) {
     try {
         const prisma: any = new PrismaClient();
-
+        
         const token: string = req.header('authorization');
         const decoded: any = await jwt.verify(token, String(process.env.JWT_SECRET_KEY));
 
@@ -40,17 +40,24 @@ export async function isLoggedIn(req: any, res: any, next: any) {
     }
 }
 
-// export async function isWriter(req: any, res: any, next: any) {
-//     try {
-//         const prisma: any = new PrismaClient();
-//         const matchId: number = Number(req.query.matchId);
-//         const match: Match = await prisma.match.findOne({ where: { id: matchId }});
-        
-//         if(req.user.id !== match.writerId)
-//             throw new Error('해당 권한이 없는 유저입니다.');
+export async function isWriter(req: any, res: any, next: any) {
+    try {
+        const prisma: any = new PrismaClient();
+        let matchId: number;
+        if (req.query.matchId) {
+            matchId = Number(req.query.matchId);
+        } else {
+            matchId = Number(req.body.matchId);
+        }
 
-//         next();
-//     } catch (error) {
-//         next(error);
-//     }
-// }
+
+        const match: Match = await prisma.match.findOne({ where: { id: matchId }});
+        
+        if(req.user.id !== match.writerId)
+            throw new Error('Match 등록자만 접근 가능한 요청입니다.');
+
+        next();
+    } catch (error) {
+        next(error);
+    }
+}

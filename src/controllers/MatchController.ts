@@ -1,8 +1,8 @@
 import { BaseController } from './BaseController';
 import { JsonController, Get, Post, Put, BodyParam, 
-        UseBefore, Req, NotFoundError, QueryParam } from 'routing-controllers';
+        UseBefore, Req, NotFoundError, QueryParam, HttpCode } from 'routing-controllers';
 import { PrismaClient, Match, Location, StatusType } from '@prisma/client';
-import { isLoggedIn } from '../middlewares/auth';
+import { isLoggedIn, isWriter } from '../middlewares/auth';
 
 @JsonController('/match')
 export class MatchController extends BaseController {
@@ -15,27 +15,45 @@ export class MatchController extends BaseController {
 
     // 매치 작성
     @Post()
+    @HttpCode(201)
     @UseBefore(isLoggedIn)
     public async register(@Req() req: any,
                         @BodyParam('matchData') matchData: Match, 
                         @BodyParam('locationData') locationData: Location) {
         try {
-
-            const teamid:number = req.user.teamId;
-            if (teamid == null){
-                throw new NotFoundError('팀 가입 해주세요.');
+            const teamId:number = req.user.teamId;
+            if (teamId){
+                throw new NotFoundError('팀에 가입되어 있지 않습니다.');
             }
 
-            await this.prisma.match.create({
+            const match: object = await this.prisma.match.create({
                 data: {
                     ...matchData, 
                     writer: { connect: { id: req.user.id } },
                     homeTeam: { connect: { id: req.user.teamId } },
                     location: { create: locationData }  
+                },
+                select: {
+                    id: true, type: true, description: true,
+                    startAt: true, duration: true, fee: true,
+                    phone: true, totalQuota: true, status: true, 
+                    writerId: true,
+                    homeTeam: {
+                        select: {
+                            id: true, name: true, description: true,
+                            age: true, level: true, leader: true, phone: true
+                        }
+                    },
+                    location: {
+                        select: {
+                            id: true, latitude: true, longitude: true,
+                            name: true, address: true, detail: true,
+                        }
+                    },
                 }
             });
 
-            return { success: true }
+            return { match }
         } catch (error) {
             throw error;
         }
@@ -125,8 +143,9 @@ export class MatchController extends BaseController {
 
     // 매치 수정 
     @Put()
-    @UseBefore(isLoggedIn)
-    public async updateMatch(@BodyParam('matchData') matchData: Match, 
+    @UseBefore(isLoggedIn, isWriter)
+    public async updateMatch(@BodyParam('matchId') matchId: number,
+                            @BodyParam('matchData') matchData: Match, 
                             @BodyParam('locationData') locationData: Location) {
         try {
             if (locationData) {
@@ -137,7 +156,7 @@ export class MatchController extends BaseController {
             }
 
             const match: object = await this.prisma.match.update({
-                where: { id: matchData.id },
+                where: { id: matchId },
                 data: { ...matchData },
                 select: {
                     id: true, type: true, description: true,
@@ -167,7 +186,7 @@ export class MatchController extends BaseController {
     
     // 매치 마감 
     @Put('/status')
-    @UseBefore(isLoggedIn)
+    @UseBefore(isLoggedIn, isWriter)
     public async closeMatch(@BodyParam('matchId') matchId: number,
                             @BodyParam('status') status: StatusType) {
         try {
