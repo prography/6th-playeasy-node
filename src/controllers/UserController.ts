@@ -1,6 +1,6 @@
 import { BaseController } from './BaseController';
-import { JsonController, Get, Put, UseBefore, Req, BodyParam, QueryParam } from 'routing-controllers';
-import { PrismaClient, User, Level } from '@prisma/client';
+import { JsonController, Get, Put, UseBefore, Req, BodyParam, QueryParam, Body } from 'routing-controllers';
+import { PrismaClient, User, Level, Team } from '@prisma/client';
 import { isLoggedIn } from '../middlewares/auth';
 
 @JsonController('/users')
@@ -146,6 +146,5 @@ export class UserController extends BaseController {
             throw error;
         }
     }
-
     // 사진 
 }

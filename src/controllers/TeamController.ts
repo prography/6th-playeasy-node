@@ -1,6 +1,6 @@
 import { BaseController } from './BaseController';
-import { JsonController, UseBefore, BodyParam, Post, Body, Put, Get, Delete, QueryParam } from 'routing-controllers';
-import { PrismaClient, User, Team } from '@prisma/client';
+import { JsonController, UseBefore, BodyParam, Post, Body, Put, Get, Delete, QueryParam, Req } from 'routing-controllers';
+import { PrismaClient, User, Team, PrismaClientUnknownRequestError, StatusType } from '@prisma/client';
 import { isLoggedIn } from '../middlewares/auth';
 
 @JsonController('/team')
@@ -143,5 +143,34 @@ export class TeamController extends BaseController {
         } catch (error) {
             throw error;
         }
+    }
+
+    @Put('/selection')  
+    @UseBefore(isLoggedIn)
+    public async joinTeam(@Req() req: any, @BodyParam('teamId') teamId: number) {
+       try {
+            const matchList = this.prisma.match.findMany({
+                where: {
+                    writerId: req.user.id,
+                    status: StatusType.WAITING,
+                }
+            });
+
+            if (matchList)
+                throw new Error("기존 팀으로 매치를 등록하고 대기 중이면 팀 이동이 불가능 합니다.");
+
+            const team: Team  = await this.prisma.team.update({
+                where: { id: teamId },
+                data: {
+                    users: {
+                        connect: { id: req.user.id }
+                    }
+                }
+            });
+
+            return { team }
+       } catch (error) {
+           throw error;
+       }
     }
 }

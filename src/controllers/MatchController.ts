@@ -96,7 +96,7 @@ export class MatchController extends BaseController {
         
     }
 
-    // 매치 (매치 메인화면) -> 장소 필터 추가해야 함
+    // 매치 (매치 메인화면)
     @Get('/list')
     public async getMatchList(@QueryParam('date') date: string, 
                             @QueryParam('status') status: string) {
@@ -105,8 +105,8 @@ export class MatchController extends BaseController {
             matchList = await this.prisma.match.findMany({
                 where: {
                     startAt: {
-                        gte: new Date(`${date}T00:00:00`),
-                        lte: new Date(`${date}T23:59:59`),
+                        gte: new Date(`${date}T00:00:00.260Z`),
+                        lte: new Date(`${date}T23:59:59.260Z`),
                     }
                 },
                 select: {
