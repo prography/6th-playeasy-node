@@ -9,7 +9,7 @@ datasource mysql {
 
 
 enum MatchType {
-  SOCCKER
+  SOCCER
   FUTSAL5 
   FUTSAL6
 }

@@ -1,6 +1,6 @@
 import { BaseController } from './BaseController';
 import { JsonController, Get, Put, UseBefore, Req, BodyParam, QueryParam } from 'routing-controllers';
-import { PrismaClient, User, Level, Match, MatchUserApplication, MatchTeamApplication } from '@prisma/client';
+import { PrismaClient, User, Level } from '@prisma/client';
 import { isLoggedIn } from '../middlewares/auth';
 
 @JsonController('/users')

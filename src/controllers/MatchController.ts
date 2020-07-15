@@ -22,7 +22,7 @@ export class MatchController extends BaseController {
                         @BodyParam('locationData') locationData: Location) {
         try {
             const teamId:number = req.user.teamId;
-            if (teamId){
+            if (!teamId){
                 throw new NotFoundError('팀에 가입되어 있지 않습니다.');
             }
 
