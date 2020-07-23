@@ -5,6 +5,7 @@ import bodyParser from 'body-parser';
 import cookieParser from 'cookie-parser';
 import morgan from 'morgan';
 import dotenv from 'dotenv';
+import createError from 'http-errors';
 import * as Sentry from '@sentry/node';
 
 Sentry.init({ dsn: process.env.SENTRY_DSN });
@@ -28,7 +29,7 @@ useExpressServer(app, {
   cors: true,
   controllers: [`${__dirname}/controllers/**`],
   middlewares: [`${__dirname}/middlewares/**`],
-  });
+});
 
 app.use(Sentry.Handlers.errorHandler());
 
@@ -38,6 +39,7 @@ app.use(function onError(_: any , __: Request, res: any, next: any) {
   res.statusCode = 500;
   res.end(res.sentry + "\n");
 });
+
 
 
 export {

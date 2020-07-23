@@ -149,26 +149,16 @@ export class TeamController extends BaseController {
     @UseBefore(isLoggedIn)
     public async joinTeam(@Req() req: any, @BodyParam('teamId') teamId: number) {
        try {
-            const matchList = this.prisma.match.findMany({
-                where: {
-                    writerId: req.user.id,
-                    status: StatusType.WAITING,
-                }
-            });
-
-            if (matchList)
-                throw new Error("기존 팀으로 매치를 등록하고 대기 중이면 팀 이동이 불가능 합니다.");
-
-            const team: Team  = await this.prisma.team.update({
-                where: { id: teamId },
+            const user: User = await this.prisma.user.update({
+                where: { id: req.user.id },
                 data: {
-                    users: {
-                        connect: { id: req.user.id }
+                    team: {
+                        connect: { id: teamId }
                     }
                 }
             });
 
-            return { team }
+            return { user }
        } catch (error) {
            throw error;
        }
