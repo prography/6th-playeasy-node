@@ -1,7 +1,7 @@
 import { BaseController } from './BaseController';
 import { JsonController, Get, Post, Put, BodyParam, 
         UseBefore, Req, NotFoundError, QueryParam, HttpCode } from 'routing-controllers';
-import { PrismaClient, Match, Location, StatusType } from '@prisma/client';
+import { PrismaClient, Match, Location, StatusType, MatchType } from '@prisma/client';
 import { isLoggedIn, isWriter } from '../middlewares/auth';
 
 @JsonController('/match')
@@ -18,17 +18,25 @@ export class MatchController extends BaseController {
     @HttpCode(201)
     @UseBefore(isLoggedIn)
     public async register(@Req() req: any,
-                        @BodyParam('matchData') matchData: Match, 
+                        @BodyParam('matchData') matchData: any, 
                         @BodyParam('locationData') locationData: Location) {
         try {
             const teamId:number = req.user.teamId;
             if (!teamId){
                 throw new NotFoundError('팀에 가입되어 있지 않습니다.');
             }
+            const type: MatchType = matchData.type;
+            const description: string | null = matchData.description;
+            const startAt: Date = new Date(matchData.startAt);
+            const duration: number | null = matchData.duration;
+            const fee: number | null = matchData.fee;
+            const phone: string | null = matchData.phone;
+            const totalQuota: number = matchData.totalQuota;
 
             const match: object = await this.prisma.match.create({
                 data: {
-                    ...matchData, 
+                    type, description, startAt, duration, 
+                    fee, phone, totalQuota, 
                     writer: { connect: { id: req.user.id } },
                     homeTeam: { connect: { id: req.user.teamId } },
                     location: { create: locationData }  
@@ -145,7 +153,7 @@ export class MatchController extends BaseController {
     @Put()
     @UseBefore(isLoggedIn, isWriter)
     public async updateMatch(@BodyParam('matchId') matchId: number,
-                            @BodyParam('matchData') matchData: Match, 
+                            @BodyParam('matchData') matchData: any, 
                             @BodyParam('locationData') locationData: Location) {
         try {
             if (locationData) {
@@ -155,9 +163,17 @@ export class MatchController extends BaseController {
                 });
             }
 
+            const type: MatchType = matchData.type;
+            const description: string | null = matchData.description;
+            const startAt: Date = new Date(matchData.startAt);
+            const duration: number | null = matchData.duration;
+            const fee: number | null = matchData.fee;
+            const phone: string | null = matchData.phone;
+            const totalQuota: number = matchData.totalQuota;
+
             const match: object = await this.prisma.match.update({
                 where: { id: matchId },
-                data: { ...matchData },
+                data: { type, description, startAt, duration, fee, phone, totalQuota },
                 select: {
                     id: true, type: true, description: true,
                     startAt: true, duration: true, fee: true,
