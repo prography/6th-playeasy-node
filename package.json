@@ -7,6 +7,7 @@
     "build": "npm run prisma:generate && tsc",
     "start": "npm run prisma:generate && node ./dist",
     "dev": "npm run prisma:migrate && npm run prisma:generate && nodemon",
+    "prd": "pm2 stop playeasy && npm run prisma:migrate && npm run prisma:generate && pm2 start ./dist/index.js --name 'playeasy'",
     "prisma:generate": "prisma2 generate",
     "prisma:migrate": "prisma2 migrate up --experimental",
     "eslint": "eslint './src/**/*.ts"

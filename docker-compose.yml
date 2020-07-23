@@ -25,7 +25,7 @@ services:
       HOST: 0.0.0.0
       PORT: 3000
       DB_URL: mysql://admin:playeasy@playeasy.c2nvfbhvyzxd.ap-northeast-2.rds.amazonaws.com:3306/playeasy
-    entrypoint: "npm run dev"
+    entrypoint: "npm run prd"
     networks:
       default:
         ipv4_address: 192.168.200.2
