@@ -8,33 +8,33 @@ import {
 } from "typeorm";
 
 @Entity()
-export class User extends BaseEntity {
+export class Match extends BaseEntity {
     @PrimaryGeneratedColumn()
     id!: number;
 
-    @Column({ nullable: true })
-    name!: string;
+    @Column()  // enum
+    type!: string;
 
     @Column({ nullable: true })
-    age!: number;
+    description!: number;
 
     @Column()
-    email!: string;
+    startAt!: string;
 
     @Column()
-    socialType!: string;
+    endAt!: string;
+
+    @Column()
+    fee!: number;
 
     @Column({ nullable: true })
     phone!: string;
 
-    @Column({ nullable: true })  // enum
-    level!: string;
+    @Column()
+    quota!: number;
 
-    @Column({ nullable: true })
-    description!: string;
-
-    @Column({ nullable: true })
-    picture!: string;
+    @Column()
+    status!: string;
 
     @CreateDateColumn({ name: 'created_at' })
     createdAt!: Date;
