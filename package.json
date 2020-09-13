@@ -1,88 +1,47 @@
 {
-  "name": "6th-playeasy-node",
-  "version": "1.0.0",
-  "description": "플레이지 백엔드",
-  "main": "index.js",
-  "scripts": {
-    "build": "npm run prisma:generate && tsc",
-    "start": "npm run prisma:generate && node ./dist",
-    "dev": "npm run prisma:migrate && npm run prisma:generate && nodemon",
-    "prd": "pm2 stop playeasy && npm run prisma:migrate && npm run prisma:generate && pm2 start ./dist/index.js --name 'playeasy'",
-    "prisma:generate": "prisma2 generate",
-    "prisma:migrate": "prisma2 migrate up --experimental",
-    "eslint": "eslint './src/**/*.ts"
-  },
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/prography/6th-playeasy-node.git"
-  },
-  "author": "",
-  "license": "ISC",
-  "bugs": {
-    "url": "https://github.com/prography/6th-playeasy-node/issues"
-  },
-  "homepage": "https://github.com/prography/6th-playeasy-node#readme",
-  "nodemonConfig": {
-    "watch": [
-      "src/*"
-    ],
-    "ext": "ts",
-    "ignore": [
-      "**/*.spec.ts",
-      ".env"
-    ],
-    "exec": "ts-node ./src"
-  },
-  "devDependencies": {
-    "@prisma/cli": "^2.0.0-beta.7",
-    "@types/body-parser": "^1.19.0",
-    "@types/cookie-parser": "^1.4.2",
-    "@types/dotenv": "^8.2.0",
-    "@types/express": "^4.17.6",
-    "@types/http-errors": "^1.8.0",
-    "@types/jest": "^24.9.1",
-    "@types/jsonwebtoken": "^8.3.9",
-    "@types/morgan": "^1.9.0",
-    "@types/node": "^13.13.2",
-    "@types/passport": "^1.0.3",
-    "@types/passport-kakao": "^0.2.0",
-    "@types/request": "^2.48.4",
-    "@types/supertest": "^2.0.8",
-    "@typescript-eslint/eslint-plugin": "^2.30.0",
-    "@typescript-eslint/parser": "^2.30.0",
-    "eslint": "^6.8.0",
-    "eslint-config-google": "^0.14.0",
-    "jest": "^24.9.0",
-    "morgan": "^1.10.0",
-    "nodemon": "^2.0.3",
-    "prettier": "^2.0.5",
-    "supertest": "^4.0.2",
-    "ts-jest": "^24.3.0",
-    "ts-node": "^8.9.0",
-    "typescript": "^3.8.3"
-  },
-  "dependencies": {
-    "@prisma/client": "^2.0.0-beta.3",
-    "@sentry/node": "^5.19.1",
-    "aws-sdk": "^2.675.0",
-    "axios": "^0.19.2",
-    "bcrypt": "^4.0.1",
-    "body-parser": "^1.19.0",
-    "class-transformer": "^0.2.3",
-    "class-validator": "^0.12.2",
-    "cookie-parser": "^1.4.5",
-    "cors": "^2.8.5",
-    "dotenv": "^8.2.0",
-    "ejs": "^3.1.2",
-    "express": "^4.17.1",
-    "http-errors": "^1.8.0",
-    "jsonwebtoken": "^8.5.1",
-    "multer": "^1.4.2",
-    "passport": "^0.4.1",
-    "passport-kakao": "^1.0.0",
-    "querystring": "^0.2.0",
-    "reflect-metadata": "^0.1.13",
-    "request": "^2.88.2",
-    "routing-controllers": "^0.8.1"
-  }
+   "name": "6th-playeasy-node",
+   "version": "1.0.0",
+   "description": "",
+   "main": "index.js",
+   "scripts": {
+      "build": "tsc",
+      "test": "echo \"Error: no test specified\" && exit 1",
+      "start": "ts-node src/index.ts"
+   },
+   "repository": {
+      "type": "git",
+      "url": "git+https://github.com/prography/6th-playeasy-node.git"
+   },
+   "author": "",
+   "license": "ISC",
+   "bugs": {
+      "url": "https://github.com/prography/6th-playeasy-node/issues"
+   },
+   "homepage": "https://github.com/prography/6th-playeasy-node#readme",
+   "devDependencies": {
+      "@types/body-parser": "^1.19.0",
+      "@types/cookie-parser": "^1.4.2",
+      "@types/dotenv": "^8.2.0",
+      "@types/express": "^4.17.8",
+      "@types/morgan": "^1.9.1",
+      "@types/node": "^8.0.29",
+      "jest": "^26.4.2",
+      "ts-jest": "^26.3.0",
+      "ts-node": "3.3.0",
+      "typescript": "^3.3.3333"
+   },
+   "dependencies": {
+      "body-parser": "^1.19.0",
+      "class-transformer": "^0.3.1",
+      "class-validator": "^0.12.2",
+      "cookie-parser": "^1.4.5",
+      "dotenv": "^8.2.0",
+      "ejs": "^3.1.5",
+      "express": "^4.17.1",
+      "morgan": "^1.10.0",
+      "mysql": "^2.14.1",
+      "reflect-metadata": "^0.1.13",
+      "routing-controllers": "^0.9.0-alpha.6",
+      "typeorm": "0.2.26"
+   }
 }

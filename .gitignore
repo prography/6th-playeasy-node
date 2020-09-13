@@ -1,12 +1,6 @@
-node_modules
-dist
-prisma/.env
-.ebextensions
-.env
-
-# Elastic Beanstalk Files
-.elasticbeanstalk/*
-!.elasticbeanstalk/*.cfg.yml
-!.elasticbeanstalk/*.global.yml
-.ebextensions/
-db/
+.idea/
+.vscode/
+node_modules/
+build/
+tmp/
+temp/
