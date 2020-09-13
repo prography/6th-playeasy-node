@@ -8,7 +8,7 @@ import {
 } from "typeorm";
 
 @Entity()
-export class Match extends BaseEntity {
+export class Location extends BaseEntity {
     @PrimaryGeneratedColumn()
     id!: number;
 
