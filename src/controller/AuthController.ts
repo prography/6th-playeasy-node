@@ -1,36 +1,39 @@
 import { BaseController } from './BaseController';
-import { JsonController, Get, Post, BodyParam, Req, Res, Render } from 'routing-controllers';
-import jwt from 'jsonwebtoken';
+import { 
+    JsonController, 
+    Get, 
+    Post, 
+    BodyParam, 
+    Req, 
+    Render,
+} from 'routing-controllers';
 import axios from 'axios';
 import querystring from 'querystring';
-import { PrismaClient } from '@prisma/client';
-
 import requestKakao from 'request'; 
+import { UserService } from '../service/UserService';
 
 @JsonController('/auth')
 export class AuthController extends BaseController {
-    private prisma: PrismaClient;
 
-    constructor() {
+    constructor(private userService: UserService) {
         super();
-        this.prisma = new PrismaClient();
     }
 
-    @Get()  
+    @Get()  // 카카오 로그인 테스트용 api
     @Render('view.html')
     public main() {
       console.log('login page');
     }
 
-    @Get('/kakao')
-    public kakaoCheck(@Res() response: any) {
+    @Get('/kakao')  // 카카오 로그인 테스트용 api
+    public kakaoCheck() {
         const kakaoAuthUrl = `https://kauth.kakao.com/oauth/authorize?client_id=${process.env.KAKAO_CLIENT_ID}&redirect_uri=${process.env.KAKAO_REDIRECT_URI}&response_type=code`;
     
         return requestKakao.post(kakaoAuthUrl, function(err: any,httpResponse: any,body: any){});
     }
 
-    @Get('/kakao/callback')
-    public async kakao(@Req() request: any, @Res() response: any) {
+    @Get('/kakao/callback')  // 카카오 로그인 테스트용 api
+    public async kakao(@Req() request: any) {
         // 1. kakao access token  
         const kakaoToken = await axios({      
             method: "POST",
@@ -46,31 +49,21 @@ export class AuthController extends BaseController {
                 redirect_uri: process.env.KAKAO_REDIRECT_URI
             })
         });
+        
         return { access_token: kakaoToken.data.access_token };
     }
 
     @Post('/login')
-    public async login(@BodyParam('access_token') access_token: string, @Res() res: any) {
-        try {
-            const kakaoUserInfo = await axios({      
-                method: "GET",
-                url: "https://kapi.kakao.com/v2/user/me",
-                headers: { Authorization: `Bearer ${access_token}` }
-            });
-    
-            const email: string = kakaoUserInfo.data.kakao_account.email;
-            const exUser: any = await this.prisma.user.findOne({ where: { email } });
-            let isNewMember: boolean = false;
-    
-            if (!exUser) {
-                isNewMember = true;
-                await this.prisma.user.create({data: { email }});
-            }
-            const token = await jwt.sign({email: email}, String(process.env.JWT_SECRET_KEY), {expiresIn : "7d"});
-    
-            return { isNewMember, token };
-        } catch (error) {
-            throw error;
-        } 
+    public async login(@BodyParam('access_token') access_token: string) {
+        const kakaoUserInfo = await axios({      
+            method: "GET",
+            url: "https://kapi.kakao.com/v2/user/me",
+            headers: { Authorization: `Bearer ${access_token}` }
+        });
+        const email: string = kakaoUserInfo.data.kakao_account.email;
+        // 이메일이 없는 경우 에러처리
+
+        const data = this.userService.login(email);
+        return data;
     }
 }
