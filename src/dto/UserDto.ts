@@ -1,5 +1,19 @@
-import { isNotEmpty, Length, IsEmail, IsNotEmpty } from 'class-validator';
-import { User } from '../entity/User';
+import { IsEmail, IsNotEmpty,  } from 'class-validator';
+
+export class UpdateUserDto {
+    @IsNotEmpty()
+    private id!: number;
+    
+    private name!: string;
+    
+    private age!: number;
+
+    private level!: string;
+
+    private description!: string;
+
+    private picture!: string;
+}
 
 export class ResponseUserDto {
     @IsNotEmpty()
@@ -12,7 +26,7 @@ export class ResponseUserDto {
     @IsNotEmpty()
     @IsEmail()
     private email!: string;
-
+    
     private socialType!: string;
 
     private level!: string;

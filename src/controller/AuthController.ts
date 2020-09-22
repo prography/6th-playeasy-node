@@ -1,3 +1,4 @@
+import { Request } from 'express';
 import { BaseController } from './BaseController';
 import { 
     JsonController, 
@@ -5,17 +6,18 @@ import {
     Post, 
     BodyParam, 
     Req, 
-    Render,
+    Render, 
+    NotFoundError,
 } from 'routing-controllers';
 import axios from 'axios';
 import querystring from 'querystring';
 import requestKakao from 'request'; 
-import { UserService } from '../service/UserService';
+import { AuthService } from '../service/AuthService';
 
 @JsonController('/auth')
 export class AuthController extends BaseController {
 
-    constructor(private userService: UserService) {
+    constructor(private authService: AuthService) {
         super();
     }
 
@@ -33,7 +35,7 @@ export class AuthController extends BaseController {
     }
 
     @Get('/kakao/callback')  // 카카오 로그인 테스트용 api
-    public async kakao(@Req() request: any) {
+    public async kakao(@Req() request: Request) {
         // 1. kakao access token  
         const kakaoToken = await axios({      
             method: "POST",
@@ -60,10 +62,12 @@ export class AuthController extends BaseController {
             url: "https://kapi.kakao.com/v2/user/me",
             headers: { Authorization: `Bearer ${access_token}` }
         });
-        const email: string = kakaoUserInfo.data.kakao_account.email;
-        // 이메일이 없는 경우 에러처리
 
-        const data = this.userService.login(email);
+        const email: string = kakaoUserInfo.data.kakao_account.email;
+        if (!email) 
+            throw new NotFoundError('카카오 인증에 실패했습니다.');
+        
+        const data = await this.authService.login(email);
         return data;
     }
 }

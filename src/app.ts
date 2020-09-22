@@ -1,6 +1,6 @@
 import 'reflect-metadata';
 import express from 'express';
-import { createDatabaseConnection } from './db';
+import { createDatabaseConnection } from './utils/DatabaseConnector';
 import { useExpressServer, useContainer } from 'routing-controllers';
 import { Container } from 'typedi';
 import bodyParser from 'body-parser';
