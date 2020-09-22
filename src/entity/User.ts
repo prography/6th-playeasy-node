@@ -7,6 +7,12 @@ import {
     UpdateDateColumn,
 } from "typeorm";
 
+export enum Level {
+    LOW = "LOW",
+    MIDDLE = "MEDIUM",
+    HIGH = "HIGH",
+}
+
 @Entity()
 export class User extends BaseEntity {
     @PrimaryGeneratedColumn()
@@ -27,8 +33,8 @@ export class User extends BaseEntity {
     @Column({ nullable: true })
     phone!: string;
 
-    @Column({ nullable: true })  // enum
-    level!: string;
+    @Column({ nullable: true, enum: Level })  
+    level!: Level;
 
     @Column({ nullable: true })
     description!: string;

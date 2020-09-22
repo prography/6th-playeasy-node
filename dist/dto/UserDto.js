@@ -9,8 +9,14 @@ var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.ResponseUserDto = void 0;
+exports.ResponseUserDto = exports.UpdateUserDto = void 0;
 var class_validator_1 = require("class-validator");
+var UpdateUserDto = /** @class */ (function () {
+    function UpdateUserDto() {
+    }
+    return UpdateUserDto;
+}());
+exports.UpdateUserDto = UpdateUserDto;
 var ResponseUserDto = /** @class */ (function () {
     function ResponseUserDto() {
     }

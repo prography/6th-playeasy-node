@@ -1,13 +1,14 @@
 import 'reflect-metadata';
 import express from 'express';
-import { createDatabaseConnection } from './utils/DatabaseConnector';
+import { createDatabaseConnection } from './util/DatabaseConnector';
 import { useExpressServer, useContainer } from 'routing-controllers';
 import { Container } from 'typedi';
 import bodyParser from 'body-parser';
 import cookieParser from 'cookie-parser';
 import morgan from 'morgan';
 import dotenv from 'dotenv';
-  
+import { currentUserChecker } from './util/Authorization';  
+
 const app = express();
 
 dotenv.config();
@@ -38,6 +39,7 @@ useExpressServer(app, {
   cors: true,
   controllers: [`${__dirname}/controller/**`],
   middlewares: [`${__dirname}/middlewares/**`],
+  currentUserChecker,
   });
 
 export {

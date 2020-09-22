@@ -13,7 +13,7 @@ export async function createDatabaseConnection(): Promise<void> {
       database: process.env.DATABASE_DATABASE,
       synchronize: true,
       logging: false,
-      entities: [__dirname + "/entity/*{.ts,.js}"],
+      entities: [__dirname + "/../entity/*{.ts,.js}"],
     };
 
     useContainer(Container);

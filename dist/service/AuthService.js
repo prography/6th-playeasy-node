@@ -47,49 +47,52 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
         if (op[0] & 5) throw op[1]; return { value: op[0] ? op[1] : void 0, done: true };
     }
 };
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.UserService = void 0;
+exports.AuthService = void 0;
 var typedi_1 = require("typedi");
 var typeorm_typedi_extensions_1 = require("typeorm-typedi-extensions");
 var UserRepository_1 = require("../repository/UserRepository");
-var UserDto_1 = require("../dto/UserDto");
-var class_transformer_1 = require("class-transformer");
-var UserService = /** @class */ (function () {
-    function UserService(userRepository) {
+var User_1 = require("../entity/User");
+var jsonwebtoken_1 = __importDefault(require("jsonwebtoken"));
+var AuthService = /** @class */ (function () {
+    function AuthService(userRepository) {
         this.userRepository = userRepository;
     }
-    UserService.prototype.getUser = function () {
+    AuthService.prototype.login = function (email) {
         return __awaiter(this, void 0, void 0, function () {
-            return __generator(this, function (_a) {
-                return [2 /*return*/];
-            });
-        });
-    };
-    UserService.prototype.updateUser = function (user, updateUserDto) {
-        return __awaiter(this, void 0, void 0, function () {
-            var updatedUser, responseUserDto;
+            var isNewMember, exUser, user, token;
             return __generator(this, function (_a) {
                 switch (_a.label) {
                     case 0:
-                        user.name = updateUserDto.name;
-                        user.age = updateUserDto.age;
-                        user.level = updateUserDto.level;
-                        user.description = updateUserDto.description;
-                        user.picture = updateUserDto.picture;
-                        return [4 /*yield*/, this.userRepository.save(user)];
+                        isNewMember = false;
+                        return [4 /*yield*/, this.userRepository.findOne({ where: { email: email } })];
                     case 1:
-                        updatedUser = _a.sent();
-                        responseUserDto = class_transformer_1.plainToClass(UserDto_1.ResponseUserDto, updatedUser);
-                        return [2 /*return*/, responseUserDto];
+                        exUser = _a.sent();
+                        if (!!exUser) return [3 /*break*/, 3];
+                        isNewMember = true;
+                        user = new User_1.User();
+                        user.email = email;
+                        user.socialType = 'kakao';
+                        return [4 /*yield*/, this.userRepository.save(user)];
+                    case 2:
+                        _a.sent();
+                        _a.label = 3;
+                    case 3: return [4 /*yield*/, jsonwebtoken_1.default.sign({ email: email }, String(process.env.JWT_SECRET_KEY), { expiresIn: "7d" })];
+                    case 4:
+                        token = _a.sent();
+                        return [2 /*return*/, { isNewMember: isNewMember, token: token }];
                 }
             });
         });
     };
-    UserService = __decorate([
+    AuthService = __decorate([
         typedi_1.Service(),
         __param(0, typeorm_typedi_extensions_1.InjectRepository()),
         __metadata("design:paramtypes", [UserRepository_1.UserRepository])
-    ], UserService);
-    return UserService;
+    ], AuthService);
+    return AuthService;
 }());
-exports.UserService = UserService;
+exports.AuthService = AuthService;

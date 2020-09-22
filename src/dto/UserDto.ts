@@ -1,37 +1,64 @@
-import { IsEmail, IsNotEmpty,  } from 'class-validator';
+import { 
+    IsEmail, 
+    IsInt, 
+    IsNotEmpty,
+    Min,
+    Max,
+    IsString,
+    IsEnum,
+    IsMobilePhone
+} from 'class-validator';
+import { Exclude, Expose } from 'class-transformer';
+import { Level } from '../entity/User';
 
 export class UpdateUserDto {
-    @IsNotEmpty()
-    private id!: number;
+    public name!: string;
     
-    private name!: string;
-    
-    private age!: number;
+    @IsInt()
+    @Min(1)
+    @Max(100)
+    public age!: number;
 
-    private level!: string;
+    @IsMobilePhone("ko-KR")
+    public phone!: string;
 
-    private description!: string;
+    @IsEnum(Level)
+    public level!: Level;
 
-    private picture!: string;
+    @IsString()
+    public description!: string;
+
+    public picture!: string;
 }
 
+@Exclude()
 export class ResponseUserDto {
+    @Expose()
     @IsNotEmpty()
-    private id!: number;
+    public id!: number;
     
-    private name!: string;
+    @Expose()
+    public name!: string;
     
-    private age!: number;
+    @Expose()
+    public age!: number;
 
+    @Expose()
     @IsNotEmpty()
-    @IsEmail()
-    private email!: string;
+    public email!: string;
+
+    @Expose()
+    public phone!: string;
     
-    private socialType!: string;
+    @Expose()
+    public socialType!: string;
 
-    private level!: string;
+    @Expose()
+    public level!: string;
 
-    private description!: string;
+    @Expose()
+    public description!: string;
 
-    private picture!: string;
+    @Expose()
+    public picture!: string;
 }

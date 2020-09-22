@@ -70,12 +70,12 @@ var routing_controllers_1 = require("routing-controllers");
 var axios_1 = __importDefault(require("axios"));
 var querystring_1 = __importDefault(require("querystring"));
 var request_1 = __importDefault(require("request"));
-var UserService_1 = require("../service/UserService");
+var AuthService_1 = require("../service/AuthService");
 var AuthController = /** @class */ (function (_super) {
     __extends(AuthController, _super);
-    function AuthController(userService) {
+    function AuthController(authService) {
         var _this = _super.call(this) || this;
-        _this.userService = userService;
+        _this.authService = authService;
         return _this;
     }
     AuthController.prototype.main = function () {
@@ -113,7 +113,7 @@ var AuthController = /** @class */ (function (_super) {
     };
     AuthController.prototype.login = function (access_token) {
         return __awaiter(this, void 0, void 0, function () {
-            var kakaoUserInfo, email;
+            var kakaoUserInfo, email, data;
             return __generator(this, function (_a) {
                 switch (_a.label) {
                     case 0: return [4 /*yield*/, axios_1.default({
@@ -124,7 +124,12 @@ var AuthController = /** @class */ (function (_super) {
                     case 1:
                         kakaoUserInfo = _a.sent();
                         email = kakaoUserInfo.data.kakao_account.email;
-                        return [2 /*return*/, this.userService.login(email)];
+                        if (!email)
+                            throw new routing_controllers_1.NotFoundError('카카오 인증에 실패했습니다.');
+                        return [4 /*yield*/, this.authService.login(email)];
+                    case 2:
+                        data = _a.sent();
+                        return [2 /*return*/, data];
                 }
             });
         });
@@ -161,7 +166,7 @@ var AuthController = /** @class */ (function (_super) {
     ], AuthController.prototype, "login", null);
     AuthController = __decorate([
         routing_controllers_1.JsonController('/auth'),
-        __metadata("design:paramtypes", [UserService_1.UserService])
+        __metadata("design:paramtypes", [AuthService_1.AuthService])
     ], AuthController);
     return AuthController;
 }(BaseController_1.BaseController));
