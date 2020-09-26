@@ -8,7 +8,8 @@ import {
     IsMobilePhone
 } from 'class-validator';
 import { Exclude, Expose } from 'class-transformer';
-import { Level } from '../entity/User';
+import { Level } from 'util/Enums';
+
 
 export class UpdateUserDto {
     public name!: string;

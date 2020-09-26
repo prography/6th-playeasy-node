@@ -6,19 +6,7 @@ import {
     CreateDateColumn,
     UpdateDateColumn,
 } from "typeorm";
-
-export enum MatchType {
-    SOCCER = "SOCCER",
-    FUTSAL5 = "FUTSAL5", 
-    FUTSAL6 = "FUTSAL6",
-}
-
-export enum MatchStatus {
-    WAITING = "WAITING",
-    CONFIRMED = "CONFIRMED",
-    DENIED = "DENIED",
-    CANCEL = "CANCEL",
-}
+import { MatchStatus, MatchType } from "util/Enums";
 
 @Entity()
 export class Match extends BaseEntity {

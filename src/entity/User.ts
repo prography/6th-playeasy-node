@@ -4,14 +4,10 @@ import {
     PrimaryGeneratedColumn, 
     Column,
     CreateDateColumn,
-    UpdateDateColumn,
+    UpdateDateColumn,, ManyToOne
 } from "typeorm";
-
-export enum Level {
-    LOW = "LOW",
-    MIDDLE = "MEDIUM",
-    HIGH = "HIGH",
-}
+import { Level } from "util/Enums";
+import { Team } from "./Team";
 
 @Entity()
 export class User extends BaseEntity {
@@ -47,4 +43,12 @@ export class User extends BaseEntity {
 
     @UpdateDateColumn({ name: 'updated_at' })
     updatedAt!: Date;
+
+    // User N : 1 Team
+
+    
+    // user 1 : N Match
+
+    // User 1 : N MatchUserApplication
+
 }
