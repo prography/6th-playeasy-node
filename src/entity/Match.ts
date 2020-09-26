@@ -7,22 +7,35 @@ import {
     UpdateDateColumn,
 } from "typeorm";
 
+export enum MatchType {
+    SOCCER = "SOCCER",
+    FUTSAL5 = "FUTSAL5", 
+    FUTSAL6 = "FUTSAL6",
+}
+
+export enum MatchStatus {
+    WAITING = "WAITING",
+    CONFIRMED = "CONFIRMED",
+    DENIED = "DENIED",
+    CANCEL = "CANCEL",
+}
+
 @Entity()
 export class Match extends BaseEntity {
     @PrimaryGeneratedColumn()
     id!: number;
 
-    @Column()  // enum
-    type!: string;
+    @Column({ enum: MatchType })  
+    type!: MatchType;
 
     @Column({ nullable: true })
-    description!: number;
+    description!: string;
 
     @Column()
     startAt!: string;
 
     @Column()
-    endAt!: string;
+    duration!: number;
 
     @Column()
     fee!: number;
@@ -33,8 +46,8 @@ export class Match extends BaseEntity {
     @Column()
     quota!: number;
 
-    @Column()
-    status!: string;
+    @Column({ enum: MatchStatus })
+    status!: MatchStatus;
 
     @CreateDateColumn({ name: 'created_at' })
     createdAt!: Date;
