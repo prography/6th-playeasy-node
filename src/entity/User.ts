@@ -4,9 +4,13 @@ import {
     PrimaryGeneratedColumn, 
     Column,
     CreateDateColumn,
-    UpdateDateColumn,, ManyToOne
+    UpdateDateColumn, 
+    ManyToOne, 
+    OneToMany
 } from "typeorm";
 import { Level } from "util/Enums";
+import { Match } from "./Match";
+import { MatchUserApplication } from "./MatchUserApplication";
 import { Team } from "./Team";
 
 @Entity()
@@ -45,10 +49,14 @@ export class User extends BaseEntity {
     updatedAt!: Date;
 
     // User N : 1 Team
-
+    @ManyToOne(type => Team, team => team.users)
+    team!: Team;
     
     // user 1 : N Match
+    @OneToMany(type => Match, match => match.user)
+    matches!: Match[];
 
     // User 1 : N MatchUserApplication
-
+    @OneToMany(type => MatchUserApplication, matchUserApplication => matchUserApplication.user)
+    matchUserApplications!: MatchUserApplication[];
 }

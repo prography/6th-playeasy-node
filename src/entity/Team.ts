@@ -6,6 +6,7 @@ import {
     CreateDateColumn,
     UpdateDateColumn,, ManyToOne, OneToMany
 } from "typeorm";
+import { Match } from "./Match";
 import { User } from "./User";
 
 @Entity()
@@ -23,8 +24,13 @@ export class Team extends BaseEntity {
     updatedAt!: Date;
 
     // Team 1 : N User
-
-
+    @OneToMany(type => User, user => user.team)
+    users!: User[];
+    
     // Team 1 : N Match
+    @OneToMany(type => Match, match => match.team)
+    matches!: Match[];
+    
     // Team 1 : N MatchTeamApplication
+    
 }

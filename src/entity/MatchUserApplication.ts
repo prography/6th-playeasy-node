@@ -5,8 +5,10 @@ import {
     Column,
     CreateDateColumn,
     UpdateDateColumn,
+    ManyToOne
 } from "typeorm";
 import { ApplicationStatus } from "util/Enums";
+import { User } from "./User";
 
 @Entity()
 export class MatchUserApplication extends BaseEntity {
@@ -24,4 +26,11 @@ export class MatchUserApplication extends BaseEntity {
 
     @UpdateDateColumn({ name: 'updated_at' })
     updatedAt!: Date;
+    
+    // MatchUserApplication N : 1 User
+    @ManyToOne(type => User, user => user.matchUserApplications)
+    user!: User;
+
+    // MatchUserApplication N : 1 Match
+
 }

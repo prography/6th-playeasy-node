@@ -19,7 +19,7 @@ export class UserService {
 
         const updatedUser: User = await this.userRepository.save(user);
         const responseUserDto: ResponseUserDto = plainToClass(ResponseUserDto, updatedUser);
-
+        
         return responseUserDto;
     }
 }

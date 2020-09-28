@@ -24,4 +24,9 @@ export class MatchTeamApplication extends BaseEntity {
 
     @UpdateDateColumn({ name: 'updated_at' })
     updatedAt!: Date;
+
+    // MatchTeamApplication N : 1 Match
+
+    // MatchTeamApplication N : 1 Team
+    
 }
