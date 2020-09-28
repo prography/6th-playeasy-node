@@ -3,12 +3,8 @@ import {
     JsonController, 
     Get, 
     Put, 
-    UseBefore, 
-    Req, 
     BodyParam, 
-    QueryParam,
     CurrentUser, 
-    NotFoundError
     } from 'routing-controllers';
 import { UserService } from '../service/UserService';
 import { UpdateUserDto, ResponseUserDto } from '../dto/UserDto';
@@ -33,7 +29,7 @@ export class UserController extends BaseController {
     @Put()  
     public async updateUser(@CurrentUser({ required: true }) user: User,
                             @BodyParam('userData') updateUserDto: UpdateUserDto) {   
-        const updatedUser: ResponseUserDto = await this.userService.updateUser(user, updateUserDto);
+        const updatedUser: ResponseUserDto = await this.userService.update(user, updateUserDto);
 
         return updatedUser;
     }

@@ -9,7 +9,7 @@ import { plainToClass } from 'class-transformer';
 export class UserService {
     constructor(@InjectRepository() private userRepository: UserRepository) {}
 
-    public async updateUser(user: User, updateUserDto: UpdateUserDto) {
+    public async update(user: User, updateUserDto: UpdateUserDto) {
         user.name = updateUserDto.name;
         user.age = updateUserDto.age;
         user.level = updateUserDto.level;
