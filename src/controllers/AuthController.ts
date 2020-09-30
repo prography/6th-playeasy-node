@@ -64,7 +64,7 @@ export class AuthController extends BaseController {
             const email: string = kakaoUserInfo.data.kakao_account.email;
             const exUser: any = await this.prisma.user.findOne({ where: { email } });
             let isNewMember: boolean = false;
-    
+            
             if (!exUser) {
                 isNewMember = true;
                 await this.prisma.user.create({data: { email }});

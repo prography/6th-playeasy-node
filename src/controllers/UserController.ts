@@ -112,22 +112,81 @@ export class UserController extends BaseController {
     }
 
     // 내 정보 수정 
+    // @Put()  
+    // @UseBefore(isLoggedIn)
+    // public async updateUser(@Req() req: any, 
+    //                         @BodyParam('userData') userData: User) {   
+    //     try {
+    //         const exUser: User = req.user;
+
+    //         const name: string | null = userData.name;
+    //         const age: number | null = userData.age;
+    //         const phone: string | null = userData.phone;
+    //         const level: Level | null = userData.level;
+    //         const description: string | null = userData.description;
+            
+    //         const user: object = await this.prisma.user.update({
+    //             where: { id: exUser.id },
+    //             data: { name, age, phone, level, description },
+    //             select: {
+    //                 id: true, name: true, age: true, email: true,
+    //                 socialType: true, phone: true, pushToken: true,
+    //                 level: true, description: true, picture: true,
+    //                 team: {
+    //                     select: {
+    //                         id: true, name: true, description: true,
+    //                         age: true, level: true, leader: true, phone: true,
+    //                     }
+    //                 }
+    //             }
+    //         });
+
+    //         return { user }
+    //     } catch (error) {
+    //         throw error;
+    //     }
+    // }
+    // 사진
     @Put()  
     @UseBefore(isLoggedIn)
-    public async updateUser(@Req() req: any, 
-                            @BodyParam('userData') userData: User) {   
+    public async updateUser(@Req() req: any) {   
+
+        const userData = req.body.userData;
         try {
             const exUser: User = req.user;
+            const exTeam : Team = req.user.team;
 
-            const name: string | null = userData.name;
+            const name: string = userData.name;
             const age: number | null = userData.age;
             const phone: string | null = userData.phone;
             const level: Level | null = userData.level;
             const description: string | null = userData.description;
+            const teamName: string = userData.team || userData.name + 'FC';
+            
+            var teamId = null;
+
+            if (!exTeam) {
+                const createTeam = await this.prisma.team.create({
+                    data: { name : teamName, description : description,
+                        age : age,      
+                        level : level,    
+                        leader : name, 
+                        phone : phone}
+                })
+                teamId = createTeam.id;
+            } else {
+                teamId = exTeam.id;
+                await this.prisma.team.update({
+                    where: { id: teamId },
+                    data: { name : teamName },
+                });
+            }
             
             const user: object = await this.prisma.user.update({
                 where: { id: exUser.id },
-                data: { name, age, phone, level, description },
+                data: { name, age, phone, level, description, 
+                        team: { connect: { id: teamId } }
+                      },
                 select: {
                     id: true, name: true, age: true, email: true,
                     socialType: true, phone: true, pushToken: true,
@@ -137,14 +196,13 @@ export class UserController extends BaseController {
                             id: true, name: true, description: true,
                             age: true, level: true, leader: true, phone: true,
                         }
-                    }
-                }
+                    }  
+                }    
             });
 
             return { user }
         } catch (error) {
             throw error;
         }
-    }
-    // 사진 
+    } 
 }
