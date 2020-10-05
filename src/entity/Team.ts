@@ -4,9 +4,11 @@ import {
     PrimaryGeneratedColumn, 
     Column,
     CreateDateColumn,
-    UpdateDateColumn,, ManyToOne, OneToMany
+    UpdateDateColumn,
+    OneToMany
 } from "typeorm";
 import { Match } from "./Match";
+import { MatchTeamApplication } from "./MatchTeamApplication";
 import { User } from "./User";
 
 @Entity()
@@ -32,5 +34,6 @@ export class Team extends BaseEntity {
     matches!: Match[];
     
     // Team 1 : N MatchTeamApplication
-    
+    @OneToMany(type => MatchTeamApplication, matchTeamApplication => matchTeamApplication.team)
+    matchTeamApplications!: MatchTeamApplication[];
 }

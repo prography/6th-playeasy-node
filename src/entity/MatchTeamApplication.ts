@@ -4,9 +4,12 @@ import {
     PrimaryGeneratedColumn, 
     Column,
     CreateDateColumn,
-    UpdateDateColumn,
+    UpdateDateColumn, 
+    ManyToOne
 } from "typeorm";
 import { ApplicationStatus } from "util/Enums";
+import { Match } from "./Match";
+import { Team } from "./Team";
 
 @Entity()
 export class MatchTeamApplication extends BaseEntity {
@@ -26,7 +29,10 @@ export class MatchTeamApplication extends BaseEntity {
     updatedAt!: Date;
 
     // MatchTeamApplication N : 1 Match
+    @ManyToOne(type => Match, match => match.matchUserApplications)
+    match!: Match;
 
     // MatchTeamApplication N : 1 Team
-    
+    @ManyToOne(type => Team, team => team.matchTeamApplications)
+    team!: Team;
 }

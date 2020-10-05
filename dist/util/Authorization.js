@@ -40,15 +40,12 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.currentUserChecker = void 0;
+var typeorm_1 = require("typeorm");
+var User_1 = require("../entity/User");
 var jsonwebtoken_1 = __importDefault(require("jsonwebtoken"));
-// export class Authorization {
-//     constructor(private userService: UserService) {}
-//     async function currentUserChecker() {
-//     }
-// }
 function currentUserChecker(action) {
     return __awaiter(this, void 0, void 0, function () {
-        var token, decoded, email, key;
+        var token, decoded, email, key, entityManager, user;
         return __generator(this, function (_a) {
             switch (_a.label) {
                 case 0:
@@ -59,7 +56,11 @@ function currentUserChecker(action) {
                     for (key in decoded)
                         if (key === 'email')
                             email = decoded.email;
-                    return [2 /*return*/];
+                    entityManager = typeorm_1.getManager();
+                    return [4 /*yield*/, entityManager.findOne(User_1.User, { where: { email: email } })];
+                case 2:
+                    user = _a.sent();
+                    return [2 /*return*/, user];
             }
         });
     });

@@ -86,7 +86,7 @@ var UserController = /** @class */ (function (_super) {
             var updatedUser;
             return __generator(this, function (_a) {
                 switch (_a.label) {
-                    case 0: return [4 /*yield*/, this.userService.updateUser(user, updateUserDto)];
+                    case 0: return [4 /*yield*/, this.userService.update(user, updateUserDto)];
                     case 1:
                         updatedUser = _a.sent();
                         return [2 /*return*/, updatedUser];
@@ -104,7 +104,7 @@ var UserController = /** @class */ (function (_super) {
     __decorate([
         routing_controllers_1.Put(),
         __param(0, routing_controllers_1.CurrentUser({ required: true })),
-        __param(1, routing_controllers_1.BodyParam('updateUserDto')),
+        __param(1, routing_controllers_1.BodyParam('userData')),
         __metadata("design:type", Function),
         __metadata("design:paramtypes", [User_1.User,
             UserDto_1.UpdateUserDto]),

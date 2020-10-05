@@ -22,32 +22,37 @@ var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.Location = void 0;
+exports.MatchTeamApplication = void 0;
 var typeorm_1 = require("typeorm");
-var Location = /** @class */ (function (_super) {
-    __extends(Location, _super);
-    function Location() {
+var Enums_1 = require("util/Enums");
+var MatchTeamApplication = /** @class */ (function (_super) {
+    __extends(MatchTeamApplication, _super);
+    function MatchTeamApplication() {
         return _super !== null && _super.apply(this, arguments) || this;
     }
     __decorate([
         typeorm_1.PrimaryGeneratedColumn(),
         __metadata("design:type", Number)
-    ], Location.prototype, "id", void 0);
+    ], MatchTeamApplication.prototype, "id", void 0);
     __decorate([
-        typeorm_1.Column({ nullable: true }),
+        typeorm_1.Column(),
+        __metadata("design:type", Number)
+    ], MatchTeamApplication.prototype, "quota", void 0);
+    __decorate([
+        typeorm_1.Column({ enum: Enums_1.ApplicationStatus }),
         __metadata("design:type", String)
-    ], Location.prototype, "name", void 0);
+    ], MatchTeamApplication.prototype, "status", void 0);
     __decorate([
         typeorm_1.CreateDateColumn({ name: 'created_at' }),
         __metadata("design:type", Date)
-    ], Location.prototype, "createdAt", void 0);
+    ], MatchTeamApplication.prototype, "createdAt", void 0);
     __decorate([
         typeorm_1.UpdateDateColumn({ name: 'updated_at' }),
         __metadata("design:type", Date)
-    ], Location.prototype, "updatedAt", void 0);
-    Location = __decorate([
+    ], MatchTeamApplication.prototype, "updatedAt", void 0);
+    MatchTeamApplication = __decorate([
         typeorm_1.Entity()
-    ], Location);
-    return Location;
+    ], MatchTeamApplication);
+    return MatchTeamApplication;
 }(typeorm_1.BaseEntity));
-exports.Location = Location;
+exports.MatchTeamApplication = MatchTeamApplication;

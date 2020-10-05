@@ -22,76 +22,42 @@ var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.User = void 0;
+exports.Team = void 0;
 var typeorm_1 = require("typeorm");
-var Enums_1 = require("util/Enums");
 var Match_1 = require("./Match");
-var MatchUserApplication_1 = require("./MatchUserApplication");
-var Team_1 = require("./Team");
-var User = /** @class */ (function (_super) {
-    __extends(User, _super);
-    function User() {
+var User_1 = require("./User");
+var Team = /** @class */ (function (_super) {
+    __extends(Team, _super);
+    function Team() {
         return _super !== null && _super.apply(this, arguments) || this;
     }
     __decorate([
         typeorm_1.PrimaryGeneratedColumn(),
         __metadata("design:type", Number)
-    ], User.prototype, "id", void 0);
+    ], Team.prototype, "id", void 0);
     __decorate([
         typeorm_1.Column({ nullable: true }),
         __metadata("design:type", String)
-    ], User.prototype, "name", void 0);
-    __decorate([
-        typeorm_1.Column({ nullable: true }),
-        __metadata("design:type", Number)
-    ], User.prototype, "age", void 0);
-    __decorate([
-        typeorm_1.Column(),
-        __metadata("design:type", String)
-    ], User.prototype, "email", void 0);
-    __decorate([
-        typeorm_1.Column(),
-        __metadata("design:type", String)
-    ], User.prototype, "socialType", void 0);
-    __decorate([
-        typeorm_1.Column({ nullable: true }),
-        __metadata("design:type", String)
-    ], User.prototype, "phone", void 0);
-    __decorate([
-        typeorm_1.Column({ nullable: true, enum: Enums_1.Level }),
-        __metadata("design:type", String)
-    ], User.prototype, "level", void 0);
-    __decorate([
-        typeorm_1.Column({ nullable: true }),
-        __metadata("design:type", String)
-    ], User.prototype, "description", void 0);
-    __decorate([
-        typeorm_1.Column({ nullable: true }),
-        __metadata("design:type", String)
-    ], User.prototype, "picture", void 0);
+    ], Team.prototype, "name", void 0);
     __decorate([
         typeorm_1.CreateDateColumn({ name: 'created_at' }),
         __metadata("design:type", Date)
-    ], User.prototype, "createdAt", void 0);
+    ], Team.prototype, "createdAt", void 0);
     __decorate([
         typeorm_1.UpdateDateColumn({ name: 'updated_at' }),
         __metadata("design:type", Date)
-    ], User.prototype, "updatedAt", void 0);
+    ], Team.prototype, "updatedAt", void 0);
     __decorate([
-        typeorm_1.ManyToOne(function (type) { return Team_1.Team; }, function (team) { return team.users; }),
-        __metadata("design:type", Team_1.Team)
-    ], User.prototype, "team", void 0);
-    __decorate([
-        typeorm_1.OneToMany(function (type) { return Match_1.Match; }, function (match) { return match.user; }),
+        typeorm_1.OneToMany(function (type) { return User_1.User; }, function (user) { return user.team; }),
         __metadata("design:type", Array)
-    ], User.prototype, "matches", void 0);
+    ], Team.prototype, "users", void 0);
     __decorate([
-        typeorm_1.OneToMany(function (type) { return MatchUserApplication_1.MatchUserApplication; }, function (matchUserApplication) { return matchUserApplication.user; }),
+        typeorm_1.OneToMany(function (type) { return Match_1.Match; }, function (match) { return match.team; }),
         __metadata("design:type", Array)
-    ], User.prototype, "matchUserApplications", void 0);
-    User = __decorate([
+    ], Team.prototype, "matches", void 0);
+    Team = __decorate([
         typeorm_1.Entity()
-    ], User);
-    return User;
+    ], Team);
+    return Team;
 }(typeorm_1.BaseEntity));
-exports.User = User;
+exports.Team = Team;

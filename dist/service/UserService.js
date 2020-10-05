@@ -58,14 +58,7 @@ var UserService = /** @class */ (function () {
     function UserService(userRepository) {
         this.userRepository = userRepository;
     }
-    UserService.prototype.getUser = function () {
-        return __awaiter(this, void 0, void 0, function () {
-            return __generator(this, function (_a) {
-                return [2 /*return*/];
-            });
-        });
-    };
-    UserService.prototype.updateUser = function (user, updateUserDto) {
+    UserService.prototype.update = function (user, updateUserDto) {
         return __awaiter(this, void 0, void 0, function () {
             var updatedUser, responseUserDto;
             return __generator(this, function (_a) {
@@ -76,6 +69,7 @@ var UserService = /** @class */ (function () {
                         user.level = updateUserDto.level;
                         user.description = updateUserDto.description;
                         user.picture = updateUserDto.picture;
+                        user.phone = updateUserDto.phone;
                         return [4 /*yield*/, this.userRepository.save(user)];
                     case 1:
                         updatedUser = _a.sent();

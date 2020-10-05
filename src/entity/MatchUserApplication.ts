@@ -8,6 +8,7 @@ import {
     ManyToOne
 } from "typeorm";
 import { ApplicationStatus } from "util/Enums";
+import { Match } from "./Match";
 import { User } from "./User";
 
 @Entity()
@@ -32,5 +33,6 @@ export class MatchUserApplication extends BaseEntity {
     user!: User;
 
     // MatchUserApplication N : 1 Match
-
+    @ManyToOne(type => Match, match => match.matchUserApplications)
+    match!: Match;
 }

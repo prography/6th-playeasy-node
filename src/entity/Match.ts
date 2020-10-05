@@ -6,9 +6,13 @@ import {
     CreateDateColumn,
     UpdateDateColumn, 
     ManyToOne, 
-    OneToMany
+    OneToMany, 
+    OneToOne, 
+    JoinColumn
 } from "typeorm";
 import { MatchStatus, MatchType } from "util/Enums";
+import { Location } from "./Location";
+import { MatchTeamApplication } from "./MatchTeamApplication";
 import { MatchUserApplication } from "./MatchUserApplication";
 import { Team } from "./Team";
 import { User } from "./User";
@@ -25,7 +29,7 @@ export class Match extends BaseEntity {
     description!: string;
 
     @Column()
-    startAt!: string;
+    startAt!: Date;
 
     @Column()
     duration!: number;
@@ -57,11 +61,15 @@ export class Match extends BaseEntity {
     team!: Team;
 
     // Match 1 : 1 Location
+    @OneToOne(type => Location)
+    @JoinColumn()
+    location!: Location;
 
     // Match 1 : N MatchUserApplication
     @OneToMany(type => MatchUserApplication, matchUserApplication => matchUserApplication.match)
     matchUserApplications!: MatchUserApplication[];
 
     // Match 1 : N MatchTeamApplication
-
+    @OneToMany(type => MatchTeamApplication, matchTeamApplication => matchTeamApplication.match)
+    matchTeamApplications!: MatchTeamApplication[];
 }

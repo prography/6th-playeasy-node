@@ -13,6 +13,7 @@ var body_parser_1 = __importDefault(require("body-parser"));
 var cookie_parser_1 = __importDefault(require("cookie-parser"));
 var morgan_1 = __importDefault(require("morgan"));
 var dotenv_1 = __importDefault(require("dotenv"));
+var Authorization_1 = require("./util/Authorization");
 var app = express_1.default();
 exports.app = app;
 dotenv_1.default.config();
@@ -38,4 +39,5 @@ routing_controllers_1.useExpressServer(app, {
     cors: true,
     controllers: [__dirname + "/controller/**"],
     middlewares: [__dirname + "/middlewares/**"],
+    currentUserChecker: Authorization_1.currentUserChecker,
 });

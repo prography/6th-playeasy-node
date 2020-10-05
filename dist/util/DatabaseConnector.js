@@ -59,7 +59,7 @@ function createDatabaseConnection() {
                         database: process.env.DATABASE_DATABASE,
                         synchronize: true,
                         logging: false,
-                        entities: [__dirname + "/entity/*{.ts,.js}"],
+                        entities: [__dirname + "/../entity/*{.ts,.js}"],
                     };
                     typeorm_1.useContainer(typedi_1.default);
                     return [4 /*yield*/, typeorm_1.createConnection(connectionOpts)];

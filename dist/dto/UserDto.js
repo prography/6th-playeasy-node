@@ -11,9 +11,29 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.ResponseUserDto = exports.UpdateUserDto = void 0;
 var class_validator_1 = require("class-validator");
+var class_transformer_1 = require("class-transformer");
+var Enums_1 = require("util/Enums");
 var UpdateUserDto = /** @class */ (function () {
     function UpdateUserDto() {
     }
+    __decorate([
+        class_validator_1.IsInt(),
+        class_validator_1.Min(1),
+        class_validator_1.Max(100),
+        __metadata("design:type", Number)
+    ], UpdateUserDto.prototype, "age", void 0);
+    __decorate([
+        class_validator_1.IsMobilePhone("ko-KR"),
+        __metadata("design:type", String)
+    ], UpdateUserDto.prototype, "phone", void 0);
+    __decorate([
+        class_validator_1.IsEnum(Enums_1.Level),
+        __metadata("design:type", String)
+    ], UpdateUserDto.prototype, "level", void 0);
+    __decorate([
+        class_validator_1.IsString(),
+        __metadata("design:type", String)
+    ], UpdateUserDto.prototype, "description", void 0);
     return UpdateUserDto;
 }());
 exports.UpdateUserDto = UpdateUserDto;
@@ -21,14 +41,46 @@ var ResponseUserDto = /** @class */ (function () {
     function ResponseUserDto() {
     }
     __decorate([
+        class_transformer_1.Expose(),
         class_validator_1.IsNotEmpty(),
         __metadata("design:type", Number)
     ], ResponseUserDto.prototype, "id", void 0);
     __decorate([
+        class_transformer_1.Expose(),
+        __metadata("design:type", String)
+    ], ResponseUserDto.prototype, "name", void 0);
+    __decorate([
+        class_transformer_1.Expose(),
+        __metadata("design:type", Number)
+    ], ResponseUserDto.prototype, "age", void 0);
+    __decorate([
+        class_transformer_1.Expose(),
         class_validator_1.IsNotEmpty(),
-        class_validator_1.IsEmail(),
         __metadata("design:type", String)
     ], ResponseUserDto.prototype, "email", void 0);
+    __decorate([
+        class_transformer_1.Expose(),
+        __metadata("design:type", String)
+    ], ResponseUserDto.prototype, "phone", void 0);
+    __decorate([
+        class_transformer_1.Expose(),
+        __metadata("design:type", String)
+    ], ResponseUserDto.prototype, "socialType", void 0);
+    __decorate([
+        class_transformer_1.Expose(),
+        __metadata("design:type", String)
+    ], ResponseUserDto.prototype, "level", void 0);
+    __decorate([
+        class_transformer_1.Expose(),
+        __metadata("design:type", String)
+    ], ResponseUserDto.prototype, "description", void 0);
+    __decorate([
+        class_transformer_1.Expose(),
+        __metadata("design:type", String)
+    ], ResponseUserDto.prototype, "picture", void 0);
+    ResponseUserDto = __decorate([
+        class_transformer_1.Exclude()
+    ], ResponseUserDto);
     return ResponseUserDto;
 }());
 exports.ResponseUserDto = ResponseUserDto;

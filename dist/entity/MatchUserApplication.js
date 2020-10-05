@@ -22,32 +22,42 @@ var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.Location = void 0;
+exports.MatchUserApplication = void 0;
 var typeorm_1 = require("typeorm");
-var Location = /** @class */ (function (_super) {
-    __extends(Location, _super);
-    function Location() {
+var Enums_1 = require("util/Enums");
+var User_1 = require("./User");
+var MatchUserApplication = /** @class */ (function (_super) {
+    __extends(MatchUserApplication, _super);
+    function MatchUserApplication() {
         return _super !== null && _super.apply(this, arguments) || this;
     }
     __decorate([
         typeorm_1.PrimaryGeneratedColumn(),
         __metadata("design:type", Number)
-    ], Location.prototype, "id", void 0);
+    ], MatchUserApplication.prototype, "id", void 0);
     __decorate([
-        typeorm_1.Column({ nullable: true }),
+        typeorm_1.Column(),
+        __metadata("design:type", Number)
+    ], MatchUserApplication.prototype, "quota", void 0);
+    __decorate([
+        typeorm_1.Column({ enum: Enums_1.ApplicationStatus }),
         __metadata("design:type", String)
-    ], Location.prototype, "name", void 0);
+    ], MatchUserApplication.prototype, "status", void 0);
     __decorate([
         typeorm_1.CreateDateColumn({ name: 'created_at' }),
         __metadata("design:type", Date)
-    ], Location.prototype, "createdAt", void 0);
+    ], MatchUserApplication.prototype, "createdAt", void 0);
     __decorate([
         typeorm_1.UpdateDateColumn({ name: 'updated_at' }),
         __metadata("design:type", Date)
-    ], Location.prototype, "updatedAt", void 0);
-    Location = __decorate([
+    ], MatchUserApplication.prototype, "updatedAt", void 0);
+    __decorate([
+        typeorm_1.ManyToOne(function (type) { return User_1.User; }, function (user) { return user.matchUserApplications; }),
+        __metadata("design:type", User_1.User)
+    ], MatchUserApplication.prototype, "user", void 0);
+    MatchUserApplication = __decorate([
         typeorm_1.Entity()
-    ], Location);
-    return Location;
+    ], MatchUserApplication);
+    return MatchUserApplication;
 }(typeorm_1.BaseEntity));
-exports.Location = Location;
+exports.MatchUserApplication = MatchUserApplication;
