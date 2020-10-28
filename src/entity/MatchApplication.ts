@@ -7,7 +7,7 @@ import {
     UpdateDateColumn,
     ManyToOne
 } from "typeorm";
-import { ApplicationStatus } from "util/Enums";
+import { ApplicationStatus, ApplicationType } from "util/Enums";
 import { Match } from "./Match";
 import { User } from "./User";
 
@@ -18,6 +18,9 @@ export class MatchApplication extends BaseEntity {
 
     @Column()
     quota!: number;
+
+    @Column()
+    type!: ApplicationType;
     
     @Column({ enum: ApplicationStatus })
     status!: ApplicationStatus;

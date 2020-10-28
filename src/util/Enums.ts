@@ -13,7 +13,6 @@ export enum MatchType {
 export enum MatchStatus {
     WAITING = "WAITING",
     CONFIRMED = "CONFIRMED",
-    DENIED = "DENIED",
     CANCEL = "CANCEL",
 }
 
@@ -22,4 +21,9 @@ export enum ApplicationStatus {
     CONFIRMED = "CONFIRMED",
     DENIED = "DENIED",
     CANCEL = "CANCEL",
-} 
+}
+
+export enum ApplicationType {
+    TEAM = "TEAM",
+    PERSONAL = "PERSONAL",
+}
