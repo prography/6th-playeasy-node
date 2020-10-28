@@ -68,6 +68,8 @@ export class AuthController extends BaseController {
             throw new NotFoundError('카카오 인증에 실패했습니다.');
         
         const data = await this.authService.login(email);
+        if (!data) 
+            throw new NotFoundError('로그인에 실패했습니다.');
         
         return data;
     }

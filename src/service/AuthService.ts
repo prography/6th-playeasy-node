@@ -20,7 +20,7 @@ export class AuthService {
             await this.userRepository.save(user);
         }
         
-        const token: string = await jwt.sign({email: email}, String(process.env.JWT_SECRET_KEY), {expiresIn : "7d"});
+        const token: string = await jwt.sign({ email }, String(process.env.JWT_SECRET_KEY), {expiresIn : "7d"});
 
         return { isNewMember, token }
     }

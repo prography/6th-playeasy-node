@@ -21,15 +21,15 @@
    "homepage": "https://github.com/prography/6th-playeasy-node#readme",
    "nodemonConfig": {
       "watch": [
-        "src/*"
+         "src/*"
       ],
       "ext": "ts",
       "ignore": [
-        "**/*.spec.ts",
-        ".env"
+         "**/*.spec.ts",
+         ".env"
       ],
       "exec": "ts-node ./src"
-    },
+   },
    "devDependencies": {
       "@types/body-parser": "^1.19.0",
       "@types/cookie-parser": "^1.4.2",

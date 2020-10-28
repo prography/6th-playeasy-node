@@ -12,8 +12,14 @@ export class Location extends BaseEntity {
     @PrimaryGeneratedColumn()
     id!: number;
 
-    @Column({ nullable: true })
+    @Column()
     name!: string;
+
+    @Column()
+    address!: string;
+
+    @Column({ nullable: true })
+    detail!: string;
 
     @CreateDateColumn({ name: 'created_at' })
     createdAt!: Date;

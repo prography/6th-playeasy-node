@@ -32,7 +32,7 @@ export class Match extends BaseEntity {
     startAt!: Date;
 
     @Column()
-    duration!: number;
+    endAt!: Date;
 
     @Column()
     fee!: number;
