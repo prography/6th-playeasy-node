@@ -12,9 +12,7 @@ import {
 } from "typeorm";
 import { MatchStatus, MatchType } from "util/Enums";
 import { Location } from "./Location";
-import { MatchTeamApplication } from "./MatchTeamApplication";
-import { MatchUserApplication } from "./MatchUserApplication";
-import { Team } from "./Team";
+import { MatchApplication } from "./MatchApplication";
 import { User } from "./User";
 
 @Entity()
@@ -56,20 +54,12 @@ export class Match extends BaseEntity {
     @ManyToOne(type => User, user => user.matches)
     user!: User;
 
-    // Match N : 1 Team
-    @ManyToOne(type => Team, team => team.matches)
-    team!: Team;
-
     // Match 1 : 1 Location
     @OneToOne(type => Location)
     @JoinColumn()
     location!: Location;
 
-    // Match 1 : N MatchUserApplication
-    @OneToMany(type => MatchUserApplication, matchUserApplication => matchUserApplication.match)
-    matchUserApplications!: MatchUserApplication[];
-
-    // Match 1 : N MatchTeamApplication
-    @OneToMany(type => MatchTeamApplication, matchTeamApplication => matchTeamApplication.match)
-    matchTeamApplications!: MatchTeamApplication[];
+    // Match 1 : N MatchApplication
+    @OneToMany(type => MatchApplication, matchApplication => matchApplication.match)
+    matchApplications!: MatchApplication[];
 }

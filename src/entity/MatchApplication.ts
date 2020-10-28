@@ -12,7 +12,7 @@ import { Match } from "./Match";
 import { User } from "./User";
 
 @Entity()
-export class MatchUserApplication extends BaseEntity {
+export class MatchApplication extends BaseEntity {
     @PrimaryGeneratedColumn()
     id!: number;
 
@@ -28,11 +28,11 @@ export class MatchUserApplication extends BaseEntity {
     @UpdateDateColumn({ name: 'updated_at' })
     updatedAt!: Date;
     
-    // MatchUserApplication N : 1 User
-    @ManyToOne(type => User, user => user.matchUserApplications)
+    // MatchApplication N : 1 User
+    @ManyToOne(type => User, user => user.matchApplications)
     user!: User;
 
-    // MatchUserApplication N : 1 Match
-    @ManyToOne(type => Match, match => match.matchUserApplications)
+    // MatchApplication N : 1 Match
+    @ManyToOne(type => Match, match => match.matchApplications)
     match!: Match;
 }

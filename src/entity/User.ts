@@ -10,8 +10,7 @@ import {
 } from "typeorm";
 import { Level } from "util/Enums";
 import { Match } from "./Match";
-import { MatchUserApplication } from "./MatchUserApplication";
-import { Team } from "./Team";
+import { MatchApplication } from "./MatchApplication";
 
 @Entity()
 export class User extends BaseEntity {
@@ -42,21 +41,20 @@ export class User extends BaseEntity {
     @Column({ nullable: true })
     picture!: string;
 
+    @Column({ nullable: true })
+    teamName!: string;
+
     @CreateDateColumn({ name: 'created_at' })
     createdAt!: Date;
 
     @UpdateDateColumn({ name: 'updated_at' })
     updatedAt!: Date;
-
-    // User N : 1 Team
-    @ManyToOne(type => Team, team => team.users)
-    team!: Team;
     
     // user 1 : N Match
     @OneToMany(type => Match, match => match.user)
     matches!: Match[];
 
     // User 1 : N MatchUserApplication
-    @OneToMany(type => MatchUserApplication, matchUserApplication => matchUserApplication.user)
-    matchUserApplications!: MatchUserApplication[];
+    @OneToMany(type => MatchApplication, matchApplication => matchApplication.user)
+    matchApplications!: MatchApplication[];
 }

@@ -13,9 +13,6 @@ export class Location extends BaseEntity {
     id!: number;
 
     @Column()
-    name!: string;
-
-    @Column()
     address!: string;
 
     @Column({ nullable: true })
