@@ -15,17 +15,15 @@ export class MatchService {
         match.type = createMatchDto.type;
         match.description = createMatchDto.description;
         match.startAt = createMatchDto.startAt;
-        match.duration = createMatchDto.duration;
+        match.endAt = createMatchDto.endAt;
         match.fee = createMatchDto.fee;
         match.phone = createMatchDto.phone;
         match.quota = createMatchDto.quota;
         match.status = createMatchDto.status;
 
         const location: Location = new Location();
-        location.name = createLocationDto.name;
         location.address = createLocationDto.address;
         location.detail = createLocationDto.detail;
-        
 
     }
 

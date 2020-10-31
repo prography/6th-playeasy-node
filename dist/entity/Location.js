@@ -34,9 +34,13 @@ var Location = /** @class */ (function (_super) {
         __metadata("design:type", Number)
     ], Location.prototype, "id", void 0);
     __decorate([
+        typeorm_1.Column(),
+        __metadata("design:type", String)
+    ], Location.prototype, "address", void 0);
+    __decorate([
         typeorm_1.Column({ nullable: true }),
         __metadata("design:type", String)
-    ], Location.prototype, "name", void 0);
+    ], Location.prototype, "detail", void 0);
     __decorate([
         typeorm_1.CreateDateColumn({ name: 'created_at' }),
         __metadata("design:type", Date)

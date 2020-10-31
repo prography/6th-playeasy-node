@@ -24,9 +24,9 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.Match = void 0;
 var typeorm_1 = require("typeorm");
-var Enums_1 = require("util/Enums");
-var MatchUserApplication_1 = require("./MatchUserApplication");
-var Team_1 = require("./Team");
+var Enums_1 = require("../util/Enums");
+var Location_1 = require("./Location");
+var MatchApplication_1 = require("./MatchApplication");
 var User_1 = require("./User");
 var Match = /** @class */ (function (_super) {
     __extends(Match, _super);
@@ -38,7 +38,7 @@ var Match = /** @class */ (function (_super) {
         __metadata("design:type", Number)
     ], Match.prototype, "id", void 0);
     __decorate([
-        typeorm_1.Column({ enum: Enums_1.MatchType }),
+        typeorm_1.Column("enum", { enum: Enums_1.MatchType }),
         __metadata("design:type", String)
     ], Match.prototype, "type", void 0);
     __decorate([
@@ -51,8 +51,8 @@ var Match = /** @class */ (function (_super) {
     ], Match.prototype, "startAt", void 0);
     __decorate([
         typeorm_1.Column(),
-        __metadata("design:type", Number)
-    ], Match.prototype, "duration", void 0);
+        __metadata("design:type", Date)
+    ], Match.prototype, "endAt", void 0);
     __decorate([
         typeorm_1.Column(),
         __metadata("design:type", Number)
@@ -66,7 +66,7 @@ var Match = /** @class */ (function (_super) {
         __metadata("design:type", Number)
     ], Match.prototype, "quota", void 0);
     __decorate([
-        typeorm_1.Column({ enum: Enums_1.MatchStatus }),
+        typeorm_1.Column("enum", { enum: Enums_1.MatchStatus }),
         __metadata("design:type", String)
     ], Match.prototype, "status", void 0);
     __decorate([
@@ -82,13 +82,14 @@ var Match = /** @class */ (function (_super) {
         __metadata("design:type", User_1.User)
     ], Match.prototype, "user", void 0);
     __decorate([
-        typeorm_1.ManyToOne(function (type) { return Team_1.Team; }, function (team) { return team.matches; }),
-        __metadata("design:type", Team_1.Team)
-    ], Match.prototype, "team", void 0);
+        typeorm_1.OneToOne(function (type) { return Location_1.Location; }),
+        typeorm_1.JoinColumn(),
+        __metadata("design:type", Location_1.Location)
+    ], Match.prototype, "location", void 0);
     __decorate([
-        typeorm_1.OneToMany(function (type) { return MatchUserApplication_1.MatchUserApplication; }, function (matchUserApplication) { return matchUserApplication.match; }),
+        typeorm_1.OneToMany(function (type) { return MatchApplication_1.MatchApplication; }, function (matchApplication) { return matchApplication.match; }),
         __metadata("design:type", Array)
-    ], Match.prototype, "matchUserApplications", void 0);
+    ], Match.prototype, "matchApplications", void 0);
     Match = __decorate([
         typeorm_1.Entity()
     ], Match);

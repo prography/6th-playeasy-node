@@ -5,10 +5,8 @@ import {
     Column,
     CreateDateColumn,
     UpdateDateColumn, 
-    ManyToOne, 
     OneToMany
 } from "typeorm";
-import { Level } from "util/Enums";
 import { Match } from "./Match";
 import { MatchApplication } from "./MatchApplication";
 
@@ -29,11 +27,11 @@ export class User extends BaseEntity {
     @Column()
     socialType!: string;
 
+    @Column()
+    socialId!: number;
+
     @Column({ nullable: true })
     phone!: string;
-
-    @Column({ nullable: true, enum: Level })  
-    level!: Level;
 
     @Column({ nullable: true })
     description!: string;
@@ -54,7 +52,7 @@ export class User extends BaseEntity {
     @OneToMany(type => Match, match => match.user)
     matches!: Match[];
 
-    // User 1 : N MatchUserApplication
+    // User 1 : N MatchApplication
     @OneToMany(type => MatchApplication, matchApplication => matchApplication.user)
     matchApplications!: MatchApplication[];
 }

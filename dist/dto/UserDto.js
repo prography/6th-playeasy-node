@@ -12,7 +12,6 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.ResponseUserDto = exports.UpdateUserDto = void 0;
 var class_validator_1 = require("class-validator");
 var class_transformer_1 = require("class-transformer");
-var Enums_1 = require("util/Enums");
 var UpdateUserDto = /** @class */ (function () {
     function UpdateUserDto() {
     }
@@ -26,10 +25,6 @@ var UpdateUserDto = /** @class */ (function () {
         class_validator_1.IsMobilePhone("ko-KR"),
         __metadata("design:type", String)
     ], UpdateUserDto.prototype, "phone", void 0);
-    __decorate([
-        class_validator_1.IsEnum(Enums_1.Level),
-        __metadata("design:type", String)
-    ], UpdateUserDto.prototype, "level", void 0);
     __decorate([
         class_validator_1.IsString(),
         __metadata("design:type", String)
@@ -69,15 +64,15 @@ var ResponseUserDto = /** @class */ (function () {
     __decorate([
         class_transformer_1.Expose(),
         __metadata("design:type", String)
-    ], ResponseUserDto.prototype, "level", void 0);
-    __decorate([
-        class_transformer_1.Expose(),
-        __metadata("design:type", String)
     ], ResponseUserDto.prototype, "description", void 0);
     __decorate([
         class_transformer_1.Expose(),
         __metadata("design:type", String)
     ], ResponseUserDto.prototype, "picture", void 0);
+    __decorate([
+        class_transformer_1.Expose(),
+        __metadata("design:type", String)
+    ], ResponseUserDto.prototype, "teamName", void 0);
     ResponseUserDto = __decorate([
         class_transformer_1.Exclude()
     ], ResponseUserDto);

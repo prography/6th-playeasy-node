@@ -52,13 +52,28 @@ exports.MatchService = void 0;
 var typedi_1 = require("typedi");
 var typeorm_typedi_extensions_1 = require("typeorm-typedi-extensions");
 var MatchRepository_1 = require("../repository/MatchRepository");
+var Match_1 = require("../entity/Match");
+var Location_1 = require("../entity/Location");
 var MatchService = /** @class */ (function () {
     function MatchService(matchRepository) {
         this.matchRepository = matchRepository;
     }
     MatchService.prototype.add = function (createMatchDto, createLocationDto) {
         return __awaiter(this, void 0, void 0, function () {
+            var match, location;
             return __generator(this, function (_a) {
+                match = new Match_1.Match();
+                match.type = createMatchDto.type;
+                match.description = createMatchDto.description;
+                match.startAt = createMatchDto.startAt;
+                match.endAt = createMatchDto.endAt;
+                match.fee = createMatchDto.fee;
+                match.phone = createMatchDto.phone;
+                match.quota = createMatchDto.quota;
+                match.status = createMatchDto.status;
+                location = new Location_1.Location();
+                location.address = createLocationDto.address;
+                location.detail = createLocationDto.detail;
                 return [2 /*return*/];
             });
         });

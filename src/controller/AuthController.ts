@@ -62,15 +62,16 @@ export class AuthController extends BaseController {
             url: "https://kapi.kakao.com/v2/user/me",
             headers: { Authorization: `Bearer ${access_token}` }
         });
-
-        const email: string = kakaoUserInfo.data.kakao_account.email;
-        if (!email) 
+        if (kakaoUserInfo.status !== 200) 
             throw new NotFoundError('카카오 인증에 실패했습니다.');
         
-        const data = await this.authService.login(email);
-        if (!data) 
-            throw new NotFoundError('로그인에 실패했습니다.');
+        let email = null;
+        if (kakaoUserInfo.data.kakao_account.has_email) {
+            email = kakaoUserInfo.data.kakao_account.email;
+        }
+        const socialId: number = kakaoUserInfo.data.id;
+        const nickname: string = kakaoUserInfo.data.properties.nickname;
         
-        return data;
+        return await this.authService.login(socialId, email, nickname);
     }
 }

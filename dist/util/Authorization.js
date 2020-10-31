@@ -45,7 +45,7 @@ var User_1 = require("../entity/User");
 var jsonwebtoken_1 = __importDefault(require("jsonwebtoken"));
 function currentUserChecker(action) {
     return __awaiter(this, void 0, void 0, function () {
-        var token, decoded, email, key, entityManager, user;
+        var token, decoded, socialId, key, entityManager, user;
         return __generator(this, function (_a) {
             switch (_a.label) {
                 case 0:
@@ -54,10 +54,10 @@ function currentUserChecker(action) {
                 case 1:
                     decoded = _a.sent();
                     for (key in decoded)
-                        if (key === 'email')
-                            email = decoded.email;
+                        if (key === 'socialId')
+                            socialId = decoded.socialId;
                     entityManager = typeorm_1.getManager();
-                    return [4 /*yield*/, entityManager.findOne(User_1.User, { where: { email: email } })];
+                    return [4 /*yield*/, entityManager.findOne(User_1.User, { where: { socialId: socialId } })];
                 case 2:
                     user = _a.sent();
                     return [2 /*return*/, user];

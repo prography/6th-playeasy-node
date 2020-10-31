@@ -61,26 +61,27 @@ var AuthService = /** @class */ (function () {
     function AuthService(userRepository) {
         this.userRepository = userRepository;
     }
-    AuthService.prototype.login = function (email) {
+    AuthService.prototype.login = function (socialId, email) {
         return __awaiter(this, void 0, void 0, function () {
             var isNewMember, exUser, user, token;
             return __generator(this, function (_a) {
                 switch (_a.label) {
                     case 0:
                         isNewMember = false;
-                        return [4 /*yield*/, this.userRepository.findOne({ where: { email: email } })];
+                        return [4 /*yield*/, this.userRepository.findOne({ where: { socialId: socialId } })];
                     case 1:
                         exUser = _a.sent();
                         if (!!exUser) return [3 /*break*/, 3];
                         isNewMember = true;
                         user = new User_1.User();
+                        user.socialId = socialId;
                         user.email = email;
                         user.socialType = 'kakao';
                         return [4 /*yield*/, this.userRepository.save(user)];
                     case 2:
                         _a.sent();
                         _a.label = 3;
-                    case 3: return [4 /*yield*/, jsonwebtoken_1.default.sign({ email: email }, String(process.env.JWT_SECRET_KEY), { expiresIn: "7d" })];
+                    case 3: return [4 /*yield*/, jsonwebtoken_1.default.sign({ socialId: socialId, email: email }, String(process.env.JWT_SECRET_KEY), { expiresIn: "7d" })];
                     case 4:
                         token = _a.sent();
                         return [2 /*return*/, { isNewMember: isNewMember, token: token }];

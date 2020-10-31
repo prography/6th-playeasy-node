@@ -7,9 +7,9 @@ import {
     UpdateDateColumn,
     ManyToOne
 } from "typeorm";
-import { ApplicationStatus, ApplicationType } from "util/Enums";
 import { Match } from "./Match";
 import { User } from "./User";
+import { ApplicationStatus, ApplicationType } from "../util/Enums";
 
 @Entity()
 export class MatchApplication extends BaseEntity {
@@ -19,10 +19,10 @@ export class MatchApplication extends BaseEntity {
     @Column()
     quota!: number;
 
-    @Column()
-    type!: ApplicationType;
+    @Column("enum", { enum: ApplicationType })
+    organization!: ApplicationType;
     
-    @Column({ enum: ApplicationStatus })
+    @Column("enum", { enum: ApplicationStatus })
     status!: ApplicationStatus;
 
     @CreateDateColumn({ name: 'created_at' })

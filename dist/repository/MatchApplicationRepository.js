@@ -19,17 +19,17 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
     return c > 3 && r && Object.defineProperty(target, key, r), r;
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.LocationRepository = void 0;
+exports.MatchApplicationRepository = void 0;
 var typeorm_1 = require("typeorm");
-var Location_1 = require("../entity/Location");
-var LocationRepository = /** @class */ (function (_super) {
-    __extends(LocationRepository, _super);
-    function LocationRepository() {
+var MatchApplication_1 = require("../entity/MatchApplication");
+var MatchApplicationRepository = /** @class */ (function (_super) {
+    __extends(MatchApplicationRepository, _super);
+    function MatchApplicationRepository() {
         return _super !== null && _super.apply(this, arguments) || this;
     }
-    LocationRepository = __decorate([
-        typeorm_1.EntityRepository(Location_1.Location)
-    ], LocationRepository);
-    return LocationRepository;
+    MatchApplicationRepository = __decorate([
+        typeorm_1.EntityRepository(MatchApplication_1.MatchApplication)
+    ], MatchApplicationRepository);
+    return MatchApplicationRepository;
 }(typeorm_1.Repository));
-exports.LocationRepository = LocationRepository;
+exports.MatchApplicationRepository = MatchApplicationRepository;

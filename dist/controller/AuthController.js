@@ -113,7 +113,7 @@ var AuthController = /** @class */ (function (_super) {
     };
     AuthController.prototype.login = function (access_token) {
         return __awaiter(this, void 0, void 0, function () {
-            var kakaoUserInfo, email, data;
+            var kakaoUserInfo, email, socialId, data;
             return __generator(this, function (_a) {
                 switch (_a.label) {
                     case 0: return [4 /*yield*/, axios_1.default({
@@ -124,11 +124,14 @@ var AuthController = /** @class */ (function (_super) {
                     case 1:
                         kakaoUserInfo = _a.sent();
                         email = kakaoUserInfo.data.kakao_account.email;
-                        if (!email)
+                        socialId = kakaoUserInfo.data.kakao_account.id;
+                        if (!socialId)
                             throw new routing_controllers_1.NotFoundError('카카오 인증에 실패했습니다.');
-                        return [4 /*yield*/, this.authService.login(email)];
+                        return [4 /*yield*/, this.authService.login(socialId, email)];
                     case 2:
                         data = _a.sent();
+                        if (!data)
+                            throw new routing_controllers_1.NotFoundError('로그인에 실패했습니다.');
                         return [2 /*return*/, data];
                 }
             });

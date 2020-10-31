@@ -9,18 +9,20 @@ import { BadRequestError } from 'routing-controllers';
 export class AuthService {
     constructor(@InjectRepository() private userRepository: UserRepository) {}
 
-    public async login(email: string) {
+    public async login(socialId: number, email: string, name: string) {
         let isNewMember: boolean = false;
-        const exUser: User | undefined = await this.userRepository.findOne({ where: { email }});
+        const exUser: User | undefined = await this.userRepository.findOne({ where: { socialId }});
         if (!exUser) {
             isNewMember = true;
             const user: User = new User();
+            user.socialId = socialId;
             user.email = email;
+            user.name = name;
             user.socialType = 'kakao';
             await this.userRepository.save(user);
         }
         
-        const token: string = await jwt.sign({ email }, String(process.env.JWT_SECRET_KEY), {expiresIn : "7d"});
+        const token: string = await jwt.sign({ socialId }, String(process.env.JWT_SECRET_KEY), {expiresIn : "7d"});
 
         return { isNewMember, token }
     }

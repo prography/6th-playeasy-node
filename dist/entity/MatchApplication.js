@@ -22,37 +22,51 @@ var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.MatchTeamApplication = void 0;
+exports.MatchApplication = void 0;
 var typeorm_1 = require("typeorm");
-var Enums_1 = require("util/Enums");
-var MatchTeamApplication = /** @class */ (function (_super) {
-    __extends(MatchTeamApplication, _super);
-    function MatchTeamApplication() {
+var Match_1 = require("./Match");
+var User_1 = require("./User");
+var Enums_1 = require("../util/Enums");
+var MatchApplication = /** @class */ (function (_super) {
+    __extends(MatchApplication, _super);
+    function MatchApplication() {
         return _super !== null && _super.apply(this, arguments) || this;
     }
     __decorate([
         typeorm_1.PrimaryGeneratedColumn(),
         __metadata("design:type", Number)
-    ], MatchTeamApplication.prototype, "id", void 0);
+    ], MatchApplication.prototype, "id", void 0);
     __decorate([
         typeorm_1.Column(),
         __metadata("design:type", Number)
-    ], MatchTeamApplication.prototype, "quota", void 0);
+    ], MatchApplication.prototype, "quota", void 0);
     __decorate([
-        typeorm_1.Column({ enum: Enums_1.ApplicationStatus }),
+        typeorm_1.Column("enum", { enum: Enums_1.ApplicationType }),
         __metadata("design:type", String)
-    ], MatchTeamApplication.prototype, "status", void 0);
+    ], MatchApplication.prototype, "organization", void 0);
+    __decorate([
+        typeorm_1.Column("enum", { enum: Enums_1.ApplicationStatus }),
+        __metadata("design:type", String)
+    ], MatchApplication.prototype, "status", void 0);
     __decorate([
         typeorm_1.CreateDateColumn({ name: 'created_at' }),
         __metadata("design:type", Date)
-    ], MatchTeamApplication.prototype, "createdAt", void 0);
+    ], MatchApplication.prototype, "createdAt", void 0);
     __decorate([
         typeorm_1.UpdateDateColumn({ name: 'updated_at' }),
         __metadata("design:type", Date)
-    ], MatchTeamApplication.prototype, "updatedAt", void 0);
-    MatchTeamApplication = __decorate([
+    ], MatchApplication.prototype, "updatedAt", void 0);
+    __decorate([
+        typeorm_1.ManyToOne(function (type) { return User_1.User; }, function (user) { return user.matchApplications; }),
+        __metadata("design:type", User_1.User)
+    ], MatchApplication.prototype, "user", void 0);
+    __decorate([
+        typeorm_1.ManyToOne(function (type) { return Match_1.Match; }, function (match) { return match.matchApplications; }),
+        __metadata("design:type", Match_1.Match)
+    ], MatchApplication.prototype, "match", void 0);
+    MatchApplication = __decorate([
         typeorm_1.Entity()
-    ], MatchTeamApplication);
-    return MatchTeamApplication;
+    ], MatchApplication);
+    return MatchApplication;
 }(typeorm_1.BaseEntity));
-exports.MatchTeamApplication = MatchTeamApplication;
+exports.MatchApplication = MatchApplication;

@@ -1,12 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.ApplicationStatus = exports.MatchStatus = exports.MatchType = exports.Level = void 0;
-var Level;
-(function (Level) {
-    Level["LOW"] = "LOW";
-    Level["MIDDLE"] = "MEDIUM";
-    Level["HIGH"] = "HIGH";
-})(Level = exports.Level || (exports.Level = {}));
+exports.ApplicationType = exports.ApplicationStatus = exports.MatchStatus = exports.MatchType = void 0;
 var MatchType;
 (function (MatchType) {
     MatchType["SOCCER"] = "SOCCER";
@@ -27,3 +21,8 @@ var ApplicationStatus;
     ApplicationStatus["DENIED"] = "DENIED";
     ApplicationStatus["CANCEL"] = "CANCEL";
 })(ApplicationStatus = exports.ApplicationStatus || (exports.ApplicationStatus = {}));
+var ApplicationType;
+(function (ApplicationType) {
+    ApplicationType["TEAM"] = "TEAM";
+    ApplicationType["PERSONAL"] = "PERSONAL";
+})(ApplicationType = exports.ApplicationType || (exports.ApplicationType = {}));

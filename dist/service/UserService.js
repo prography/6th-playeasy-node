@@ -66,10 +66,10 @@ var UserService = /** @class */ (function () {
                     case 0:
                         user.name = updateUserDto.name;
                         user.age = updateUserDto.age;
-                        user.level = updateUserDto.level;
                         user.description = updateUserDto.description;
                         user.picture = updateUserDto.picture;
                         user.phone = updateUserDto.phone;
+                        user.teamName = updateUserDto.teamName;
                         return [4 /*yield*/, this.userRepository.save(user)];
                     case 1:
                         updatedUser = _a.sent();

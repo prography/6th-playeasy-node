@@ -4,14 +4,14 @@ import {
     Min,
     Max,
     IsString,
-    IsEnum,
-    IsMobilePhone
+    IsMobilePhone,
+    IsEmail,
+    Length
 } from 'class-validator';
 import { Exclude, Expose } from 'class-transformer';
-import { Level } from 'util/Enums';
-
 
 export class UpdateUserDto {
+    @Length(1, 20)
     public name!: string;
     
     @IsInt()
@@ -19,16 +19,18 @@ export class UpdateUserDto {
     @Max(100)
     public age!: number;
 
+    @IsEmail()
+    public email!: string;
+
     @IsMobilePhone("ko-KR")
     public phone!: string;
-
-    @IsEnum(Level)
-    public level!: Level;
 
     @IsString()
     public description!: string;
 
     public picture!: string;
+
+    public teamName!: string;
 }
 
 @Exclude()
@@ -54,11 +56,11 @@ export class ResponseUserDto {
     public socialType!: string;
 
     @Expose()
-    public level!: string;
-
-    @Expose()
     public description!: string;
 
     @Expose()
     public picture!: string;
+
+    @Expose()
+    public teamName!: string;
 }

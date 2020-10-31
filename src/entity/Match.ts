@@ -10,7 +10,7 @@ import {
     OneToOne, 
     JoinColumn
 } from "typeorm";
-import { MatchStatus, MatchType } from "util/Enums";
+import { MatchStatus, MatchType } from "../util/Enums";
 import { Location } from "./Location";
 import { MatchApplication } from "./MatchApplication";
 import { User } from "./User";
@@ -20,7 +20,7 @@ export class Match extends BaseEntity {
     @PrimaryGeneratedColumn()
     id!: number;
 
-    @Column({ enum: MatchType })  
+    @Column("enum", { enum: MatchType })  
     type!: MatchType;
 
     @Column({ nullable: true })
@@ -41,7 +41,7 @@ export class Match extends BaseEntity {
     @Column()
     quota!: number;
 
-    @Column({ enum: MatchStatus })
+    @Column("enum", { enum: MatchStatus })
     status!: MatchStatus;
 
     @CreateDateColumn({ name: 'created_at' })

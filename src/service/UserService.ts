@@ -12,10 +12,11 @@ export class UserService {
     public async update(user: User, updateUserDto: UpdateUserDto) {
         user.name = updateUserDto.name;
         user.age = updateUserDto.age;
-        user.level = updateUserDto.level;
+        user.email = updateUserDto.email;
+        user.phone = updateUserDto.phone;
         user.description = updateUserDto.description;
         user.picture = updateUserDto.picture;
-        user.phone = updateUserDto.phone;
+        user.teamName = updateUserDto.teamName;
 
         const updatedUser: User = await this.userRepository.save(user);
         const responseUserDto: ResponseUserDto = plainToClass(ResponseUserDto, updatedUser);
