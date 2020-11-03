@@ -5,9 +5,11 @@ import {
     IsEnum,
     IsMobilePhone, 
     IsDate,
+    IsDateString,
 } from 'class-validator';
 import { Exclude, Expose } from 'class-transformer';
 import { MatchStatus, MatchType } from '../util/Enums';
+import { Location } from '../entity/Location';
 
 export class CreateMatchDto {
     @IsEnum(MatchType)
@@ -16,11 +18,11 @@ export class CreateMatchDto {
     @IsString()
     public description!: string;
     
-    @IsDate()
-    public startAt!: Date;
+    @IsDateString()
+    public startAt!: string;
     
-    @IsDate()
-    public endAt!: Date;
+    @IsDateString()
+    public endAt!: string;
     
     @IsInt()
     public fee!: number;
@@ -30,9 +32,12 @@ export class CreateMatchDto {
 
     @IsInt()
     public quota!: number;
-    
-    @IsEnum(MatchStatus)
-    public status!: MatchStatus;
+
+    @IsString()
+    public address!: string;
+
+    @IsString()
+    public addressDetail!: string;
 }
 
 export class UpdateMatchDto {
@@ -45,11 +50,11 @@ export class UpdateMatchDto {
     @IsString()
     public description!: string;
     
-    @IsDate()
-    public startAt!: Date;
+    @IsDateString()
+    public startAt!: string;
     
-    @IsDate()
-    public endAt!: Date;
+    @IsDateString()
+    public endAt!: string;
 
     @IsInt()
     public fee!: number;
@@ -59,6 +64,12 @@ export class UpdateMatchDto {
     
     @IsInt()
     public quota!: number;
+
+    @IsString()
+    public address!: string;
+
+    @IsString()
+    public addressDetail!: string;
 }
 
 export class UpdateMatchStatusDto {
@@ -100,4 +111,7 @@ export class ResponseMatchDto {
     
     @Expose()
     public status!: MatchStatus;
+
+    @Expose()
+    public location!: Location;
 }

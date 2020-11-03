@@ -1,21 +1,18 @@
 import { BaseController } from './BaseController';
 import {
-    BodyParam,
+    Body,
     CurrentUser,
     Get,
     HttpCode,
     JsonController, 
+    NotFoundError, 
     Post,
     Put,
     QueryParam,
     } from 'routing-controllers';
 import { MatchService } from '../service/MatchService';
-import { CreateMatchDto, UpdateMatchDto, ResponseMatchDto } from '../dto/MatchDto';
-import { CreateLocationDto, UpdateLocationDto } from '../dto/LocationDto';
-import { Match } from '../entity/Match';
+import { CreateMatchDto, UpdateMatchDto, UpdateMatchStatusDto } from '../dto/MatchDto';
 import { User } from '../entity/User';
-import { MatchStatus } from '../util/Enums';
-import { plainToClass } from 'class-transformer';
 
 @JsonController('/match')
 export class MatchController extends BaseController {
@@ -27,48 +24,34 @@ export class MatchController extends BaseController {
     @Post()
     @HttpCode(201)
     public async add(@CurrentUser({ required: true }) user: User,
-                    @BodyParam('matchData') matchData: CreateMatchDto,
-                    @BodyParam('locationData') locationData: CreateLocationDto) {
-        // const match: ResponseMatchDto = await this.matchService.add(matchData, locationData);
-
-        // return match;
+                    @Body() createMatchDto: CreateMatchDto) {
+        return await this.matchService.add(user, createMatchDto);
     }
 
     // 매치 상세
     @Get()
     public async getOne(@CurrentUser({ required: true }) user: User,
                         @QueryParam('matchId') matchId: number) {
-        // const match: ResponseMatchDto = await this.matchService.getOne(matchId);
-
-        // return match;
+        return await this.matchService.getOne(matchId);
     }
 
     // 매치 리스트 - 메인화면
     @Get('/list')
-    public async getList(@QueryParam('date') date: string,
-                        @QueryParam('status') status: string) {
-        // const matchList: Array<ResponseMatchDto> = await this.matchService.getList(date, status);
-
-        // return matchList;
+    public async getList(@QueryParam('date') date: string) {    
+        return await this.matchService.getList(date);
     }
 
     // 매치 수정
     @Put() // 매치 작성자인지 확인
     public async update(@CurrentUser({ required: true }) user: User,
-                        @BodyParam('matchData') matchData: UpdateMatchDto,
-                        @BodyParam('locationData') locationData: UpdateLocationDto) {
-        // const match: ResponseMatchDto = await this.matchService.update(matchData, locationData);
-        
-        // return match;
+                        @Body() updateMatchDto: UpdateMatchDto) {
+        return await this.matchService.update(updateMatchDto);
     }
 
     // 매치 마감
     @Put('/status')  // 매치 작성자인지 확인
     public async close(@CurrentUser({ required: true }) user: User,
-                        @BodyParam('matchId') matchId: number,
-                        @BodyParam('status') status: MatchStatus) {
-        // const match: ResponseMatchDto = await this.matchService.updateStatus(matchId, status);
-
-        // return match;
+                        @Body() updateMatchStatusDto: UpdateMatchStatusDto) {
+        return await this.matchService.updateStatus(updateMatchStatusDto);
     }
 }

@@ -3,7 +3,7 @@ import {
     JsonController, 
     Get, 
     Put, 
-    BodyParam, 
+    Body, 
     CurrentUser, 
     } from 'routing-controllers';
 import { UserService } from '../service/UserService';
@@ -19,7 +19,7 @@ export class UserController extends BaseController {
 
     // 내 정보
     @Get()  
-    public getUser(@CurrentUser({ required: true }) user?: User) {
+    public getUser(@CurrentUser({ required: true }) user: User) {
         const userInfo: ResponseUserDto = plainToClass(ResponseUserDto, user);
 
         return userInfo;
@@ -28,7 +28,7 @@ export class UserController extends BaseController {
     // 내 정보 수정 
     @Put()  
     public async updateUser(@CurrentUser({ required: true }) user: User,
-                            @BodyParam('userData') updateUserDto: UpdateUserDto) {   
+                            @Body() updateUserDto: UpdateUserDto) {   
         const updatedUser: ResponseUserDto = await this.userService.update(user, updateUserDto);
 
         return updatedUser;
