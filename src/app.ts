@@ -20,15 +20,19 @@ createDatabaseConnection()
   })
   .catch((error) => console.error(error));
 
-// 소셜 로그인 테스트를 위한 템플릿 엔진 사용
 app.engine('html', require('ejs').renderFile);
 app.set('view engine', 'ejs');
+app.set('port', process.env.PORT || 3000);
 
 // 미들웨어
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 app.use(cookieParser());
-app.use(morgan('dev'));
+if (process.env.NODE_ENV === 'production') {
+  app.use(morgan('combined'));
+} else{ 
+  app.use(morgan('dev'));
+}
 
 // 의존성 관리
 useContainer(Container);

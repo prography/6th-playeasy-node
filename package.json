@@ -7,7 +7,8 @@
       "build": "tsc",
       "test": "echo \"Error: no test specified\" && exit 1",
       "start": "node ./dist",
-      "dev": "nodemon"
+      "dev": "nodemon",
+      "prod": "cross-env NODE_ENV=production PORT=80 pm2 start ./dist"
    },
    "repository": {
       "type": "git",
@@ -52,6 +53,7 @@
       "class-validator": "^0.12.2",
       "cookie-parser": "^1.4.5",
       "cors": "^2.8.5",
+      "cross-env": "^7.0.2",
       "dotenv": "^8.2.0",
       "ejs": "^3.1.5",
       "express": "^4.17.1",
