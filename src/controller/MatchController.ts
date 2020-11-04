@@ -5,7 +5,6 @@ import {
     Get,
     HttpCode,
     JsonController, 
-    NotFoundError, 
     Post,
     Put,
     QueryParam,

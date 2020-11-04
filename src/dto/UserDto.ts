@@ -51,15 +51,9 @@ export class ResponseUserDto {
 
     @Expose()
     public phone!: string;
-    
-    @Expose()
-    public socialType!: string;
 
     @Expose()
     public description!: string;
-
-    @Expose()
-    public picture!: string;
 
     @Expose()
     public teamName!: string;

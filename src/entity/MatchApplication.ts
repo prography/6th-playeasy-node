@@ -20,7 +20,7 @@ export class MatchApplication extends BaseEntity {
     quota!: number;
 
     @Column("enum", { enum: ApplicationType })
-    organization!: ApplicationType;
+    type!: ApplicationType;
     
     @Column("enum", { enum: ApplicationStatus })
     status!: ApplicationStatus;

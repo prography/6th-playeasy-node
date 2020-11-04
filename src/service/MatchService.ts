@@ -9,14 +9,14 @@ import { User } from '../entity/User';
 import { plainToClass } from 'class-transformer';
 import { NotFoundError } from 'routing-controllers';
 import { MatchStatus } from '../util/Enums';
-import { Between, LessThanOrEqual, MoreThanOrEqual, Raw } from 'typeorm';
+import { Between } from 'typeorm';
 
 @Service()
 export class MatchService {
     constructor(@InjectRepository() private matchRepository: MatchRepository,
                 @InjectRepository() private locationRepository: LocationRepository) {}
 
-    public async add(user: User, createMatchDto: CreateMatchDto) {
+    public async add(user: User, createMatchDto: CreateMatchDto) {   
         let match: Match = new Match();
         match.type = createMatchDto.type;
         match.description = createMatchDto.description;
@@ -71,13 +71,19 @@ export class MatchService {
             ]
         });
 
+        const matchDtos: ResponseMatchDto[] = [];
+        matchList.forEach(match => {
+            matchDtos.push(plainToClass(ResponseMatchDto, match));
+        });
 
-
-        return matchList;
+        return matchDtos;
     }
 
     public async update(updateMatchDto: UpdateMatchDto) {
-        let match = await this.matchRepository.findOne({ id: updateMatchDto.id });
+        let match = await this.matchRepository.findOne({
+            relations: ["location"],
+            where: { id: updateMatchDto.id }
+        });
 
         if (!match) 
             throw new NotFoundError('해당 Match를 찾을 수 없습니다.');
