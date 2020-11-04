@@ -11,7 +11,7 @@ import { UpdateUserDto, ResponseUserDto } from '../dto/UserDto';
 import { User } from '../entity/User';
 import { plainToClass } from 'class-transformer';
 
-@JsonController('/users')
+@JsonController('/user')
 export class UserController extends BaseController {    
     constructor(private userService: UserService) {
         super();
