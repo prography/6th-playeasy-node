@@ -24,6 +24,6 @@ export class AuthService {
         
         const token: string = await jwt.sign({ socialId }, String(process.env.JWT_SECRET_KEY));
 
-        return token
+        return { token }
     }
 }
