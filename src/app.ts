@@ -1,5 +1,5 @@
 import 'reflect-metadata';
-import express from 'express';
+import express, { NextFunction, Request, Response } from 'express';
 import { createDatabaseConnection } from './util/DatabaseConnector';
 import { useExpressServer, useContainer } from 'routing-controllers';
 import { Container } from 'typedi';
@@ -30,7 +30,7 @@ app.use(bodyParser.json());
 app.use(cookieParser());
 if (process.env.NODE_ENV === 'production') {
   app.use(morgan('combined'));
-} else{ 
+} else { 
   app.use(morgan('dev'));
 }
 
@@ -44,7 +44,14 @@ useExpressServer(app, {
   controllers: [`${__dirname}/controller/**`],
   middlewares: [`${__dirname}/middlewares/**`],
   currentUserChecker,
-  });
+});
+
+// 404 미들웨어
+app.use(function(req: Request, res: Response, next: NextFunction) {
+  const err = new Error('Not Found');
+  res.status(404);
+  next(err);
+});
 
 export {
     app,
