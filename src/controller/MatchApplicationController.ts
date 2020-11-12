@@ -23,7 +23,7 @@ export class MatchApplication extends BaseController {
     }
 
     // 매치 신청
-    @Post()
+    @Post()  // 매치 작성자가 아닌 사람만 신청 가능
     @HttpCode(201)
     public async add(@CurrentUser({ required: true }) user: User,
                     @Body() createMatchApplicationDto: CreateMatchApplicationDto) {
@@ -34,20 +34,20 @@ export class MatchApplication extends BaseController {
     @Get()  // 매치 작성자인지 확인
     public async getList(@CurrentUser({ required: true }) user: User,
                         @QueryParam('matchId') matchId: number) {
-
+        return await this.matchApplicationService.getList(matchId);
     }
 
     // 매치 신청 승인 or 거절 (매니저)
     @Put()  // 매치 작성자인지 확인
     public async update(@CurrentUser({ required: true }) user: User,
                         @Body() updateMatchApplicationDto: UpdateMatchApplicationDto) {
-
+        return await this.matchApplicationService.update(updateMatchApplicationDto);
     }
 
     // 매치 신청 취소 (사용자)
     @Put()
     public async cancel(@CurrentUser({ required: true }) user: User,
                         @Body() updateMatchApplicationDto: UpdateMatchApplicationDto) {
-
+        return await this.matchApplicationService.cancel(updateMatchApplicationDto);
     }
 }

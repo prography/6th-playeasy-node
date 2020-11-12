@@ -16,8 +16,8 @@ export class CreateMatchApplicationDto {
     @IsEnum(ApplicationType)
     type!: ApplicationType;
 
-    @IsEnum(ApplicationStatus)
-    status!: ApplicationStatus;
+    @IsInt()
+    matchId!: number;
 }
 
 export class UpdateMatchApplicationDto {

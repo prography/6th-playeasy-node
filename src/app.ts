@@ -46,12 +46,12 @@ useExpressServer(app, {
   currentUserChecker,
 });
 
-// 404 미들웨어
-app.use(function(req: Request, res: Response, next: NextFunction) {
-  const err = new Error('Not Found');
-  res.status(404);
-  next(err);
-});
+// // 404 미들웨어
+// app.use(function(req: Request, res: Response, next: NextFunction) {
+//   const err = new Error('Not Found');
+//   res.status(404);
+//   next(err);
+// });
 
 export {
     app,
