@@ -22,7 +22,7 @@ export class CreateMatchApplicationDto {
 
 export class UpdateMatchApplicationDto {
     @IsNotEmpty()
-    id!: number;
+    applicationId!: number;
 
     @IsEnum(ApplicationStatus)
     status!: ApplicationStatus;

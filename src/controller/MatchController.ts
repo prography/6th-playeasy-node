@@ -1,6 +1,7 @@
 import { BaseController } from './BaseController';
 import {
     Body,
+    BodyParam,
     Get,
     HttpCode,
     JsonController, 
@@ -14,6 +15,8 @@ import { MatchService } from '../service/MatchService';
 import { CreateMatchDto, UpdateMatchDto } from '../dto/MatchDto';
 import { checkCurrentUser } from '../middlewares/AuthMiddleware'
 import { Request } from 'express';
+import { MatchStatus } from '../util/Enums';
+
 @JsonController('/match')
 export class MatchController extends BaseController {
     constructor(private matchService: MatchService) {
@@ -51,7 +54,9 @@ export class MatchController extends BaseController {
     // 매치 마감
     @Put('/status')  
     @UseBefore(checkCurrentUser)
-    public async close(@Req() req: Request, @Body() updateMatchDto: UpdateMatchDto) {
-        return await this.matchService.updateStatus(req.currentUser, updateMatchDto);
+    public async close(@Req() req: Request, 
+                       @BodyParam('matchId') matchId: number,
+                       @BodyParam('status') status: MatchStatus) {
+        return await this.matchService.updateStatus(req.currentUser, matchId, status);
     }
 }

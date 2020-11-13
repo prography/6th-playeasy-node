@@ -3,7 +3,6 @@ import { InjectRepository } from 'typeorm-typedi-extensions';
 import { MatchApplicationRepository } from '../repository/MatchApplicationRepository';
 import { plainToClass } from 'class-transformer';
 import { ForbiddenError, NotFoundError } from 'routing-controllers';
-import { ApplicationStatus, ApplicationType } from '../util/Enums';
 import { User } from '../entity/User';
 import { 
     CreateMatchApplicationDto, 
@@ -12,8 +11,6 @@ import {
 } from '../dto/MatchApplicationDto';
 import { MatchApplication } from '../entity/MatchApplication';
 import { MatchRepository } from '../repository/MatchRepository';
-import { Match } from '../entity/Match';
-import { app } from 'app';
 
 @Service()
 export class MatchApplicationService {
@@ -45,9 +42,9 @@ export class MatchApplicationService {
     public async getList(user: User, matchId: number) {
         const applicationList: MatchApplication[] = await this.matchApplicationRepository.find({
             relations: ["user"],
-            where: { matchId }
+            where: { match: matchId }
         });
-
+        
         const applicationDtos: ResponseMatchApplicationDto[] = [];
         applicationList.forEach(application => {
             applicationDtos.push(plainToClass(ResponseMatchApplicationDto, application));
@@ -60,7 +57,7 @@ export class MatchApplicationService {
         let application = await this.matchApplicationRepository.findOne({
             relations: ["user", "match"],
             where: {
-                id: updateMatchApplicationDto.id,
+                id: updateMatchApplicationDto.applicationId,
             }
         });
         

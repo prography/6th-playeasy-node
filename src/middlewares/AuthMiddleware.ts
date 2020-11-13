@@ -1,7 +1,6 @@
-import { ForbiddenError, NotFoundError, UnauthorizedError } from 'routing-controllers';
+import { NotFoundError, UnauthorizedError } from 'routing-controllers';
 import { EntityManager, getManager, Not } from 'typeorm';
 import { User } from '../entity/User';
-import { Match } from '../entity/Match';
 import jwt from 'jsonwebtoken';
 import { NextFunction, Request, Response } from 'express';
 
