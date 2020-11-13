@@ -9,6 +9,7 @@ import {
 import { Exclude, Expose } from 'class-transformer';
 import { MatchStatus, MatchType } from '../util/Enums';
 import { Location } from '../entity/Location';
+import { User } from '../entity/User';
 
 export class CreateMatchDto {
     @IsEnum(MatchType)
@@ -32,11 +33,17 @@ export class CreateMatchDto {
     @IsInt()
     public quota!: number;
 
-    @IsString()
-    public address!: string;
+    @IsInt()
+    public mapId!: number;
 
     @IsString()
-    public addressDetail!: string;
+    public placeName!: string;
+
+    @IsString()
+    public addressName!: string;
+
+    @IsString()
+    public placeDetail!: string;
 }
 
 export class UpdateMatchDto {
@@ -64,21 +71,17 @@ export class UpdateMatchDto {
     @IsInt()
     public quota!: number;
 
-    @IsString()
-    public address!: string;
-
-    @IsString()
-    public addressDetail!: string;
-}
-
-export class UpdateMatchStatusDto {
     @IsInt()
-    @IsNotEmpty()
-    public id!: number;
+    public mapId!: number;
 
-    @IsEnum(MatchStatus)
-    @IsNotEmpty()
-    public status!: MatchStatus;
+    @IsString()
+    public placeName!: string;
+
+    @IsString()
+    public addressName!: string;
+
+    @IsString()
+    public placeDetail!: string;
 }
 
 @Exclude()
@@ -113,4 +116,7 @@ export class ResponseMatchDto {
 
     @Expose()
     public location!: Location;
+
+    @Expose()
+    public teamName!: string;
 }

@@ -9,7 +9,7 @@ import { BadRequestError } from 'routing-controllers';
 export class AuthService {
     constructor(@InjectRepository() private userRepository: UserRepository) {}
 
-    public async login(socialId: number, email: string, name: string) {
+    public async login(socialId: number, email: string, name: string, picture: string) {
         let isNewMember: boolean = false;
         const exUser: User | undefined = await this.userRepository.findOne({ where: { socialId }});
         if (!exUser) {
@@ -19,6 +19,7 @@ export class AuthService {
             user.email = email;
             user.name = name;
             user.socialType = 'kakao';
+            user.picture = picture;
             await this.userRepository.save(user);
         }
         

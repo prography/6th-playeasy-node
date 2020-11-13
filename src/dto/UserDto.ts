@@ -57,4 +57,7 @@ export class ResponseUserDto {
 
     @Expose()
     public teamName!: string;
+
+    @Expose()
+    public picture!: string;
 }

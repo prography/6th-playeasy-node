@@ -3,8 +3,6 @@ import {
     Entity, 
     PrimaryGeneratedColumn, 
     Column,
-    CreateDateColumn,
-    UpdateDateColumn,
 } from "typeorm";
 
 @Entity()
@@ -13,8 +11,14 @@ export class Location extends BaseEntity {
     id!: number;
 
     @Column()
-    address!: string;
+    mapId!: number;
+
+    @Column()
+    placeName!: string;
+
+    @Column()
+    addressName!: string;
 
     @Column({ nullable: true })
-    detail!: string;
+    placeDetail!: string;
 }

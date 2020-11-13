@@ -4,12 +4,14 @@ import {
     Get, 
     Put, 
     Body, 
-    CurrentUser, 
+    UseBefore,
+    Req, 
     } from 'routing-controllers';
 import { UserService } from '../service/UserService';
 import { UpdateUserDto, ResponseUserDto } from '../dto/UserDto';
-import { User } from '../entity/User';
 import { plainToClass } from 'class-transformer';
+import { checkCurrentUser } from '../middlewares/AuthMiddleware';
+import { Request } from 'express';
 
 @JsonController('/user')
 export class UserController extends BaseController {    
@@ -18,20 +20,19 @@ export class UserController extends BaseController {
     }
 
     // 내 정보
-    @Get()  
-    public getUser(@CurrentUser({ required: true }) user: User) {
-        const userInfo: ResponseUserDto = plainToClass(ResponseUserDto, user);
+    @Get()
+    @UseBefore(checkCurrentUser)  
+    public getUser(@Req() req: Request) {
+        const userInfo: ResponseUserDto = plainToClass(ResponseUserDto, req.currentUser);
 
         return userInfo;
     }
 
     // 내 정보 수정 
-    @Put()  
-    public async updateUser(@CurrentUser({ required: true }) user: User,
-                            @Body() updateUserDto: UpdateUserDto) {   
-        const updatedUser: ResponseUserDto = await this.userService.update(user, updateUserDto);
-
-        return updatedUser;
+    @Put()
+    @UseBefore(checkCurrentUser)   
+    public async updateUser(@Req() req: Request, @Body() updateUserDto: UpdateUserDto) {   
+        return await this.userService.update(req.currentUser, updateUserDto);
     }
     
     // // 나의 매치 정보 - 내가 등록한 매치

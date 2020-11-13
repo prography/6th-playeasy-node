@@ -4,7 +4,7 @@ import { MatchRepository } from '../repository/MatchRepository';
 import { LocationRepository } from '../repository/LocationRepository';
 import { Match } from '../entity/Match';
 import { Location } from '../entity/Location';
-import { CreateMatchDto, UpdateMatchDto, UpdateMatchStatusDto, ResponseMatchDto } from '../dto/MatchDto';
+import { CreateMatchDto, UpdateMatchDto, ResponseMatchDto } from '../dto/MatchDto';
 import { User } from '../entity/User';
 import { plainToClass } from 'class-transformer';
 import { NotFoundError } from 'routing-controllers';
@@ -28,22 +28,26 @@ export class MatchService {
         match.status = MatchStatus.WAITING;
 
         let location: Location = new Location();
-        location.address = createMatchDto.address;
-        location.detail = createMatchDto.addressDetail;
+        location.mapId = createMatchDto.mapId;
+        location.placeName = createMatchDto.placeName;
+        location.addressName = createMatchDto.addressName;
+        location.placeDetail = createMatchDto.placeDetail;
         location = await this.locationRepository.save(location);
 
         match.location = location;  // match - location
         match.user = user;  // match - user
 
         match = await this.matchRepository.save(match);
+        
         const respneseMatchDto: ResponseMatchDto = plainToClass(ResponseMatchDto, match);
+        respneseMatchDto.teamName = user.teamName;
         
         return respneseMatchDto;
     }
 
     public async getOne(matchId: number) {
         const match = await this.matchRepository.findOne({
-            relations: ["location"],
+            relations: ["location", "user"],
             where: { id: matchId }
         });
         
@@ -51,7 +55,8 @@ export class MatchService {
             throw new NotFoundError('해당 Match를 찾을 수 없습니다.');
         
         const responseMatchDto: ResponseMatchDto = plainToClass(ResponseMatchDto, match);
-
+        responseMatchDto.teamName = match.user.teamName;
+        
         return responseMatchDto;
     }
 
@@ -65,7 +70,7 @@ export class MatchService {
         const end: Date = new Date(date + "T23:59:59");
 
         const matchList: Match[] = await this.matchRepository.find({
-            relations: ["location"],
+            relations: ["location", "user"],
             where: [
                 { startAt: Between(start, end) }
             ]
@@ -73,16 +78,21 @@ export class MatchService {
 
         const matchDtos: ResponseMatchDto[] = [];
         matchList.forEach(match => {
-            matchDtos.push(plainToClass(ResponseMatchDto, match));
+            let matchDto = plainToClass(ResponseMatchDto, match);
+            matchDto.teamName = match.user.teamName;
+            matchDtos.push(matchDto);
         });
 
         return matchDtos;
     }
 
-    public async update(updateMatchDto: UpdateMatchDto) {
+    public async update(user: User, updateMatchDto: UpdateMatchDto) {
         let match = await this.matchRepository.findOne({
-            relations: ["location"],
-            where: { id: updateMatchDto.id }
+            relations: ["location", "user"],
+            where: { 
+                id: updateMatchDto.id, 
+                user,
+            }
         });
 
         if (!match) 
@@ -97,31 +107,41 @@ export class MatchService {
         match.quota = updateMatchDto.quota;
 
         let location = await this.locationRepository.findOne({ id: match.location.id });
-
         if (!location) 
             throw new NotFoundError('해당 장소를 찾을 수 없습니다.');
 
-        location.address = updateMatchDto.address;
-        location.detail = updateMatchDto.addressDetail;
+        location.mapId = updateMatchDto.mapId;
+        location.placeName = updateMatchDto.placeName;
+        location.addressName = updateMatchDto.addressName;
+        location.placeDetail = updateMatchDto.placeDetail;
+        
         location = await this.locationRepository.save(location);
         match.location = location;  // match - location
 
         match = await this.matchRepository.save(match);
         const respneseMatchDto: ResponseMatchDto = plainToClass(ResponseMatchDto, match);
-        
+        respneseMatchDto.teamName = match.user.teamName;
+
         return respneseMatchDto;
     }
 
-    public async updateStatus(updateMatchStatusDto: UpdateMatchStatusDto) {
-        let match = await this.matchRepository.findOne({ id: updateMatchStatusDto.id });
+    public async updateStatus(user: User, matchId: number, status: MatchStatus) {
+        let match = await this.matchRepository.findOne({
+            relations: ["location", "user"],
+            where: { 
+                id: matchId, 
+                user,
+            }
+        });
         
         if (!match) 
             throw new NotFoundError('해당 Match를 찾을 수 없습니다.');
 
-        match.status = updateMatchStatusDto.status;
-
+        match.status = status;
         match = await this.matchRepository.save(match);
+
         const respneseMatchDto: ResponseMatchDto = plainToClass(ResponseMatchDto, match);
+        respneseMatchDto.teamName = match.user.teamName;
         
         return respneseMatchDto; 
     }    

@@ -7,7 +7,7 @@ import {
     BodyParam, 
     Req, 
     Render, 
-    NotFoundError,
+    UnauthorizedError,
 } from 'routing-controllers';
 import axios from 'axios';
 import querystring from 'querystring';
@@ -63,15 +63,16 @@ export class AuthController extends BaseController {
             headers: { Authorization: `Bearer ${access_token}` }
         });
         if (kakaoUserInfo.status !== 200) 
-            throw new NotFoundError('카카오 인증에 실패했습니다.');
-        
+            throw new UnauthorizedError('카카오 인증에 실패했습니다.');
+
         let email = null;
         if (kakaoUserInfo.data.kakao_account.has_email) {
             email = kakaoUserInfo.data.kakao_account.email;
         }
         const socialId: number = kakaoUserInfo.data.id;
         const nickname: string = kakaoUserInfo.data.properties.nickname;
-        
-        return await this.authService.login(socialId, email, nickname);
+        const picture: string = "https://cdn.pixabay.com/photo/2015/11/03/08/54/sport-1019776_960_720.jpg";
+
+        return await this.authService.login(socialId, email, nickname, picture);
     }
 }
