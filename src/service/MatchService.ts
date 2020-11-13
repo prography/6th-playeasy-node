@@ -4,7 +4,7 @@ import { MatchRepository } from '../repository/MatchRepository';
 import { LocationRepository } from '../repository/LocationRepository';
 import { Match } from '../entity/Match';
 import { Location } from '../entity/Location';
-import { CreateMatchDto, UpdateMatchDto, UpdateMatchStatusDto, ResponseMatchDto } from '../dto/MatchDto';
+import { CreateMatchDto, UpdateMatchDto, ResponseMatchDto } from '../dto/MatchDto';
 import { User } from '../entity/User';
 import { plainToClass } from 'class-transformer';
 import { NotFoundError } from 'routing-controllers';
@@ -79,10 +79,13 @@ export class MatchService {
         return matchDtos;
     }
 
-    public async update(updateMatchDto: UpdateMatchDto) {
+    public async update(user: User, updateMatchDto: UpdateMatchDto) {
         let match = await this.matchRepository.findOne({
             relations: ["location"],
-            where: { id: updateMatchDto.id }
+            where: { 
+                id: updateMatchDto.id, 
+                user,
+            }
         });
 
         if (!match) 
@@ -112,13 +115,19 @@ export class MatchService {
         return respneseMatchDto;
     }
 
-    public async updateStatus(updateMatchStatusDto: UpdateMatchStatusDto) {
-        let match = await this.matchRepository.findOne({ id: updateMatchStatusDto.id });
+    public async updateStatus(user: User, updateMatchDto: UpdateMatchDto) {
+        let match = await this.matchRepository.findOne({
+            relations: ["location"],
+            where: { 
+                id: updateMatchDto.id, 
+                user,
+            }
+        });
         
         if (!match) 
             throw new NotFoundError('해당 Match를 찾을 수 없습니다.');
 
-        match.status = updateMatchStatusDto.status;
+        match.status = updateMatchDto.status;
 
         match = await this.matchRepository.save(match);
         const respneseMatchDto: ResponseMatchDto = plainToClass(ResponseMatchDto, match);

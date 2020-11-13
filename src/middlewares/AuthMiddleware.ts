@@ -1,6 +1,7 @@
-import { Action, ForbiddenError, NotFoundError, UnauthorizedError } from 'routing-controllers';
-import { EntityManager, getManager } from 'typeorm';
-import { User } from '../entity/User'
+import { ForbiddenError, NotFoundError, UnauthorizedError } from 'routing-controllers';
+import { EntityManager, getManager, Not } from 'typeorm';
+import { User } from '../entity/User';
+import { Match } from '../entity/Match';
 import jwt from 'jsonwebtoken';
 import { NextFunction, Request, Response } from 'express';
 
@@ -30,8 +31,4 @@ export async function checkCurrentUser(req: Request, res: Response, next: NextFu
         console.error(error);
         next(error);
     }
-}
-
-export async function checkWriter(req: Request, res: Response, next: NextFunction) {
-    
 }

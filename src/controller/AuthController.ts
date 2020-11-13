@@ -7,7 +7,7 @@ import {
     BodyParam, 
     Req, 
     Render, 
-    NotFoundError,
+    UnauthorizedError,
 } from 'routing-controllers';
 import axios from 'axios';
 import querystring from 'querystring';
@@ -63,7 +63,7 @@ export class AuthController extends BaseController {
             headers: { Authorization: `Bearer ${access_token}` }
         });
         if (kakaoUserInfo.status !== 200) 
-            throw new NotFoundError('카카오 인증에 실패했습니다.');
+            throw new UnauthorizedError('카카오 인증에 실패했습니다.');
         
         let email = null;
         if (kakaoUserInfo.data.kakao_account.has_email) {

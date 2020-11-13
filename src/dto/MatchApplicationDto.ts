@@ -21,12 +21,8 @@ export class CreateMatchApplicationDto {
 }
 
 export class UpdateMatchApplicationDto {
-    @IsInt()
-    @Min(1)
-    quota!: number;
-
-    @IsEnum(ApplicationType)
-    type!: ApplicationType;
+    @IsNotEmpty()
+    id!: number;
 
     @IsEnum(ApplicationStatus)
     status!: ApplicationStatus;

@@ -69,12 +69,6 @@ export class UpdateMatchDto {
 
     @IsString()
     public addressDetail!: string;
-}
-
-export class UpdateMatchStatusDto {
-    @IsInt()
-    @IsNotEmpty()
-    public id!: number;
 
     @IsEnum(MatchStatus)
     @IsNotEmpty()
