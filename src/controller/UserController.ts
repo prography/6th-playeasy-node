@@ -5,17 +5,24 @@ import {
     Put, 
     Body, 
     UseBefore,
-    Req, 
+    Req,
+    QueryParam,
     } from 'routing-controllers';
 import { UserService } from '../service/UserService';
+import { MatchService } from '../service/MatchService';
+import { MatchApplicationService } from '../service/MatchApplicationService';
 import { UpdateUserDto, ResponseUserDto } from '../dto/UserDto';
 import { plainToClass } from 'class-transformer';
 import { checkCurrentUser } from '../middlewares/AuthMiddleware';
 import { Request } from 'express';
+import { ApplicationType } from '../util/Enums';
 
 @JsonController('/user')
 export class UserController extends BaseController {    
-    constructor(private userService: UserService) {
+    constructor(
+        private userService: UserService,
+        private matchService: MatchService,
+        private matchApplicationService: MatchApplicationService) {
         super();
     }
 
@@ -31,40 +38,25 @@ export class UserController extends BaseController {
     // 내 정보 수정 
     @Put()
     @UseBefore(checkCurrentUser)   
-    public async updateUser(@Req() req: Request, @Body() updateUserDto: UpdateUserDto) {   
+    public async updateUser(
+        @Req() req: Request, @Body() updateUserDto: UpdateUserDto) {   
         return await this.userService.update(req.currentUser, updateUserDto);
     }
     
-    // // 나의 매치 정보 - 내가 등록한 매치
-    // @Get("/matches")
-    // @UseBefore(isLoggedIn)
-    // public async getMatchList(@Req() req: any)  {
-    //     const matchList = await this.prisma.match.findMany({
-    //         where: { writerId: req.user.id },
-    //         select: {
-    //             id: true, type: true, description: true,
-    //             startAt: true, duration: true, fee: true,
-    //             phone: true, totalQuota: true, status: true, 
-    //             writerId: true,
-    //             homeTeam: {
-    //                 select: {
-    //                     id: true, name: true, description: true,
-    //                     age: true, level: true, leader: true, phone: true
-    //                 }
-    //             },
-    //             location: {
-    //                 select: {
-    //                     id: true, latitude: true, longitude: true,
-    //                     name: true, address: true, detail: true,
-    //                 }
-    //             },
-    //         }
-    //     });
+    // 나의 매칭 정보 - 내가 등록한 매치
+    @Get("/matches")
+    @UseBefore(checkCurrentUser)
+    public async getMatchList(@Req() req: Request) {
+        return await this.matchService.getListByUser(req.currentUser);
+    }
 
-    //     return { matchList } 
-    // }
+    // 나의 매칭 정보 - 나의 신청 현황
+    @Get("/applications")
+    @UseBefore(checkCurrentUser)
+    public async getApplicationList(@Req() req: Request, @QueryParam("type") type: ApplicationType) {
+        return this.matchApplicationService.getListByUser(req.currentUser, type);
+    }
 
-    // // 나의 매치 정보 - 나의 신청 현황
     // @Get("/applications")
     // @UseBefore(isLoggedIn)
     // public async getApplicationList(@Req() req: any, @QueryParam("type") type: string) {

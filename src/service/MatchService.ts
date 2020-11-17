@@ -60,7 +60,7 @@ export class MatchService {
         return responseMatchDto;
     }
 
-    public async getList(date: string) {
+    public async getListByDate(date: string) {
         const checkedDate: Date = new Date(date);
 
         if (checkedDate.toString() === "Invalid Date")
@@ -85,6 +85,23 @@ export class MatchService {
 
         return matchDtos;
     }
+
+    public async getListByUser(user: User) {
+        const matchList: Match[] = await this.matchRepository.find({
+            relations: ["location", "user"],
+            where: { user }
+        });
+
+        const matchDtos: ResponseMatchDto[] = [];
+        matchList.forEach(match => {
+            let matchDto = plainToClass(ResponseMatchDto, match);
+            matchDto.teamName = match.user.teamName;
+            matchDtos.push(matchDto);
+        });
+
+        return matchDtos;
+    }
+
 
     public async update(user: User, updateMatchDto: UpdateMatchDto) {
         let match = await this.matchRepository.findOne({

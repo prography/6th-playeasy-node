@@ -41,7 +41,7 @@ export class MatchController extends BaseController {
     // 매치 리스트 - 메인화면
     @Get('/list')
     public async getList(@QueryParam('date') date: string) {    
-        return await this.matchService.getList(date);
+        return await this.matchService.getListByDate(date);
     }
 
     // 매치 수정

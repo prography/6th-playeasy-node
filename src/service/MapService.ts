@@ -1,7 +1,4 @@
 import { Service } from 'typedi';
-import { Match } from '../entity/Match';
-import { Location } from '../entity/Location';
-import { plainToClass } from 'class-transformer';
 import { NotFoundError } from 'routing-controllers';
 import axios from 'axios';
 
@@ -19,7 +16,7 @@ export class MapService {
                     'Content-Type': 'application/x-www-form-urlencoded;charset=euc-kr'
                 }
             });
-    
+            
             return searchResult.data.documents;
         } catch (error) {
             console.error(error);

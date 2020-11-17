@@ -11,6 +11,7 @@ import {
 } from '../dto/MatchApplicationDto';
 import { MatchApplication } from '../entity/MatchApplication';
 import { MatchRepository } from '../repository/MatchRepository';
+import { ApplicationType } from 'util/Enums';
 
 @Service()
 export class MatchApplicationService {
@@ -39,7 +40,7 @@ export class MatchApplicationService {
         return plainToClass(ResponseMatchApplicationDto, matchApplication);
     }
 
-    public async getList(user: User, matchId: number) {
+    public async getListByMatch(user: User, matchId: number) {
         const applicationList: MatchApplication[] = await this.matchApplicationRepository.find({
             relations: ["user"],
             where: { match: matchId }
@@ -51,6 +52,10 @@ export class MatchApplicationService {
         });
 
         return applicationDtos;
+    }
+
+    public async getListByUser(user: User, type: ApplicationType) {
+
     }
 
     public async update(user: User, updateMatchApplicationDto: UpdateMatchApplicationDto) {
