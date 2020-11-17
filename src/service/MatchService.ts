@@ -71,9 +71,7 @@ export class MatchService {
 
         const matchList: Match[] = await this.matchRepository.find({
             relations: ["location", "user"],
-            where: [
-                { startAt: Between(start, end) }
-            ]
+            where: { startAt: Between(start, end) }
         });
 
         const matchDtos: ResponseMatchDto[] = [];

@@ -36,11 +36,7 @@ export class MatchApplication extends BaseController {
     @Get('/list')
     @UseBefore(checkCurrentUser)  
     public async getList(@Req() req: Request, @QueryParam('matchId') matchId: number) {
-        const matchList = await this.matchApplicationService.getListByMatch(matchId);
-        if (matchList.length === 0) {
-            return {}
-        }
-        return matchList;
+        return await this.matchApplicationService.getListByMatch(matchId);
     }
 
     // 매치 신청 상태 변경 (승인, 거절, 취소)

@@ -1,5 +1,5 @@
 import { Service } from 'typedi';
-import { NotFoundError } from 'routing-controllers';
+import { BadRequestError, NotFoundError } from 'routing-controllers';
 import axios from 'axios';
 
 @Service()
@@ -16,11 +16,13 @@ export class MapService {
                     'Content-Type': 'application/x-www-form-urlencoded;charset=euc-kr'
                 }
             });
+    
+            if (searchResult.data.documents.length === 0)
+                throw new NotFoundError('해당 검색어로 장소를 찾을 수 없습니다.');
             
-            return searchResult.data.documents;
+                return searchResult.data.documents;
         } catch (error) {
-            console.error(error);
-            throw error;
+            throw new BadRequestError('잘못된 형식으로 요청하였습니다.'); 
         }
     }
 }
