@@ -3,7 +3,6 @@ import {
     BadRequestError,
     Get,
     JsonController, 
-    NotFoundError, 
     QueryParam,
     Res,
     UseBefore,
@@ -24,11 +23,7 @@ export class MapController extends BaseController {
         try {
             const url = encodeURI("https://dapi.kakao.com/v2/local/search/keyword.json?query="+keyword);
         
-            const searchResult = await this.mapService.search(url);
-            if (searchResult.length === 0)
-                res.json({});
-                
-            return searchResult;
+            return await this.mapService.search(url);
         } catch (error) {
             throw new BadRequestError('유효하지 않은 검색어입니다.');
         }

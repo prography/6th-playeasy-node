@@ -57,10 +57,7 @@ export class MatchApplicationService {
     public async getListByUser(user: User, type: ApplicationType) {
         const applicationList: MatchApplication[] = await this.matchApplicationRepository.find({
             relations: ["user"],
-            where: [
-                { user: user },
-                { type: type }
-            ]
+            where: { user, type }
         });
 
         const applicationDtos: ResponseMatchApplicationDto[] = [];
@@ -74,10 +71,10 @@ export class MatchApplicationService {
     public async update(user: User, updateMatchApplicationDto: UpdateMatchApplicationDto) {
         let application = await this.matchApplicationRepository.findOne({
             relations: ["user", "match"],
-            where: [
-                { id: updateMatchApplicationDto.applicationId },
-                { user: user.id }
-            ]
+            where: { 
+                id: updateMatchApplicationDto.applicationId,
+                user: user.id
+            },
         });
         
         if (!application)
