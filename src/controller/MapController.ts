@@ -17,8 +17,18 @@ export class MapController extends BaseController {
     @Get('/search')
     @UseBefore(checkCurrentUser)
     public async search(@QueryParam('keyword') keyword: string) {
-        const url = encodeURI("https://dapi.kakao.com/v2/local/search/keyword.json?query="+keyword);
-    
-        return await this.mapService.search(url);
+        try {
+            const url = encodeURI("https://dapi.kakao.com/v2/local/search/keyword.json?query="+keyword);
+
+            const searchResult = await this.mapService.search(url);
+            if (!searchResult)
+                return [];
+            
+            return searchResult;
+        } catch (error) {
+            console.error(error);
+            return [];
+        }
+        
     }
 }
