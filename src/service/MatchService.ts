@@ -7,7 +7,7 @@ import { Location } from '../entity/Location';
 import { CreateMatchDto, UpdateMatchDto, ResponseMatchDto } from '../dto/MatchDto';
 import { User } from '../entity/User';
 import { plainToClass } from 'class-transformer';
-import { NotFoundError } from 'routing-controllers';
+import { BadRequestError, NotFoundError } from 'routing-controllers';
 import { MatchStatus } from '../util/Enums';
 import { Between } from 'typeorm';
 
@@ -52,7 +52,7 @@ export class MatchService {
         });
         
         if (!match) 
-            throw new NotFoundError('해당 Match를 찾을 수 없습니다.');
+            throw new NotFoundError('해당 Match가 존재하지 않습니다.');
         
         const responseMatchDto: ResponseMatchDto = plainToClass(ResponseMatchDto, match);
         responseMatchDto.teamName = match.user.teamName;
@@ -64,7 +64,7 @@ export class MatchService {
         const checkedDate: Date = new Date(date);
 
         if (checkedDate.toString() === "Invalid Date")
-            throw new NotFoundError("유효하지 않은 값입니다.");
+            throw new BadRequestError("유효하지 않은 값입니다.");
             
         const start: Date = new Date(date + "T00:00:00");
         const end: Date = new Date(date + "T23:59:59");

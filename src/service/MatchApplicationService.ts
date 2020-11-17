@@ -40,7 +40,7 @@ export class MatchApplicationService {
         return plainToClass(ResponseMatchApplicationDto, matchApplication);
     }
 
-    public async getListByMatch(user: User, matchId: number) {
+    public async getListByMatch(matchId: number) {
         const applicationList: MatchApplication[] = await this.matchApplicationRepository.find({
             relations: ["user"],
             where: { match: matchId }
@@ -55,15 +55,29 @@ export class MatchApplicationService {
     }
 
     public async getListByUser(user: User, type: ApplicationType) {
+        const applicationList: MatchApplication[] = await this.matchApplicationRepository.find({
+            relations: ["user"],
+            where: [
+                { user: user },
+                { type: type }
+            ]
+        });
 
+        const applicationDtos: ResponseMatchApplicationDto[] = [];
+        applicationList.forEach(application => {
+            applicationDtos.push(plainToClass(ResponseMatchApplicationDto, application));
+        });
+
+        return applicationDtos;
     }
 
     public async update(user: User, updateMatchApplicationDto: UpdateMatchApplicationDto) {
         let application = await this.matchApplicationRepository.findOne({
             relations: ["user", "match"],
-            where: {
-                id: updateMatchApplicationDto.applicationId,
-            }
+            where: [
+                { id: updateMatchApplicationDto.applicationId },
+                { user: user.id }
+            ]
         });
         
         if (!application)

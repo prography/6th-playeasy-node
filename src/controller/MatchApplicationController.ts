@@ -15,7 +15,6 @@ import {
     CreateMatchApplicationDto, 
     UpdateMatchApplicationDto, 
 } from '../dto/MatchApplicationDto';
-import { User } from '../entity/User';
 import { checkCurrentUser } from '../middlewares/AuthMiddleware';
 import { Request } from 'express';
 
@@ -37,7 +36,11 @@ export class MatchApplication extends BaseController {
     @Get('/list')
     @UseBefore(checkCurrentUser)  
     public async getList(@Req() req: Request, @QueryParam('matchId') matchId: number) {
-        return await this.matchApplicationService.getList(req.currentUser, matchId);
+        const matchList = await this.matchApplicationService.getListByMatch(matchId);
+        if (matchList.length === 0) {
+            return {}
+        }
+        return matchList;
     }
 
     // 매치 신청 상태 변경 (승인, 거절, 취소)
