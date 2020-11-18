@@ -1,5 +1,5 @@
 import { NotFoundError, UnauthorizedError } from 'routing-controllers';
-import { EntityManager, getManager, Not } from 'typeorm';
+import { EntityManager, getManager } from 'typeorm';
 import { User } from '../entity/User';
 import jwt from 'jsonwebtoken';
 import { NextFunction, Request, Response } from 'express';

@@ -11,7 +11,7 @@ import {
 } from '../dto/MatchApplicationDto';
 import { MatchApplication } from '../entity/MatchApplication';
 import { MatchRepository } from '../repository/MatchRepository';
-import { ApplicationType } from 'util/Enums';
+import { ApplicationType } from '../utils/Enums';
 
 @Service()
 export class MatchApplicationService {

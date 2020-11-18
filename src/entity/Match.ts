@@ -10,7 +10,7 @@ import {
     OneToOne, 
     JoinColumn
 } from "typeorm";
-import { MatchStatus, MatchType } from "../util/Enums";
+import { MatchStatus, MatchType } from "../utils/Enums";
 import { Location } from "./Location";
 import { MatchApplication } from "./MatchApplication";
 import { User } from "./User";

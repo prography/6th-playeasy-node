@@ -5,7 +5,7 @@ import {
     Min,
 } from 'class-validator';
 import { Exclude, Expose } from 'class-transformer';
-import { ApplicationStatus, ApplicationType } from '../util/Enums';
+import { ApplicationStatus, ApplicationType } from '../utils/Enums';
 import { User } from '../entity/User';
 
 export class CreateMatchApplicationDto {

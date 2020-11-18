@@ -1,11 +1,13 @@
-// 유효성 검사 시 에러
+import { NextFunction, Request, Response } from "express";
+import { Middleware, ExpressErrorMiddlewareInterface } from "routing-controllers";
+ 
+@Middleware({ type: "after" })
+export class CustomErrorHandler implements ExpressErrorMiddlewareInterface {
+    error(error: Error, request: Request, response: Response, next: NextFunction) {
+        
 
-// not found 에러
-
-// bad request
-
-// unauth~
-
-// forbidden ~
-
-// 500 error
+        
+        next();
+        
+    }
+}

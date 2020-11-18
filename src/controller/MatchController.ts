@@ -15,7 +15,7 @@ import { MatchService } from '../service/MatchService';
 import { CreateMatchDto, UpdateMatchDto } from '../dto/MatchDto';
 import { checkCurrentUser } from '../middlewares/AuthMiddleware'
 import { Request } from 'express';
-import { MatchStatus } from '../util/Enums';
+import { MatchStatus } from '../utils/Enums';
 
 @JsonController('/match')
 export class MatchController extends BaseController {

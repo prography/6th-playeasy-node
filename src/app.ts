@@ -1,12 +1,14 @@
 import 'reflect-metadata';
 import express from 'express';
-import { createDatabaseConnection } from './util/DatabaseConnector';
+import { createDatabaseConnection } from './utils/DatabaseConnector';
 import { useExpressServer, useContainer } from 'routing-controllers';
 import { Container } from 'typedi';
 import bodyParser from 'body-parser';
 import cookieParser from 'cookie-parser';
 import morgan from 'morgan';
 import dotenv from 'dotenv';
+import helmet from 'helmet';
+import * as sentry from '@sentry/node';
 
 const app = express();
 
@@ -27,8 +29,12 @@ app.set('port', process.env.PORT || 3000);
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 app.use(cookieParser());
+app.use(helmet());
 if (process.env.NODE_ENV === 'production') {
   app.use(morgan('combined'));
+  sentry.init({ dsn: process.env.SENTRY_DNS });
+  app.use(sentry.Handlers.requestHandler());
+  app.use(sentry.Handlers.errorHandler());
 } else { 
   app.use(morgan('dev'));
 }

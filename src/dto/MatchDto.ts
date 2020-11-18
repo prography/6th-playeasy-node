@@ -7,9 +7,8 @@ import {
     IsDateString,
 } from 'class-validator';
 import { Exclude, Expose } from 'class-transformer';
-import { MatchStatus, MatchType } from '../util/Enums';
+import { MatchStatus, MatchType } from '../utils/Enums';
 import { Location } from '../entity/Location';
-import { User } from '../entity/User';
 
 export class CreateMatchDto {
     @IsEnum(MatchType)

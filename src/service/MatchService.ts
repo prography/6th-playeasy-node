@@ -8,7 +8,7 @@ import { CreateMatchDto, UpdateMatchDto, ResponseMatchDto } from '../dto/MatchDt
 import { User } from '../entity/User';
 import { plainToClass } from 'class-transformer';
 import { BadRequestError, NotFoundError } from 'routing-controllers';
-import { MatchStatus } from '../util/Enums';
+import { MatchStatus } from '../utils/Enums';
 import { Between } from 'typeorm';
 
 @Service()

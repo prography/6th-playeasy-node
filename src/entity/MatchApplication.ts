@@ -9,7 +9,7 @@ import {
 } from "typeorm";
 import { Match } from "./Match";
 import { User } from "./User";
-import { ApplicationStatus, ApplicationType } from "../util/Enums";
+import { ApplicationStatus, ApplicationType } from "../utils/Enums";
 
 @Entity()
 export class MatchApplication extends BaseEntity {

@@ -15,7 +15,7 @@ import { UpdateUserDto, ResponseUserDto } from '../dto/UserDto';
 import { plainToClass } from 'class-transformer';
 import { checkCurrentUser } from '../middlewares/AuthMiddleware';
 import { Request } from 'express';
-import { ApplicationType } from '../util/Enums';
+import { ApplicationType } from '../utils/Enums';
 
 @JsonController('/user')
 export class UserController extends BaseController {    
