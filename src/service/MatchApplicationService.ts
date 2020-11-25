@@ -12,6 +12,8 @@ import {
 import { MatchApplication } from '../entity/MatchApplication';
 import { MatchRepository } from '../repository/MatchRepository';
 import { ApplicationType } from '../utils/Enums';
+import { ResponseUserDto } from '../dto/UserDto';
+import { ResponseMatchDto } from '../dto/MatchDto';
 
 @Service()
 export class MatchApplicationService {
@@ -24,7 +26,7 @@ export class MatchApplicationService {
         matchApplication.type = createMatchApplicationDto.type;
         matchApplication.user = user;
         
-        const match = await this.matchRepository.findOne({ 
+        const match = await this.matchRepository.findOne({
             relations: ["user"],
             where: { id: createMatchApplicationDto.matchId }
         });
@@ -34,21 +36,29 @@ export class MatchApplicationService {
         if (match.user.id === user.id)
             throw new ForbiddenError('자신이 등록한 매치에 신청할 수 없습니다.');
         
-        matchApplication.match = match
+        matchApplication.match = match;
         matchApplication = await this.matchApplicationRepository.save(matchApplication);
         
-        return plainToClass(ResponseMatchApplicationDto, matchApplication);
+        const applicationDto = plainToClass(ResponseMatchApplicationDto, matchApplication);
+        applicationDto.user = plainToClass(ResponseUserDto, user);
+        applicationDto.match = plainToClass(ResponseMatchDto, match);
+
+        return applicationDto;
     }
 
     public async getListByMatch(matchId: number) {
         const applicationList: MatchApplication[] = await this.matchApplicationRepository.find({
-            relations: ["user"],
+            relations: ["user", "match"],
             where: { match: matchId }
         });
         
         const applicationDtos: ResponseMatchApplicationDto[] = [];
-        applicationList.forEach(application => {
-            applicationDtos.push(plainToClass(ResponseMatchApplicationDto, application));
+        applicationList.forEach(matchApplication => {
+            const applicationDto = plainToClass(ResponseMatchApplicationDto, matchApplication);
+            applicationDto.user = plainToClass(ResponseUserDto, matchApplication.user);
+            applicationDto.match = plainToClass(ResponseMatchDto, matchApplication.match);
+            
+            applicationDtos.push(applicationDto);
         });
 
         return applicationDtos;
@@ -56,24 +66,27 @@ export class MatchApplicationService {
 
     public async getListByUser(user: User, type: ApplicationType) {
         const applicationList: MatchApplication[] = await this.matchApplicationRepository.find({
-            relations: ["user"],
+            relations: ["user", "match"],
             where: { user, type }
         });
 
         const applicationDtos: ResponseMatchApplicationDto[] = [];
-        applicationList.forEach(application => {
-            applicationDtos.push(plainToClass(ResponseMatchApplicationDto, application));
+        applicationList.forEach(matchApplication => {
+            const applicationDto = plainToClass(ResponseMatchApplicationDto, matchApplication);
+            applicationDto.user = plainToClass(ResponseUserDto, matchApplication.user);
+            applicationDto.match = plainToClass(ResponseMatchDto, matchApplication.match);
+            
+            applicationDtos.push(applicationDto);
         });
 
         return applicationDtos;
     }
 
-    public async update(user: User, updateMatchApplicationDto: UpdateMatchApplicationDto) {
+    public async update(updateMatchApplicationDto: UpdateMatchApplicationDto) {
         let application = await this.matchApplicationRepository.findOne({
             relations: ["user", "match"],
             where: { 
                 id: updateMatchApplicationDto.applicationId,
-                user: user.id
             },
         });
         
@@ -83,6 +96,10 @@ export class MatchApplicationService {
         application.status = updateMatchApplicationDto.status;
         const updatedApplication = await this.matchApplicationRepository.save(application);
     
-        return plainToClass(ResponseMatchApplicationDto, updatedApplication);
+        const applicationDto = plainToClass(ResponseMatchApplicationDto, updatedApplication);
+        applicationDto.user = plainToClass(ResponseUserDto, updatedApplication.user);
+        applicationDto.match = plainToClass(ResponseMatchDto, updatedApplication.match);
+
+        return applicationDto;
     }
 }

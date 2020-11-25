@@ -35,14 +35,14 @@ export class MatchApplication extends BaseController {
     // 매치별 신청 현황 
     @Get('/list')
     @UseBefore(checkCurrentUser)  
-    public async getList(@Req() req: Request, @QueryParam('matchId') matchId: number) {
+    public async getList(@QueryParam('matchId') matchId: number) {
         return await this.matchApplicationService.getListByMatch(matchId);
     }
 
     // 매치 신청 상태 변경 (승인, 거절, 취소)
     @Put()  
     @UseBefore(checkCurrentUser)  
-    public async update(@Req() req: Request, @Body() updateMatchApplicationDto: UpdateMatchApplicationDto) {
-        return await this.matchApplicationService.update(req.currentUser, updateMatchApplicationDto);
+    public async update(@Body() updateMatchApplicationDto: UpdateMatchApplicationDto) {
+        return await this.matchApplicationService.update(updateMatchApplicationDto);
     }
 }

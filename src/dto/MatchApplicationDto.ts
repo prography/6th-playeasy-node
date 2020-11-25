@@ -6,7 +6,8 @@ import {
 } from 'class-validator';
 import { Exclude, Expose } from 'class-transformer';
 import { ApplicationStatus, ApplicationType } from '../utils/Enums';
-import { User } from '../entity/User';
+import { ResponseUserDto } from './UserDto';
+import { ResponseMatchDto } from './MatchDto';
 
 export class CreateMatchApplicationDto {
     @IsInt()
@@ -44,5 +45,8 @@ export class ResponseMatchApplicationDto {
     status!: ApplicationStatus;
 
     @Expose()
-    user!: User;
+    user!: ResponseUserDto;
+
+    @Expose()
+    match!: ResponseMatchDto;
 }

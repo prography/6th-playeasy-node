@@ -7,7 +7,6 @@ export enum MatchType {
 export enum MatchStatus {
     WAITING = "WAITING",
     CONFIRMED = "CONFIRMED",
-    DENIED = "DENIED",
     CANCEL = "CANCEL",
 }
 
