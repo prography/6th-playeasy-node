@@ -17,6 +17,7 @@ import {
 } from '../dto/MatchApplicationDto';
 import { checkCurrentUser } from '../middlewares/AuthMiddleware';
 import { Request } from 'express';
+import { ApplicationType } from '../utils/Enums';
 
 @JsonController('/application')
 export class MatchApplication extends BaseController {
@@ -28,15 +29,17 @@ export class MatchApplication extends BaseController {
     @Post()  
     @HttpCode(201)
     @UseBefore(checkCurrentUser)
-    public async add(@Req() req: Request, @Body() createMatchApplicationDto: CreateMatchApplicationDto) {
+    public async add(@Req() req: Request, 
+                     @Body() createMatchApplicationDto: CreateMatchApplicationDto) {
         return await this.matchApplicationService.add(req.currentUser, createMatchApplicationDto);
     }
 
     // 매치별 신청 현황 
     @Get('/list')
     @UseBefore(checkCurrentUser)  
-    public async getList(@QueryParam('matchId') matchId: number) {
-        return await this.matchApplicationService.getListByMatch(matchId);
+    public async getList(@QueryParam('matchId') matchId: number, 
+                         @QueryParam('type') type: ApplicationType) {
+        return await this.matchApplicationService.getListByMatch(matchId, type);
     }
 
     // 매치 신청 상태 변경 (승인, 거절, 취소)

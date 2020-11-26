@@ -46,10 +46,10 @@ export class MatchApplicationService {
         return applicationDto;
     }
 
-    public async getListByMatch(matchId: number) {
+    public async getListByMatch(matchId: number, type: ApplicationType) {
         const applicationList: MatchApplication[] = await this.matchApplicationRepository.find({
             relations: ["user", "match"],
-            where: { match: matchId }
+            where: { match: matchId, type }
         });
         
         const applicationDtos: ResponseMatchApplicationDto[] = [];
