@@ -55,7 +55,7 @@ export class Match extends BaseEntity {
     user!: User;
 
     // Match 1 : 1 Location
-    @OneToOne(type => Location)
+    @OneToOne(type => Location, { eager: true })
     @JoinColumn()
     location!: Location;
 

@@ -47,7 +47,7 @@ export class MatchService {
 
     public async getOne(matchId: number) {
         const match = await this.matchRepository.findOne({
-            relations: ["location", "user"],
+            relations: ["user"],
             where: { id: matchId }
         });
         
@@ -70,7 +70,7 @@ export class MatchService {
         const end: Date = new Date(date + "T23:59:59");
 
         const matchList: Match[] = await this.matchRepository.find({
-            relations: ["location", "user"],
+            relations: ["user"],
             where: { startAt: Between(start, end) }
         });
 
@@ -86,7 +86,7 @@ export class MatchService {
 
     public async getListByUser(user: User) {
         const matchList: Match[] = await this.matchRepository.find({
-            relations: ["location", "user"],
+            relations: ["user"],
             where: { user }
         });
 
@@ -103,7 +103,7 @@ export class MatchService {
 
     public async update(user: User, updateMatchDto: UpdateMatchDto) {
         let match = await this.matchRepository.findOne({
-            relations: ["location", "user"],
+            relations: ["user"],
             where: { 
                 id: updateMatchDto.id, 
                 user,
@@ -142,7 +142,7 @@ export class MatchService {
 
     public async updateStatus(user: User, matchId: number, status: MatchStatus) {
         let match = await this.matchRepository.findOne({
-            relations: ["location", "user"],
+            relations: ["user"],
             where: { 
                 id: matchId, 
                 user,
