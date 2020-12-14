@@ -72,10 +72,25 @@ export class MatchApplicationService {
             .createQueryBuilder("matchApplication")
             .innerJoinAndSelect("matchApplication.user", "user")
             .innerJoinAndSelect("matchApplication.match", "match")
+            .innerJoinAndSelect("match.location", "location")
             .where("matchApplication.type = :type", {type})
             .andWhere("user.id = :userId", {userId: user.id})
             .andWhere("match.startAt >= :now", {now: new Date()})
             .getMany();
+            
+        // const applicationList: MatchApplication[] = await this.matchApplicationRepository.find({
+        //     relations: ["user", "match"],
+        //     where: { 
+        //         user, 
+        //         type,
+        //         match: {
+        //             startAt: MoreThan(new Date())
+        //         },
+        //     },
+        //     order: {
+        //         createdAt: "DESC"
+        //     }
+        // });
 
         const applicationDtos: ResponseMatchApplicationDto[] = [];
         applicationList.forEach(matchApplication => {
