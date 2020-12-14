@@ -9,7 +9,7 @@ import { User } from '../entity/User';
 import { plainToClass } from 'class-transformer';
 import { BadRequestError, NotFoundError } from 'routing-controllers';
 import { MatchStatus } from '../utils/Enums';
-import { Between } from 'typeorm';
+import { Between, MoreThan } from 'typeorm';
 
 @Service()
 export class MatchService {
@@ -87,9 +87,15 @@ export class MatchService {
     public async getListByUser(user: User) {
         const matchList: Match[] = await this.matchRepository.find({
             relations: ["user"],
-            where: { user }
+            where: { 
+                user,
+                startAt: MoreThan(new Date()),
+            },
+            order: {
+                startAt: "DESC"
+            } 
         });
-
+        
         const matchDtos: ResponseMatchDto[] = [];
         matchList.forEach(match => {
             let matchDto = plainToClass(ResponseMatchDto, match);

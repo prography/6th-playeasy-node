@@ -9,10 +9,10 @@ export async function checkCurrentUser(req: Request, res: Response, next: NextFu
         const token = req.headers["authorization"];
         
         if (!token)
-            throw new UnauthorizedError('JWT Token이 유효하지 않습니다.');
+            throw new UnauthorizedError('token이 전달되지 않았습니다.');
         
         const decoded: any = await jwt.verify(token, String(process.env.JWT_SECRET_KEY));
-        
+
         let socialId;
         for (const key in decoded) 
             if (key === 'socialId') 
@@ -28,6 +28,6 @@ export async function checkCurrentUser(req: Request, res: Response, next: NextFu
         next();
     } catch (error) {
         console.error(error);
-        next(error);
+        next(new UnauthorizedError('token이 유효하지 않습니다.'));
     }
 }

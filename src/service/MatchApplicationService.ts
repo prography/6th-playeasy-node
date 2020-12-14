@@ -11,9 +11,10 @@ import {
 } from '../dto/MatchApplicationDto';
 import { MatchApplication } from '../entity/MatchApplication';
 import { MatchRepository } from '../repository/MatchRepository';
-import { ApplicationType } from '../utils/Enums';
+import { ApplicationType, MatchStatus } from '../utils/Enums';
 import { ResponseUserDto } from '../dto/UserDto';
 import { ResponseMatchDto } from '../dto/MatchDto';
+import { MoreThan } from 'typeorm';
 
 @Service()
 export class MatchApplicationService {
@@ -35,6 +36,8 @@ export class MatchApplicationService {
             throw new NotFoundError('해당 Match를 찾을 수 없습니다.');
         if (match.user.id === user.id)
             throw new ForbiddenError('자신이 등록한 매치에 신청할 수 없습니다.');
+        if (match.status !== MatchStatus.WAITING)
+            throw new ForbiddenError('신청할 수 없는 매치입니다.');
         
         matchApplication.match = match;
         matchApplication = await this.matchApplicationRepository.save(matchApplication);
@@ -67,7 +70,16 @@ export class MatchApplicationService {
     public async getListByUser(user: User, type: ApplicationType) {
         const applicationList: MatchApplication[] = await this.matchApplicationRepository.find({
             relations: ["user", "match"],
-            where: { user, type }
+            where: { 
+                user, 
+                type,
+                match: {
+                    startAt: MoreThan(new Date()),
+                }
+            },
+            order: {
+                createdAt: "DESC"
+            }
         });
 
         const applicationDtos: ResponseMatchApplicationDto[] = [];
