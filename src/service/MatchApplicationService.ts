@@ -68,19 +68,14 @@ export class MatchApplicationService {
     }
 
     public async getListByUser(user: User, type: ApplicationType) {
-        const applicationList: MatchApplication[] = await this.matchApplicationRepository.find({
-            relations: ["user", "match"],
-            where: { 
-                user, 
-                type,
-                match: {
-                    startAt: MoreThan(new Date()),
-                }
-            },
-            order: {
-                createdAt: "DESC"
-            }
-        });
+        const applicationList: MatchApplication[] = await this.matchApplicationRepository
+            .createQueryBuilder("matchApplication")
+            .innerJoinAndSelect("matchApplication.user", "user")
+            .innerJoinAndSelect("matchApplication.match", "match")
+            .where("matchApplication.type = :type", {type})
+            .andWhere("user.id = :userId", {userId: user.id})
+            .andWhere("match.startAt >= :now", {now: new Date()})
+            .getMany();
 
         const applicationDtos: ResponseMatchApplicationDto[] = [];
         applicationList.forEach(matchApplication => {
